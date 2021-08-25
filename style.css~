@@ -1,0 +1,196 @@
+
+@media(min-width:640px) {
+    .container-1 {
+	display:flex;
+	justify-content:space-around;
+	//flex-basis: 33.3%;
+    }
+}
+
+.container-1 {
+    margin: 0px;
+}
+
+
+.box-1, .box-2, .box-3{
+    //background-color: #001a33;
+    box-sizing: border-box;
+    position: relative;
+    margin-right: 10px;
+}
+
+.box-1 {
+    min-width: 420px;
+    max-width: 1040px;
+}
+
+.box-2 {
+    //flex-basis: 67%;
+}
+
+@media(min-width: 1280px) {
+	   .Session-Box {
+	       display: grid;
+	       grid-template-columns: 50% 50%;
+	   }
+
+	   .Box-Item:nth-of-type(even) {
+	       top: 20px;
+	       position: relative;
+	   }
+}
+
+
+.Tab-Item {
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.Tab-Item img {
+    padding-right: 7px;
+}
+
+.Tab-Item:hover {
+    background-color: #001a55;
+    opacity: 1;
+}
+
+a {
+    padding: 0px;
+}
+
+a:link, a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+
+
+a:hover {
+    text-decoration: underline;
+}
+
+.open:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+body {
+    background-color: #00001a;
+    color: white;
+    font-family: "Noto Sans", "Segoe UI", sans-serif;
+    font-size: 14px;
+}
+
+img{
+    width: 16px;
+    height: 16px;
+}
+
+
+
+.add-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.add-icon:hover {
+    width: 25px;
+    height: 25px;
+}
+
+/*
+.d-b {
+    position: absolute;
+    padding-top: 5px;
+    right: 0px;
+    opacity: 0;
+}
+*/
+
+.d-b {
+    opacity: 0;
+    margin-left: auto;
+}
+
+.Tab-Item:hover .d-b {
+    opacity: 1;
+}
+
+
+.header-1 {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 320px;
+}
+    
+
+.Box-Item {
+    background: darkred;
+    width: 320px;
+    height: 70px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 90% 10%;
+    grid-template-rows: 35px 30px;
+    align-items: center;
+    
+}
+
+
+
+
+/*
+input[type="text"]{
+        background: transparent;
+        color: white;
+}
+*/
+
+#session-name {
+        background: transparent;
+        color: black;
+}
+
+#delete {
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#delete:hover {
+
+}
+
+.base {
+    display: inline;
+}
+
+.NO {
+    display: inline;
+}
+
+.tab-order {
+    margin: 15px;
+}
+
+.save-button {
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.don-icon, .set-icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}

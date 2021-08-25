@@ -1,0 +1,16 @@
+0000000000000000000000000000000000000000 acd3b5c9ee414678c3bf2dc73f367b6097c7fa02 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1598438604 +0200	commit (initial): initial
+acd3b5c9ee414678c3bf2dc73f367b6097c7fa02 51fbe1b274e0ca2bd3c5e39ff94bcfe8149d4b3d Stefan Brinkmann <stefan.brinkmann@posteo.de> 1598612702 +0200	commit: First steps storage
+51fbe1b274e0ca2bd3c5e39ff94bcfe8149d4b3d fc8062b10304f1c255edf6b44d848af4cfdb7624 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1598643672 +0200	commit: small fixes
+fc8062b10304f1c255edf6b44d848af4cfdb7624 67ed14e6466049c707b5db0339d45f10359dfb7b Stefan Brinkmann <stefan.brinkmann@posteo.de> 1598911469 +0200	commit: migration to browser.storage
+67ed14e6466049c707b5db0339d45f10359dfb7b 989d4de243f19be05bfc1454580f95204e1038ba Stefan Brinkmann <stefan.brinkmann@posteo.de> 1598965610 +0200	commit: delete session functionality
+989d4de243f19be05bfc1454580f95204e1038ba 96e6b01768520ebb6a4712f004533c9f39f15f70 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1598967072 +0200	commit: clear code
+96e6b01768520ebb6a4712f004533c9f39f15f70 8d4ada0b490e070f180bf439ac6657fce2f758b1 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1599651214 +0200	commit: signed version + visibilitychanges
+8d4ada0b490e070f180bf439ac6657fce2f758b1 fd9d8892ea7797da982f7885a2374c857715b6e0 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1602607108 +0200	commit (amend): first version for signing by AMO
+fd9d8892ea7797da982f7885a2374c857715b6e0 aefd7f02445b787405b24bde0dc796d63251ba03 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1602624425 +0200	commit: toggle - reverse list order
+aefd7f02445b787405b24bde0dc796d63251ba03 de366b8257660e9af4bd0729f0daf8570c5f4777 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1602973981 +0200	commit: avoid duplicate SessionPanel tabs
+de366b8257660e9af4bd0729f0daf8570c5f4777 36593cca6f898c0ffb9e7c4989be161885097eea Stefan Brinkmann <stefan.brinkmann@posteo.de> 1603116964 +0200	commit: overwrite session
+36593cca6f898c0ffb9e7c4989be161885097eea ecbefacf3d1b05aeed51d9b411cab98a694d766f Stefan Brinkmann <stefan.brinkmann@posteo.de> 1603135167 +0200	commit: fixed bug, added toast
+ecbefacf3d1b05aeed51d9b411cab98a694d766f 159d985071036f7f0aacf82108962bcce70d89c4 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1603220248 +0200	commit: new layout for sessions, misc
+159d985071036f7f0aacf82108962bcce70d89c4 481f2b20ce616125d84fceced90287d12c9bfb4b Stefan Brinkmann <stefan.brinkmann@posteo.de> 1603294393 +0200	commit: fixed bugs and issues
+481f2b20ce616125d84fceced90287d12c9bfb4b 1e1d58b8610a81440a6b16ae3ddabe48a2b1e8a1 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1603318430 +0200	commit: minor fixes
+1e1d58b8610a81440a6b16ae3ddabe48a2b1e8a1 6880b24d56a501ff59dfaa1c6af4d4c8665d9ad1 Stefan Brinkmann <stefan.brinkmann@posteo.de> 1603395483 +0200	commit: clean up, modal set & don, misc

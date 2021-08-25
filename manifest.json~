@@ -1,0 +1,23 @@
+{
+    "description": "Manage tabs and sessions",
+    "manifest_version": 2,
+    "name": "SessionPanel",
+    "version": "0.0.1",
+
+    "background": {
+	"scripts": ["background.js"]
+    },
+
+    "browser_action": {
+	"default_icon": {
+	    "16": "icons/icon_16.png",
+	    "32": "icons/icon_36.png"
+	}
+    },
+
+    "permissions": [
+	"history",
+	"tabs"
+    ]
+    
+}

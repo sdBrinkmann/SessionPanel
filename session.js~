@@ -1,0 +1,23 @@
+import {Session, Box, Store} from "./storage.js"
+
+
+// Load new Window by on Click
+
+var thisArg = {custom: 'object'};
+
+
+document.querySelector(".Session-Box").addEventListener('click', (e) => {
+    if (e.target.classList.contains('Box-Item')) {
+	const Sessions = Store.getSessions();
+	console.log('Beep: ' + e.target.dataset.pos);
+	//console.log(Sessions);
+	//console.log(Sessions[0].url);
+	//console.log(e);
+	const pos = parseInt(e.target.dataset.pos);
+	browser.windows.create({
+	    url: Sessions[pos].url
+	});
+	//Sessions[pos].url.forEach( element => window.open(element, "new"));
+    }
+});
+

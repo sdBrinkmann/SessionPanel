@@ -1,0 +1,143 @@
+
+/* ADD */
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  color: #000;
+}
+
+/* The Close Button */
+.close {
+  color: #444444;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover, .close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* SETTINGS */
+
+.close-set, .close-don {
+  color: #444444;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#alch, #heart {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.set-h {
+    display:flex;
+    align-items: baseline;
+    font-size: 20px;
+}
+
+.header-2 {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-content-set {
+  background-color: #eeeeee;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  color: #000;
+}
+
+.modal-content-don {
+  background-color: #eeeeee;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  color: #000;
+}
+
+
+@media(min-width: 640px) {
+    .modal-content-set, .modal-content, .modal-content-don {
+	width: 70%;
+    }
+}
+
+@media(min-width: 840px) {
+    .modal-content-set, .modal-content, .modal-content-don {
+	width: 50%;
+    }
+}
+
+@media(min-width: 1280px) {
+    .modal-content-set, .modal-content, .modal-content-don {
+	width: 40%;
+    }
+}
+
+	
+@media(min-width: 1540px) {
+    .modal-content-set, .modal-content, .modal-content-don {
+	width: 30%;
+    }
+}
+
+/* Donate */
+
+#donate {
+    float: left;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+#paypal-button:hover {
+    cursor: pointer;
+   
+}
+
+#pp {
+    width: 50px;
+    height: 13px;
+}
