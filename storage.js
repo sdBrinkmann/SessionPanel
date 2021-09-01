@@ -29,7 +29,6 @@ export class Box {
 	Save.className = 'save-button';
 	Save.id = "overwrite";
 	Save.setAttribute('title', 'Overwrite');
-	
 	box.className = 'Box-Item';
 	box.setAttribute('data-pos', pos);
 	box.setAttribute('title', Session.date.toLocaleString());
@@ -116,7 +115,7 @@ export class Store {
 
     static async overwriteSession(Session, pos) {
 	await Store.getSessions().then((sessions) => {
-	    console.log(pos);
+	    //console.log(pos);
 	    sessions[pos] = Session;
 	    browser.storage.local.set({
 		'sessions': JSON.stringify(sessions)

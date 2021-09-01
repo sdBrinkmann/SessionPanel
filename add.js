@@ -42,7 +42,7 @@ function listTabs() {
 
 
 
-listTabs();
+//listTabs();
 linkTabs();
 closeTab();
 
@@ -80,6 +80,16 @@ function test() {
 }
 
 //test();
+
+// From Popup to TAB
+
+document.querySelector("#open").onclick = () => {
+    browser.tabs.create({
+	url: browser.runtime.getURL('/main.html')
+    });
+    window.close();
+}
+
 
 // Display Number of TABS 
 
@@ -139,8 +149,8 @@ const set_close = document.getElementsByClassName("close-set")[0];
 function Settings() {
     document.querySelector(".set-icon").addEventListener('click', function(e) {
 
-	set.style.display = "block";
-
+	//set.style.display = "block";
+	browser.runtime.openOptionsPage();
     });
 }
 
@@ -206,8 +216,8 @@ document.getElementById("session-name").onkeypress = function(e){
 		const box = new Box();
 		let  pos = await Store.addSession(session);
 		box.addBox(session, pos);
-		if ( (tabs_leng - 1)!== No_tabs)
-		    Success(`New Session Added <br> ${tabs_leng - No_tabs - 1} tab(s) could not be saved`, 3000);
+		if ( (tabs_leng )!== No_tabs)
+		    Success(`New Session Added <br> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
 		else
 		    Success("New Session Added", 3000);  
 	    });
@@ -221,16 +231,40 @@ document.getElementById("session-name").onkeypress = function(e){
 }
 
 
-function hover(e) {
-  e.target.setAttribute('src', 'icons/paypal-orange-64.png');
+function hover(e, src) {
+  e.target.setAttribute('src', src);
 }
 
-function unhover(e) {
-  e.target.setAttribute('src', 'icons/paypal-64.png');
+function unhover(e, src) {
+  e.target.setAttribute('src', src);
 }
 
-document.getElementById("paypal-button").addEventListener("mouseover", hover);
-document.getElementById("paypal-button").addEventListener("mouseout", unhover);
+/*
+window.onload = function () {
+document.getElementsByClassName("save-button").addEventListener("mouseover", function() {
+    hover(event, 'save-hoover-24.png');
+}, false);
+};
+*/
+
+document.addEventListener("mouseover", function(e) {
+    if (e.target && e.target.id == "overwrite") {
+	hover(event, 'icons/save-hover-24.png');
+    }
+});
+
+document.addEventListener("mouseout", function(e) {
+    if (e.target && e.target.id == "overwrite") {
+	unhover(event, 'icons/save-24.png');
+    }
+});
+
+
+document.getElementById("paypal-button").addEventListener("mouseover", function() {
+    hover(event, 'icons/paypal-orange-64.png');
+}, false);
+document.getElementById("paypal-button").addEventListener("mouseout", function() {
+    unhover(event, 'icons/paypal-64.png');}, false);
 
 // DOM Load Event
 
@@ -239,9 +273,22 @@ document.addEventListener('DOMContentLoaded', Store.displaySessions());
 
 // Options
 let Reverse = false;
-document.querySelector('.check').checked = false;
+document.addEventListener('DOMContentLoaded', () => {
+    let order = browser.storage.local.get('rightmost', item => {
+	if (item.rightmost == true) {
+	    document.querySelector('#listorder').checked = true;
+	    Reverse = true;
+	    listTabs();
+	}
+	else if (item.rightmost == false || item.rightmost == undefined) {
+	    document.querySelector('#listorder').checked = false;
+	    Reverse = false;
+	    listTabs();
+	}
+    });
+});
 
-document.querySelector('.check').addEventListener('change', (e) => {
+document.querySelector('#listorder').addEventListener('change', (e) => {
     if(e.target.checked) {
 	Reverse = true;
 	listTabs();

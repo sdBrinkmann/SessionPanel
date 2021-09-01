@@ -82,10 +82,10 @@ function saveSession() {
 			const session = new Session(name, No_tabs, date, url);
 			const box = new Box();
 			await Store.overwriteSession(session, pos);
-			e.target.parentNode.childNodes[0].innerHTML = name + '(' + No_tabs + ')';
-			e.target.parentNode.childNodes[2].innerHTML = date.toLocaleString();
-			if ( (tabs_leng - 1) !== No_tabs)
-			    Success(`Session overwriten <br> ${tabs_leng - No_tabs - 1} tab(s) could not be saved`, 3000);
+			e.target.parentNode.childNodes[0].innerText = name + '(' + No_tabs + ')';
+			//e.target.parentNode.childNodes[2].innerHTML = date.toLocaleString();
+			if ( (tabs_leng) !== No_tabs)
+			    Success(`Session overwriten <br/> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
 			else
 			    Success("Session overwriten", 3000);
 			//box.insertBox(session, pos);

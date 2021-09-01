@@ -1,0 +1,7 @@
+
+.settings {
+    display: grid;
+    grid-template-columns: 480px 40px;
+    row-gap: 30px;
+    justify-self: start;
+}

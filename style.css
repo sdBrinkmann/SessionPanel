@@ -7,6 +7,12 @@
     }
 }
 
+@media(max-width:639px) {
+    .box-2 {
+	margin-left: 20px;
+    }
+}
+
 .container-1 {
     margin: 0px;
 }
@@ -22,10 +28,15 @@
 .box-1 {
     min-width: 420px;
     max-width: 1040px;
+    margin-left: 20px;
 }
 
 .box-2 {
     //flex-basis: 67%;
+}
+
+.Session-Box {
+    min-height: 30px;
 }
 
 @media(min-width: 1280px) {
@@ -116,8 +127,11 @@ img{
     margin-left: auto;
 }
 
+
+
 .Tab-Item:hover .d-b {
     opacity: 1;
+    cursor: pointer;
 }
 
 
@@ -216,4 +230,29 @@ p.open {
     cursor: pointer;
     width: 20px;
     height: 20px;
+}
+
+#open {
+    position: fixed;
+    z-index: 1;
+    bottom: 1%;
+    right: 1%;
+}
+
+#open:hover {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 800px) and (max-height: 600px) {
+    #open {
+	visibility: visible;
+    }
+}
+	
+@media (min-width: 801px), (min-height: 601px) {
+    #open {
+	visibility: hidden;
+    }
 }
