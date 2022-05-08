@@ -228,8 +228,8 @@ p.open {
 
 .don-icon, .set-icon {
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 #open {
@@ -237,12 +237,14 @@ p.open {
     z-index: 1;
     bottom: 1%;
     right: 1%;
+    width: 18px;
+    height: 18px;
 }
 
 #open:hover {
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 @media (max-width: 800px) and (max-height: 600px) {

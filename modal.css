@@ -19,7 +19,7 @@
 .modal-content {
   background-color: #fefefe;
   margin: auto;
-  padding: 20px;
+  padding: 5px;
   border: 1px solid #888;
   width: 90%;
   color: #000;
@@ -83,7 +83,7 @@
 .modal-content-set {
   background-color: #eeeeee;
   margin: auto;
-  padding: 20px;
+  padding: 5px;
   border: 1px solid #888;
   width: 90%;
   color: #000;
@@ -92,7 +92,7 @@
 .modal-content-don {
   background-color: #eeeeee;
   margin: auto;
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #888;
   width: 90%;
   color: #000;
@@ -121,6 +121,12 @@
 @media(min-width: 1540px) {
     .modal-content-set, .modal-content, .modal-content-don {
 	width: 30%;
+    }
+}
+
+@media(max-width: 640px) {
+    .modal {
+	padding-top: 5px;
     }
 }
 

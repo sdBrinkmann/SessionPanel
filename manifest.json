@@ -2,12 +2,12 @@
     "description": "Manage tabs and sessions",
     "manifest_version": 2,
     "name": "Session Panel",
-    "version": "0.4.85",
+    "version": "0.6.5",
 
     "browser_specific_settings": {
 	"gecko": {
 	    "id": "{d04582d5-3192-4296-83c1-13bfbc7b61f5}",
-	    "strict_min_version": "42.0"
+	    "strict_min_version": "57.0"
 	}
     },
 

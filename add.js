@@ -84,10 +84,24 @@ function test() {
 // From Popup to TAB
 
 document.querySelector("#open").onclick = () => {
-    browser.tabs.create({
-	url: browser.runtime.getURL('/main.html')
+    var SP_Id;
+    getWindowTabs().then((tabs) => {
+	var SP = tabs.filter( tab =>
+	    tab.url == browser.runtime.getURL('/main.html'));
+	if (SP.length == 0) {
+	    browser.tabs.create({ 
+		url: browser.runtime.getURL('/main.html')
+	    });
+	    window.close();
+	}
+	else {
+	    browser.tabs.update(SP[0].id, {active: true}).then( () => {
+		window.close();
+	    });
+	}
     });
-    window.close();
+ 
+ 
 }
 
 
@@ -259,6 +273,13 @@ document.addEventListener("mouseout", function(e) {
     }
 });
 
+document.getElementById("don-icon").addEventListener("mouseover", function() {
+    hover(event, 'icons/heart-full-32.png');
+}, false);
+document.getElementById("don-icon").addEventListener("mouseout", function() {
+    unhover(event, 'icons/heart-32.png');}, false);
+
+
 
 document.getElementById("paypal-button").addEventListener("mouseover", function() {
     hover(event, 'icons/paypal-orange-64.png');
@@ -317,4 +338,5 @@ function Failure(Message, Duration) {
     x.className = "show-fail";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, Duration);
 }
+
 

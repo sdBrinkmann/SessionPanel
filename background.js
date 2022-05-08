@@ -4,13 +4,10 @@ async function  getWindowTabs() {
     return await browser.tabs.query({currentWindow: true});
 }
 
-var SP_Id;
-
 let pop = undefined;
 
 function setStatus() {
     let popup = browser.storage.local.get('popup', items => {
-	console.log('setStatus');
 	if (items.popup == undefined || items.popup == true) {
 	    pop = true;
 	}
@@ -44,12 +41,10 @@ function openPanel() {
 		browser.tabs.create({ 
 		    /*url: "https://developer.mozilla.org" */
 		    url: browser.runtime.getURL('/main.html')
-		}).then( (tab) => {
-		    SP_Id = tab.id;
-		});
+		})
 	    }
 	    else {
-		browser.tabs.update(SP_Id, {active: true});
+		browser.tabs.update(SP[0].id, {active: true});
 	    }
 	});
     }
@@ -72,3 +67,13 @@ function onVisited(historyItem) {
 
 browser.history.onVisited.addListener(onVisited);
 */
+
+// After Update
+
+function handleInstalled(details) {
+    if (details.reason == "update" || details.reason == "install") {
+	browser.runtime.openOptionsPage();
+    }
+}
+
+browser.runtime.onInstalled.addListener(handleInstalled);
