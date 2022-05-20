@@ -14,44 +14,137 @@
   <body>
     <div class="header-2">
       <div class="set-h">
-	<img src="icons/alch-32.png" id="alch">
-	<h3 >Settings</h3>
+	<img src="icons/alch-64.png" id="alch">
+	<h1>Settings</h1> 
       </div>
+      
       <!-- <span class="close-set">&times;</span> -->
     </div>
+    <h3>Version: Session Panel 0.6.5 Firefox</h3> 
+    
+    <div class="text-body">
     <p>This is the settings page for the Firefox add-on Session Panel. <br />
     For more information and to see the current changelog visit <br /> the offical <a href="https://addons.mozilla.org/en-US/firefox/addon/session-panel/">Firefox Add-on page here</a>.</p>
-    <h2>General</h2>
-    <div class="settings">
-      <!-- Popup Setting -->
-      <div>Open Session Panel as a popup, instead as a tab</div>
-      <div>
-	<div class="toggle">
-	  <input type="checkbox" class="check" id="popup">
-	  <b class="b switch"></b>
-	  <b class="b track"></b>
+      <h2>General</h2>
+      <div class="settings">
+	<!-- General Settings -->
+	<div>Open Session Panel as a popup, instead as a tab</div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="popup">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
 	</div>
-      </div>
-      <!-- List order Setting --> 
-      <div>List rightmost tab of current window first as default </div>
-      <div>
-	<div class="toggle">
-	  <input type="checkbox" class="check" id="order">
-	  <b class="b switch"></b>
-	  <b class="b track"></b>
+
+	<div>Enable Drag & Drop<br>(For now works only within tab list)</div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="drag_n_drop">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
 	</div>
+
+	<div>Don't load webpages instantly when retriving a session</div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="no-load">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
+	</div>
+	
+	<!-- List Settings -->
+	<h4>Tab List Settings:</h4> <div></div>
+	<div>List rightmost tab of current window first as default </div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="order">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
+	</div>
+
+	<div>Automatic scroll so that active tab is vertically centered<br>
+	  (if possible) when opening addon</div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="auto-scroll">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
+	</div>
+	
+	<div>Highlight the active tab in the current window tab list
+	  <br> Default Color: Blue</div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="highlight-active">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
+	</div>
+
+	<div>Highlight tabs which urls are open elsewhere in current window
+	  <br> Default color: Red </div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="highlight-double">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
+	</div>
+
+	<div>Highlight tabs which url are open elsewhere in any window
+	  <br> Default Color: Orange</div>
+	<div>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="highlight-any">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
+	</div>
+
+      
+	
       </div>
-    </div>
-    <h2>User Interface (UI)</h2>
-    <div>
-      Coming Soon...
-      <!---
-      <form>
-	<label>Favorite color</label>
-	<input type="text" id="color"/>
-	<button type="submit">Save</button>
-      </form>
-      --->
+      <h2>User Interface (UI)</h2>
+      <div>
+	Change the UI at your own discretion. <br/> You can always revert back to the default settings
+	by pressing the reset button below. <br/>
+
+	<input type="button" value="Restore Default" id="reset">
+	<br>For colors use the hexadecimal format including the leading number sign #. <br> RGB colors can be specified without transparency (#RRGGBB) or with (#RRGGBBTT).
+	       <!-- -->
+	       <h3>Background Color</h3>
+	       <form>
+		 <label>HEX value: </label>
+		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="background-color"/>
+		 <button type="submit" id="submit-bc">Change</button>
+	       </form>
+	       <!-- --->
+	       <h3>Rectangles Color</h3>
+	       <form>
+		 <label>HEX value: </label>
+		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="rect-color"/>
+		 <button type="submit" id="submit-rc">Change</button>
+	       </form>
+	       
+	       <h3>Font Color (Global)</h3>
+	       <input type="radio" id="white" name="font color" value="white">
+	       <label for="white">White</label>
+	       <input type="radio" id="black" name="font color" value="black">
+	       <label for="black">Black</label>
+
+	       <h3>Font Color Rectangles</h3>
+	       <input type="radio" id="rc-global" name="font rc color" value="global">
+	       <label for="global">Same as Global</label>
+	       <input type="radio" id="rc-white" name="font rc color" value="white">
+	       <label for="white">White</label>
+	       <input type="radio" id="rc-black" name="font rc color" value="black">
+	       <label for="black">Black</label>
+      </div>
     </div>
     <script type="module" src="options.js"></script>
   </body>

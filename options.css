@@ -5,3 +5,24 @@
     row-gap: 30px;
     justify-self: start;
 }
+
+.text-body {
+    margin-left: 10px;
+}
+
+body {
+    margin-left: 20px;
+}
+
+#reset {
+    margin: 18px;
+    margin-left: 10px;
+}
+
+#alch {
+    width: 64px;
+    height: 64px;
+    display: block;
+    margin-top: auto;
+    margin-bottom: auto;
+}

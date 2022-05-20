@@ -2,6 +2,58 @@
 
 import {Session, Box, Store} from "./storage.js";
 
+// Options
+
+let Reverse = false;
+let highlight_active = true;
+let highlight_double = false;
+let auto_scroll = false;
+export let rc_color = 'darkred';
+export let rc_font_color;
+export let text_color = 'white';
+
+document.addEventListener('DOMContentLoaded', () => {
+    let order = browser.storage.local.get(items => {
+	if (items.background_color != undefined) {
+	    document.body.style.backgroundColor = items.background_color;
+	}
+	if (items.rightmost == true) {
+	    document.querySelector('#listorder').checked = true;
+	    Reverse = true;
+	}
+	if (items.font_color == "black") {
+	    text_color = 'black';
+	    document.body.style.color = 'black';
+	}
+	if (items.font_rc_color == 'black') {
+	    rc_font_color = 'black';
+	}
+	else if (items.font_rc_color == 'white') {
+	    rc_font_color = 'white';
+	}
+	if (items.highlight_active == false) {
+	    highlight_active = false;
+	}
+	if (items.auto_scroll == true) {
+	    auto_scroll = true;
+	}
+	if (items.highlight_double == true) {
+	    highlight_double = true;
+	}
+
+	if (items.rectangle_color != undefined) 
+	    rc_color = items.rectangle_color;
+	
+	listTabs();
+	linkTabs();
+	closeTab();
+	Store.displaySessions();
+    });
+});
+
+
+
+
 // Get and List TABS
 
 function getWindowTabs() {
@@ -10,12 +62,17 @@ function getWindowTabs() {
 
 function listTabs() {
     getWindowTabs().then((tabs) => {
+	console.log(browser.windows.getCurrent());
+	let id_active;
 	const List = document.getElementById('tabs-list');
 	const currentTabs = document.createDocumentFragment();
 	List.textContent = '';
+	let index = 0;
+	let double_current = [];
 	if(Reverse)
 	    tabs = tabs.reverse();
 	for (let tab of tabs) {
+	    //console.log(tab);
 	    const Parent = document.createElement('div');
 	    const Icon = document.createElement('img');
 	    const Link = document.createElement('a');
@@ -31,20 +88,44 @@ function listTabs() {
 	    Link.setAttribute('href', tab.url);
 	    Link.id = tab.id;
 	    Link.classList.add('list-tabs');
+	    Link.style.color = text_color;
 	    Parent.appendChild(Icon);
 	    Parent.appendChild(Link);
 	    Parent.appendChild(Del);
+	    console.log(tab.windowId);
+	    if (tab.active == true) id_active = tab.id;
+	    
+	    if (tab.active == true && highlight_active == true) 
+		Parent.style.backgroundColor = '#001ab2aa'
+
+	    if (highlight_double == true) {
+		for (var j = 0; j < double_current.length; j++) {
+		    if (double_current[j] == tab.id) 
+			Parent.style.backgroundColor = '#ff751aaa';
+		}
+		
+		for (var i = index + 1; i < tabs.length; i++) {
+		    if (tabs[i].url == tab.url) {
+			Parent.style.backgroundColor = '#ff751aaa';
+			double_current.push(tabs[i].id);
+		    }
+		}
+		index++;
+	    }
+	    
 	    currentTabs.appendChild(Parent);
 	}
 	List.appendChild(currentTabs);
+
+	var element = document.getElementById(id_active);
+	if (auto_scroll == true)
+	    element.scrollIntoView({block: "center"});
     });
 }
 
 
 
 //listTabs();
-linkTabs();
-closeTab();
 
 // SWITCH & CLOSE TABS Functionality
 
@@ -55,6 +136,7 @@ function linkTabs() {
 	    //console.log(typeof  e.target.id);
 		const ID = parseInt(e.target.id);
 		browser.tabs.update(ID, {active: true});
+		listTabs();
 	    }
 	});
 }
@@ -66,6 +148,8 @@ function closeTab() {
 	    await browser.tabs.remove(ID);
 	    e.target.parentElement.remove();
 	    upTabNo();
+	    if (highlight_active == true)
+		listTabs();
 	}
     });
 }
@@ -263,13 +347,23 @@ document.getElementsByClassName("save-button").addEventListener("mouseover", fun
 
 document.addEventListener("mouseover", function(e) {
     if (e.target && e.target.id == "overwrite") {
-	hover(event, 'icons/save-hover-24.png');
+	if (rc_font_color == 'black' ||
+	    (text_color == 'black' && rc_font_color != 'white')) {
+	    hover(event, 'icons/save-hover-b-24.png');
+	}
+	else
+	    hover(event, 'icons/save-hover-24.png');
     }
 });
 
 document.addEventListener("mouseout", function(e) {
     if (e.target && e.target.id == "overwrite") {
-	unhover(event, 'icons/save-24.png');
+	if (rc_font_color == 'black' ||
+	    (text_color == 'black' && rc_font_color != 'white')) {
+	    unhover(event, 'icons/save-b-24.png');
+	}
+	else
+	    unhover(event, 'icons/save-b-24.png');
     }
 });
 
@@ -287,27 +381,8 @@ document.getElementById("paypal-button").addEventListener("mouseover", function(
 document.getElementById("paypal-button").addEventListener("mouseout", function() {
     unhover(event, 'icons/paypal-64.png');}, false);
 
-// DOM Load Event
 
-document.addEventListener('DOMContentLoaded', Store.displaySessions());
-
-
-// Options
-let Reverse = false;
-document.addEventListener('DOMContentLoaded', () => {
-    let order = browser.storage.local.get('rightmost', item => {
-	if (item.rightmost == true) {
-	    document.querySelector('#listorder').checked = true;
-	    Reverse = true;
-	    listTabs();
-	}
-	else if (item.rightmost == false || item.rightmost == undefined) {
-	    document.querySelector('#listorder').checked = false;
-	    Reverse = false;
-	    listTabs();
-	}
-    });
-});
+// Options Change
 
 document.querySelector('#listorder').addEventListener('change', (e) => {
     if(e.target.checked) {

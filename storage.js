@@ -1,5 +1,7 @@
 // storage.js
 
+import {text_color, rc_color, rc_font_color} from "./add.js";
+
 export class Session {
     constructor(title, tabs, date, url) {
 	this.title = title;
@@ -20,12 +22,21 @@ export class Box {
 	Title.innerText +=  Session.title  + " (" + Session.tabs + ")";
 	Title.className = 'open';
 	Title.setAttribute('title', 'Open in New Window');
+
+	//Title.style.color = "white";
+	
 	Delete.innerHTML += '&times;';
 	Delete.id = "delete";
 	Delete.setAttribute('title', 'Delete');
 	Info.innerText = Session.date.toLocaleString();
 	Info.className = 'time-stamp';
-	Save.setAttribute('src', 'icons/save-24.png');
+	if (rc_font_color == 'black' ||
+	    (text_color == 'black' && rc_font_color != 'white')) {
+	    Save.setAttribute('src', 'icons/save-b-24.png');
+	}
+	else {
+	    Save.setAttribute('src', 'icons/save-24.png');
+	}
 	Save.className = 'save-button';
 	Save.id = "overwrite";
 	Save.setAttribute('title', 'Overwrite');
@@ -35,6 +46,14 @@ export class Box {
 	box.appendChild(Title);
 	box.appendChild(Save);
 	box.appendChild(Delete);
+
+	box.style.backgroundColor = rc_color;
+
+	if (rc_font_color == 'black')
+	    box.style.color = 'black';
+	else if (rc_font_color == 'white')
+	    box.style.color = 'white';
+	
 	//box.appendChild(Info);
 	Container.appendChild(box);
     }
