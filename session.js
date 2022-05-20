@@ -24,36 +24,29 @@ var thisArg = {custom: 'object'};
 function loadSession() {
     document.querySelector(".Session-Box").addEventListener('click', async (e) => {
 	if (e.target.classList.contains('open')) {
-	    const Sessions = await Store.getSessions();
-	    const pos = parseInt(e.target.parentElement.dataset.pos);
-	    //try {
+
+	    const pos = parseInt(e.target.parentElement.dataset.pos);	   
 		if (no_load == true) {
 		    console.log('condition true');
-		    browser.windows.create({
-			url: Sessions[pos].url[0],
-		    }).then( (windowInfo) => {
-			console.log(`Created window: ${windowInfo.id}`);
-			for (var i = 1; i < Sessions[pos].url.length; i++) {
-			    browser.tabs.create({
-				discarded: true,
-				url: Sessions[pos].url[i],
-				windowId: windowInfo.id
-			    });
-			}
-		    });
+		    browser.runtime.sendMessage({
+			type: "loadSession",
+			pos: pos
+		    }).then( (msg) => { Success("Opening new Window ...", 2000);})
+			.catch( (err) => {console.log(err); Failure(err.message, 3000);});
 		}
-		else {
+	    else {
+		try {
+		    const Sessions = await Store.getSessions();
 		    browser.windows.create({
 			url: Sessions[pos].url
 		    });
+		    Success("Opening new Window ...", 2000);
 		}
-		Success("Opening new Window ...", 2000);
-	   // }
-	    /*catch(err) {
-		console.log(err);
-		Failure(err.message, 3000);
-	}
-	*/
+		catch(err) {
+		    console.log(err);
+		    Failure(err.message, 3000);
+		}
+	    }
 	}
     });
 }

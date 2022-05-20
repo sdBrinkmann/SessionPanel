@@ -1,3 +1,4 @@
+
 // Open Panel in New TAB
 
 async function  getWindowTabs() {
@@ -51,6 +52,53 @@ function openPanel() {
 }
 
 browser.browserAction.onClicked.addListener(openPanel);
+
+
+// load Session
+
+async function getSessions() {
+    let sessions;
+    await browser.storage.local.get('sessions').then( (items) => {
+	//console.log(items);
+	//console.log(Object.keys(items));
+	if(Object.keys(items).length == 0) {
+	    sessions = [];
+	}
+	
+	else {
+	    sessions = JSON.parse(items.sessions);
+	}
+    });
+    return sessions;
+}
+
+async function openSession(message, sender, response) {
+    if (message.type == 'loadSession') {
+	const pos = message.pos;
+	const Sessions = await getSessions();
+	browser.windows.create({
+	    url: Sessions[pos].url[0],
+	}).then( (windowInfo) => {
+	    console.log(`Created window: ${windowInfo.id}`);
+	    for (var i = 1; i < Sessions[pos].url.length; i++) {
+		browser.tabs.create({
+		    discarded: true,
+		    url: Sessions[pos].url[i],
+		    windowId: windowInfo.id
+		});
+		
+	    }
+	    return true;
+	});
+    }
+    return false;
+}
+
+
+browser.runtime.onMessage.addListener(openSession);
+
+
+
 /*
 browser.browserAction.onClicked.addListener(() => {
     browser.browserAction.openPopup();

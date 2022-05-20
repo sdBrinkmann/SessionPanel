@@ -12,6 +12,9 @@ export let rc_color = 'darkred';
 export let rc_font_color;
 export let text_color = 'white';
 
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     let order = browser.storage.local.get(items => {
 	if (items.background_color != undefined) {
@@ -204,6 +207,7 @@ upTabNo();
 document.addEventListener('visibilitychange', async function() {
     if(document.visibilityState == "visible") {
 	//alert('triggered');
+	//window.location.reload();
 	await upTabNo();
 	listTabs();
     }
