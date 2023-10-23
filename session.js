@@ -10,10 +10,38 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (items.no_load == true)
 	    no_load = true;
     });
+    addSession();
     loadSession();
     deleteSession();
     saveSession();
 });
+
+
+// Modal
+
+const modal = document.getElementById("add");
+const span = document.getElementsByClassName("close")[0];
+
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+
+function addSession() {
+    document.querySelector(".add-icon").addEventListener('click', function(e) {
+	modal.style.display = "block";
+	document.getElementById('session-name').focus();
+    });
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+
 
 
 
@@ -126,6 +154,56 @@ function saveSession() {
 }
 
 //saveSession();
+
+// Save Session upon Enter
+
+document.getElementById("session-name").onkeypress = function(e){
+    if (!e) e = window.event;
+    var keyCode = e.keyCode || e.which;
+    if(keyCode  == '27') {
+	alert('WHY');
+	modal.style.display = 'none';
+	return;
+    }
+    
+    if(keyCode == '13') {
+	let Name = this.value;
+	if (Name.length > 28) {
+	    Failure("Name is too long", 4000);
+	    return;
+	}
+	if (Name.length == 0) {
+	    Failure("No Title Given", 4000);
+	    return;
+	}
+	    
+	modal.style.display = 'none';
+	try {
+	    getWindowTabs().then(async (tabs) => {
+		let url = []
+		const tabs_leng = tabs.length;
+		for (let tab of tabs) {
+		    if(tab.url.startsWith("http"))
+			url.push(tab.url);
+		}
+		const No_tabs = url.length;
+		const session = new Session(Name, No_tabs, new Date(), url);
+		const box = new Box();
+		let  pos = await Store.addSession(session);
+		box.addBox(session, pos);
+		if ( (tabs_leng )!== No_tabs)
+		    Success(`New Session Added <br> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
+		else
+		    Success("New Session Added", 3000);  
+	    });
+	}
+	catch(err) {
+	    console.log(err);
+	    Failure(err.message, 3000);
+	}
+	document.getElementById("session-name").value = '';
+    }
+}
 
 
 // Duplicate Function

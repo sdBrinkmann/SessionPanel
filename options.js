@@ -9,7 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (items.popup == undefined || items.popup == true) {
 	    document.querySelector('#popup').checked = true;
 	}
-
+	if (items.dragndrop != false) {
+	    document.querySelector('#drag-drop').checked = true;
+	}
+	if (items.no_load == true) {
+	    document.querySelector('#no-load').checked = true;
+	}
 	if (items.rightmost == true)
 	    document.querySelector('#order').checked = true;
 
@@ -38,7 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	if (items.highlight_double == true)
 	    document.querySelector('#highlight-double').checked = true;
-	
+
+	if (items.highlight_any == true)
+	    document.querySelector('#highlight-any').checked = true;
+
 	
     });
  
@@ -55,6 +63,19 @@ document.querySelector('#popup').addEventListener('change', (e) => {
 	    'popup': false
 	});
 	browser.browserAction.setPopup({popup: ""});
+    }
+});
+
+document.querySelector('#drag-drop').addEventListener('change', (e) => {
+    if (e.target.checked) {
+	browser.storage.local.set({
+	    'dragndrop': true
+	});
+    }
+    else {
+	browser.storage.local.set({
+	    'dragndrop': false
+	});
     }
 });
 
@@ -123,6 +144,19 @@ document.querySelector('#highlight-double').addEventListener('change', (e) => {
 	    'highlight_double': false
 	});
 	console.log('false');
+    }
+});
+
+document.querySelector('#highlight-any').addEventListener('change', (e) => {
+    if (e.target.checked) {
+	browser.storage.local.set({
+	    'highlight_any': true
+	});
+    }
+    else {
+	browser.storage.local.set({
+	    'highlight_any': false
+	});
     }
 });
 

@@ -119,7 +119,8 @@ browser.history.onVisited.addListener(onVisited);
 // After Update
 
 function handleInstalled(details) {
-    if (details.reason == "update" || details.reason == "install") {
+    // details.reason == "update"
+    if (details.reason == "install") {
 	browser.runtime.openOptionsPage();
     }
 }
