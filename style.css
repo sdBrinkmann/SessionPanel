@@ -2,6 +2,7 @@
 @media(min-width:640px) {
     .container-1 {
 	display:flex;
+	overflow: auto;
 	justify-content:space-around;
 	//flex-basis: 33.3%;
     }
@@ -18,11 +19,13 @@
 }
 
 
-.box-1, .box-2, .box-3{
+
+.box-1, .box-2 {
     //background-color: #001a33;
     box-sizing: border-box;
     position: relative;
     margin-right: 10px;
+    overflow: auto;
 }
 
 .box-1 {
@@ -35,17 +38,34 @@
     //flex-basis: 67%;
 }
 
-.Session-Box {
+.Session-Box, Window-Box {
     min-height: 30px;
 }
 
+.Window-Box {
+    margin-bottom: 20px;
+}
+
+.wName-input {
+    background-color: #00001a;
+    color: white;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+
 @media(min-width: 1280px) {
-	   .Session-Box {
+	   .Session-Box, .Window-Box {
 	       display: grid;
 	       grid-template-columns: 50% 50%;
 	   }
 
-	   .Box-Item:nth-of-type(even) {
+	   .Box-Item:nth-of-type(even), .Window-Item:nth-of-type(odd) {
 	       top: 20px;
 	       position: relative;
 	   }
@@ -92,6 +112,7 @@ body {
     color: white;
     font-family: "Noto Sans", "Segoe UI", sans-serif;
     font-size: 14px;
+    overflow: auto;
 }
 
 img{
@@ -148,17 +169,25 @@ img{
     align-items: center;
     width: 320px;
 }
-    
 
 .Box-Item {
     background: darkred;
+    display: grid;
+    grid-template-columns: 88% 7% 5%;
+}
+
+.Window-Item {
+    background: #483D8B;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.Box-Item, .Window-Item {
     width: 320px;
     height: 35px;
     margin-bottom: 8px;
     margin-right: 8px;
     padding: 10px;
-    display: grid;
-    grid-template-columns: 88% 7% 5%;
     //grid-template-rows: 35px 30px;
     align-items: center;
     
@@ -210,6 +239,10 @@ input[type="text"]{
 
 .NO {
     display: inline;
+}
+
+p.w-text {
+    margin: 0px;
 }
 
 p.open {

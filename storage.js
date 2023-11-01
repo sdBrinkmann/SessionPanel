@@ -57,36 +57,7 @@ export class Box {
 	//box.appendChild(Info);
 	Container.appendChild(box);
     }
-    /*
-      addBox(Session, pos){
-	const Container = document.querySelector('.Session-Box');
-	const box = document.createElement('div');
-	const Title = document.createElement('p');
-	const Delete = document.createElement('p');
-	const Info = document.createElement('p');
-	const Save = document.createElement('img');
-	Title.innerText += Session.title + " (" + Session.tabs + ")";
-	Title.className = 'open';
-	Title.setAttribute('title', 'Open in New Window');
-	Delete.innerHTML += '&times;';
-	Delete.id = "delete";
-	Delete.setAttribute('title', 'Delete');
-	Info.innerText = Session.date.toLocaleString();
-	Info.className = 'time-stamp';
-	Save.setAttribute('src', 'icons/save-24.png');
-	Save.className = 'save-button';
-	Save.id = "overwrite";
-	Save.setAttribute('title', 'Overwrite');
-	
-	box.className = 'Box-Item';
-	box.setAttribute('data-pos', pos);
-	box.appendChild(Title);
-	box.appendChild(Delete);
-	box.appendChild(Info);
-	box.appendChild(Save);
-	Container.appendChild(box);
-    }
-    */
+
 }
 
 // Local Storage Class
@@ -142,5 +113,32 @@ export class Store {
 	});
     }
     static removeSession() {
+    }
+
+    static async getNames() {
+	let names;
+	await browser.storage.local.get('names').then(items => {
+	    console.log(items);
+	    console.log(typeof items.names);
+	    if(Object.keys(items).length == 0 || items.names.length <= 2) {
+		names = new Map();
+	    }
+	    
+	    else {
+		console.log(items.names);
+		names = new Map(JSON.parse(items.names));
+	    }
+	    
+	});
+	return names;
+    }
+
+    static async addNames(N) {
+	if(N.size > 0) {
+	    await browser.storage.local.set({
+		'names': JSON.stringify([...N])
+	    });
+	    console.log("Stored NAME");
+	}
     }
 }

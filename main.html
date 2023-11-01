@@ -1,110 +1,109 @@
 <!doctype html>
 <html>
-    <head>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<link rel="stylesheet" type="text/css" href="modal.css">
-	<link rel="stylesheet" type="text/css" href="toggle.css">
-	<link rel="stylesheet" type="text/css" href="toast.css">
-	<link rel="shortcut icon" type="image/x-icon" href="icons/icon_32.png">
-	<title>Session Panel</title>
-	<meta charset="utf-8" />
-    </head>
-    <body>
-	<div class="container-1" >
-	    <div class = "box-1">
-		<div class="header-1" >
-		    <div>
-			<h3 class="base">Current Window</h3>
-			<h3 class="NO"></h3>
-		    </div>
-		    <div>
-			<img class="don-icon" id="don-icon" src="icons/heart-32.png" title="Donate" >
-			<img class="set-icon" src="icons/alch-32.png" title="Settings">
-		    </div>
-		</div>
-		<!-- <input type="text" id="win-name"/> -->
-		<div class="tab-order">
-		    <p class="order">List rightmost tab first </p>
-		    <div class="toggle">
-			<input type="checkbox" class="check" id="listorder">
-			<b class="b switch"></b>
-			<b class="b track"></b>
-		    </div>
-		</div>
-		<div id ="tabs-list" > </div>
-	    </div>
-	    <div class="box-2">
-		<div class="header"> 
-		    <h3>Sessions</h3>
-		    <img class="add-icon" src="icons/add-32.png" title="Add  Session">
-		</div>
-		<div class="Session-Box"> </div>
-	    </div>
-	    <!--
-	    <div class="box-3">
-		<h3>Settings</h3>
-		<p>Highlight double tabs</p>
-		<button class="testButton" class="browser-style">Click me</button>
-	    </div>
-	    -->
-	</div>
-
-	<!-- Arrow down -->
-	<img id="open" src="icons/arrow-down-48.png" title="Expand panel into a tab">
-
-	<!-- Modal -->
-	<!-- Name Session -->
-	<div id="add" class="modal">
-	    <div class="modal-content">
-		<span class="close">&times;</span>
-		<h3>Add New Session</h3>
-		<input type="text" id="session-name" placeholder="Session NAME"/>
-	    </div>
-	</div>
-
-	<!-- Settings -->
-	<div id="set" class="modal">
-	  <div class="modal-content-set">
-	    <div class="header-2">
-	      <div class="set-h">
-		<img src="icons/alch-32.png" id="alch">
-		<h3 >Settings</h3>
-	      </div>
-	      <span class="close-set">&times;</span>
-	    </div>
-		<p>This is the first version of the Firefox add-on Session Panel and
-		offers no settings so far. <br> <br> Further development of this add-on depends on its reception and demand for further customization, and features as there is already a plethora of tab / session managers. <br> <br> You can support further development of this add-on by donating (click on heart symbol). <br> <br></p>
-	    </div>
-	</div>
-
-	
-	<!-- Donate -->
-	<div id="don" class="modal">
-	  <div class="modal-content-don">
-	    <div class="header-2">
-	      <div class="set-h">
-		<img src="icons/heart-32.png" id="heart">
-		<h3 >Donate</h3>
-	      </div>
-	      <span class="close-don">&times;</span>
-	    </div>
-	    <p>This add-on is free for you to use. If it helps you to increase your productivity and serves your needs well, you are welcome to make a small donation.</p>
-	    <div>
-	      <p id="donate"> Donate with Paypal:</p>
-	      <form action="https://www.paypal.com/donate" method="post" target="_top">
-		<input type="hidden" name="hosted_button_id" value="S2PNMGQK653LQ" />
-		<input id="paypal-button" type="image" src='icons/paypal-64.png' border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button"/>
-		<img  src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png" id="pp"/>
-	      </form>
-	     
-	    </div>
+  <head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="modal.css">
+    <link rel="stylesheet" type="text/css" href="toggle.css">
+    <link rel="stylesheet" type="text/css" href="toast.css">
+    <link rel="shortcut icon" type="image/x-icon" href="icons/icon_32.png">
+    <title>Session Panel</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div class="container-1" >
+      <div class = "box-1">
+	<div class="header-1" >
+	  <div>
+	    <h3 class="base">Current Window</h3>
+	    <h3 class="base" id="NO"></h3></br>
+	    <h4 class="base">Name: </h4><div class="base" id="name"></div>
+	  </div>
+	  <div>
+	    <img class="don-icon" id="don-icon" src="icons/heart-32.png" title="Donate" >
+	    <img class="set-icon" src="icons/alch-32.png" title="Settings">
 	  </div>
 	</div>
+	<!-- <input type="text" id="win-name"/> -->
+	<div class="tab-order">
+	  <p class="order">List rightmost tab first </p>
+	  <div class="toggle">
+	    <input type="checkbox" class="check" id="listorder">
+	    <b class="b switch"></b>
+	    <b class="b track"></b>
+	  </div>
+	</div>
+	<div id ="tabs-list" > </div>
+      </div>
+      <div class="box-2">
+	<div class="windows"></div>
+	  <!-- <h3>Other Windows</h3> -->
+	<div class="Window-Box"></div>
+	
+	<div class="header"> 
+	  <h3>Sessions</h3>
+	  <img class="add-icon" src="icons/add-32.png" title="Add  Session">
+	</div>
+	<div class="Session-Box"> </div>
+      </div>
+    </div>
 
-	<!-- Toast -->
-	<div id="toast">Display Message</div>
-	<script type="module" src="add.js"></script>
-	<script src="test.js"></script>
-	<script type="module"  src="session.js"></script>
-    </body>
+    <!-- Arrow down -->
+    <img id="open" src="icons/arrow-down-48.png" title="Expand panel into a tab">
+
+    <!-- Modal -->
+    <!-- Name Session -->
+    <div id="add" class="modal">
+      <div class="modal-content">
+	<span class="close">&times;</span>
+	<h3>Add New Session</h3>
+	<input type="text" id="session-name" placeholder="Session NAME"/>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div id="set" class="modal">
+      <div class="modal-content-set">
+	<div class="header-2">
+	  <div class="set-h">
+	    <img src="icons/alch-32.png" id="alch">
+	    <h3 >Settings</h3>
+	  </div>
+	  <span class="close-set">&times;</span>
+	</div>
+	<p>This is the first version of the Firefox add-on Session Panel and
+	  offers no settings so far. <br> <br> Further development of this add-on depends on its reception and demand for further customization, and features as there is already a plethora of tab / session managers. <br> <br> You can support further development of this add-on by donating (click on heart symbol). <br> <br></p>
+      </div>
+    </div>
+
+    
+    <!-- Donate -->
+    <div id="don" class="modal">
+      <div class="modal-content-don">
+	<div class="header-2">
+	  <div class="set-h">
+	    <img src="icons/heart-32.png" id="heart">
+	    <h3 >Donate</h3>
+	  </div>
+	  <span class="close-don">&times;</span>
+	</div>
+	<p>This add-on is free for you to use. If it helps you to increase your productivity and serves your needs well, you are welcome to make a small donation.</p>
+	<div>
+	  <p id="donate"> Donate with Paypal:</p>
+	  <form action="https://www.paypal.com/donate" method="post" target="_top">
+	    <input type="hidden" name="hosted_button_id" value="S2PNMGQK653LQ" />
+	    <input id="paypal-button" type="image" src='icons/paypal-64.png' border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button"/>
+	    <img  src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png" id="pp"/>
+	  </form>
+	  
+	</div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast">Display Message</div>
+    <script type="module" src="add.js"></script>
+    <script type="module" src="windows.js"></script>
+    <script src="test.js"></script>
+    <script type="module"  src="session.js"></script>
+  </body>
 </html>

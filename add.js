@@ -300,7 +300,7 @@ document.querySelector("#open").onclick = () => {
 function upTabNo() {
     browser.tabs.query({currentWindow: true}).then((tabs) => {
     //console.log(tabs);
-    document.querySelector(".NO").innerText = " (" + tabs.length + ")";
+    document.querySelector("#NO").innerText = " (" + tabs.length + ")";
     });
 }
 
