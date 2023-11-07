@@ -23,9 +23,10 @@ function setName(w_id, m) {
     const I = document.createElement("Input");
     I.setAttribute("type", "text");
     I.className = "wName-input";
-    //console.log("HERE");
-    if (m.has(w_id))
+    
+    if (m.has(w_id) && m.get(w_id).length > 0) {
 	I.setAttribute("value", m.get(w_id));
+    }
     else
 	I.setAttribute("placeholder", "<Click to (Re)name Window>");
     n.appendChild(I);
@@ -37,17 +38,15 @@ function getName(w_id, m) {
     
     input.addEventListener("blur", (event) => {
 	m.set(w_id, input.value)
-	Store.addNames(m);
+	Store.saveNames(m);
     });
 
     input.addEventListener("keydown", async event => {
 	if (event.key === "Enter") {
 	    m.set(w_id, input.value)
-	    Store.addNames(m);
-	    console.log(await Store.getNames());
+	    Store.saveNames(m);
 	}
     });
-    
 }
 
 //getName();
@@ -80,21 +79,25 @@ browser.windows.getAll(
 	const Cont = document.querySelector('.Window-Box');
 	const box = document.createElement('div');
 	const Title = document.createElement('p');
-
-
+	const Tabs = document.createElement('p');
 	Title.className = "w-text";
-
-
+	Tabs.className = "w-text";
+	Tabs.className = "w-text-tabs";
 	box.className = 'Window-Item';
+	box.setAttribute("data-wId", w.id);
 	box.appendChild(Title);
+	box.appendChild(Tabs);
 
-	console.log(w);
 	if (m.has(w.id)) {
 	    Title.innerText += m.get(w.id);
 	} else {
 	    Title.innerText += "<Id: " + w.id + ">";
 	}
-	Title.innerText += " (" + w.tabs.length + " Tabs)";
+	if (w.tabs.length > 1)
+	    Tabs.innerText += "(" + w.tabs.length + " Tabs)";
+	else
+	    Tabs.innerText += "(" + w.tabs.length + " Tab)";
+	Tabs.setAttribute("data-tabs", w.tabs.length);
 	//const Name = document.createElement('p');
 	//Name.innerText = m.get(w.id);
 	

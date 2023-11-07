@@ -118,8 +118,6 @@ export class Store {
     static async getNames() {
 	let names;
 	await browser.storage.local.get('names').then(items => {
-	    console.log(items);
-	    console.log(typeof items.names);
 	    if(Object.keys(items).length == 0 || items.names.length <= 2) {
 		names = new Map();
 	    }
@@ -133,12 +131,17 @@ export class Store {
 	return names;
     }
 
-    static async addNames(N) {
+    static async saveNames(N) {
 	if(N.size > 0) {
 	    await browser.storage.local.set({
 		'names': JSON.stringify([...N])
 	    });
-	    console.log("Stored NAME");
 	}
+    }
+
+    static async addNames(key, value) {
+	let m = await Store.getNames();
+	m.set(key, value);
+	Store.saveNames(m);
     }
 }

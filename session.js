@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSession();
     deleteSession();
     saveSession();
+    createSession();
 });
 
 
@@ -54,21 +55,26 @@ function loadSession() {
 	if (e.target.classList.contains('open')) {
 
 	    const pos = parseInt(e.target.parentElement.dataset.pos);	   
-		if (no_load == true) {
-		    console.log('condition true');
-		    browser.runtime.sendMessage({
-			type: "loadSession",
-			pos: pos
-		    }).then( (msg) => { Success("Opening new Window ...", 2000);})
-			.catch( (err) => {console.log(err); Failure(err.message, 3000);});
-		}
+	    if (no_load == true) {
+		//console.log('condition true');
+		browser.runtime.sendMessage({
+		    type: "loadSession",
+		    pos: pos
+		}).then( (msg) => {
+		    Store.addNames(msg[0], msg[1]);
+		    Success("Opening new Window ...", 8000);
+		})
+		    .catch( (err) => {console.log(err); Failure(err.message, 3000);});
+	    }
 	    else {
 		try {
 		    const Sessions = await Store.getSessions();
 		    browser.windows.create({
 			url: Sessions[pos].url
+		    }).then( (windowInfo) => {
+			Store.addNames(windowInfo.id, Sessions[pos].title);
+			Success("Opening new Window ...", 2000);
 		    });
-		    Success("Opening new Window ...", 2000);
 		}
 		catch(err) {
 		    console.log(err);
@@ -89,15 +95,24 @@ function deleteSession() {
 	    let name = tag.replace(/\([0-9]*\)$/g,'');
 	    let NO = tag.match(/\d+(?!.*\d)/);
 	    if (window.confirm(`Delete Session ${name}with ${NO} Tabs ?`)) {
-		e.target.parentElement.remove();
+		
 		try {
-		Store.getSessions().then((sessions) => {
-		    const del = sessions.splice(pos, 1);
-		    browser.storage.local.set({
-			'sessions': JSON.stringify(sessions)
+		    Store.getSessions().then((sessions) => {
+			const del = sessions.splice(pos, 1);
+			browser.storage.local.set({
+			    'sessions': JSON.stringify(sessions)
+			});
+			console.log("DELETE");
+			console.log(e.target);
+			let next = e.target.parentElement.nextElementSibling;
+			while (next) {
+			    let Pos = parseInt(next.dataset.pos) - 1;
+			    next.dataset.pos = Pos;
+			    next = next.nextElementSibling;
+			}
+			e.target.parentElement.remove();
+			Success("Session Deleted", 3000);
 		    });
-		    Success("Session Deleted", 3000);
-		});
 		}
 		catch(err) {
 		    console.log(err);
@@ -153,58 +168,59 @@ function saveSession() {
     });
 }
 
+
 //saveSession();
 
-// Save Session upon Enter
-
-document.getElementById("session-name").onkeypress = function(e){
-    if (!e) e = window.event;
-    var keyCode = e.keyCode || e.which;
-    if(keyCode  == '27') {
-	alert('WHY');
-	modal.style.display = 'none';
-	return;
-    }
-    
-    if(keyCode == '13') {
-	let Name = this.value;
-	if (Name.length > 28) {
-	    Failure("Name is too long", 4000);
+// Create new Session upon Enter
+function createSession() {
+    document.getElementById("session-name").onkeypress = function(e){
+	if (!e) e = window.event;
+	var keyCode = e.keyCode || e.which;
+	if(keyCode  == '27') {
+	    alert('WHY');
+	    modal.style.display = 'none';
 	    return;
 	}
-	if (Name.length == 0) {
-	    Failure("No Title Given", 4000);
-	    return;
-	}
+	
+	if(keyCode == '13') {
+	    let Name = this.value;
+	    if (Name.length > 28) {
+		Failure("Name is too long", 4000);
+		return;
+	    }
+	    if (Name.length == 0) {
+		Failure("No Title Given", 4000);
+		return;
+	    }
 	    
-	modal.style.display = 'none';
-	try {
-	    getWindowTabs().then(async (tabs) => {
-		let url = []
-		const tabs_leng = tabs.length;
-		for (let tab of tabs) {
-		    if(tab.url.startsWith("http"))
-			url.push(tab.url);
-		}
-		const No_tabs = url.length;
-		const session = new Session(Name, No_tabs, new Date(), url);
-		const box = new Box();
-		let  pos = await Store.addSession(session);
-		box.addBox(session, pos);
-		if ( (tabs_leng )!== No_tabs)
-		    Success(`New Session Added <br> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
-		else
-		    Success("New Session Added", 3000);  
-	    });
+	    modal.style.display = 'none';
+	    try {
+		getWindowTabs().then(async (tabs) => {
+		    let url = []
+		    const tabs_leng = tabs.length;
+		    for (let tab of tabs) {
+			if(tab.url.startsWith("http"))
+			    url.push(tab.url);
+		    }
+		    const No_tabs = url.length;
+		    const session = new Session(Name, No_tabs, new Date(), url);
+		    const box = new Box();
+		    let  pos = await Store.addSession(session);
+		    box.addBox(session, pos);
+		    if ( (tabs_leng )!== No_tabs)
+			Success(`New Session Added <br> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
+		    else
+			Success("New Session Added", 3000);  
+		});
+	    }
+	    catch(err) {
+		console.log(err);
+		Failure(err.message, 3000);
+	    }
+	    document.getElementById("session-name").value = '';
 	}
-	catch(err) {
-	    console.log(err);
-	    Failure(err.message, 3000);
-	}
-	document.getElementById("session-name").value = '';
     }
 }
-
 
 // Duplicate Function
 // Toast Print

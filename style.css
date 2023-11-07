@@ -2,9 +2,11 @@
 @media(min-width:640px) {
     .container-1 {
 	display:flex;
-	overflow: auto;
+	//overflow: auto;
 	justify-content:space-around;
+	max-height: 96vh;
 	//flex-basis: 33.3%;
+	position: relative;
     }
 }
 
@@ -19,24 +21,30 @@
 }
 
 
-
 .box-1, .box-2 {
     //background-color: #001a33;
     box-sizing: border-box;
     position: relative;
-    margin-right: 10px;
     overflow: auto;
 }
 
 .box-1 {
     min-width: 420px;
     max-width: 1040px;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    scrollbar-width: none;;
+    //overflow-y: auto;
 }
 
 .box-2 {
     //flex-basis: 67%;
+    min-width: 340px;
+    margin-right: 0px;
+    scrollbar-width: none;
 }
+
+
 
 .Session-Box, Window-Box {
     min-height: 30px;
@@ -51,7 +59,7 @@
     color: white;
     border: none;
     outline: none;
-    font-size: 1em;
+    font-size: 1.1em;
     margin-top: 1.33em;
     margin-bottom: 1.33em;
     margin-left: 0;
@@ -98,12 +106,11 @@ a:link, a:visited {
 
 
 
-a:hover {
+:where(a, .open):hover {
     text-decoration: underline;
 }
 
-.open:hover {
-    text-decoration: underline;
+:where(.open, .w-text, .w-text-tabs):hover {
     cursor: pointer;
 }
 
@@ -112,7 +119,8 @@ body {
     color: white;
     font-family: "Noto Sans", "Segoe UI", sans-serif;
     font-size: 14px;
-    overflow: auto;
+    min-height: 580px;
+    //overflow-y: visible;
 }
 
 img{
@@ -178,8 +186,11 @@ img{
 
 .Window-Item {
     background: #483D8B;
-    display: grid;
-    grid-template-columns: 50% 50%;
+    display: flex;
+    //position: relative;
+    //z-index: 100;
+    //overflow: visible;
+    //grid-template-columns: 50% 50%;
 }
 
 .Box-Item, .Window-Item {
@@ -193,6 +204,13 @@ img{
     
 }
 
+.w-text-tabs {
+    margin-left: 5px;
+}
+
+.Window-Box:hover {
+    cursor: pointer;
+}
 /*
 .Box-Item {
     background: darkred;
@@ -240,6 +258,8 @@ input[type="text"]{
 .NO {
     display: inline;
 }
+
+
 
 p.w-text {
     margin: 0px;

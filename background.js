@@ -74,12 +74,14 @@ async function getSessions() {
 
 async function openSession(message, sender, response) {
     if (message.type == 'loadSession') {
+	let info;
 	const pos = message.pos;
 	const Sessions = await getSessions();
-	browser.windows.create({
+	await browser.windows.create({
 	    url: Sessions[pos].url[0],
 	}).then( (windowInfo) => {
 	    console.log(`Created window: ${windowInfo.id}`);
+	    info = [windowInfo.id, Sessions[pos].title];
 	    for (var i = 1; i < Sessions[pos].url.length; i++) {
 		browser.tabs.create({
 		    discarded: true,
@@ -88,10 +90,9 @@ async function openSession(message, sender, response) {
 		});
 		
 	    }
-	    return true;
 	});
+	return info;
     }
-    return false;
 }
 
 
