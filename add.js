@@ -1,6 +1,7 @@
 // add.js
 
 import {Session, Box, Store} from "./storage.js";
+import {Success, Failure} from "./util.js";
 
 // Options
 
@@ -16,8 +17,8 @@ export let text_color = 'white';
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    let order = browser.storage.local.get(items => {
+document.addEventListener('DOMContentLoaded', async () => {
+    let order = await browser.storage.local.get(items => {
 	if (items.background_color != undefined) {
 	    document.body.style.backgroundColor = items.background_color;
 	}
@@ -60,13 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	    dragLeave();
 	    dragDrop();
 	}
-	
 	listTabs(true);
 	linkTabs();
 	closeTab();
 	switchWin();
 	Store.displaySessions();
+
     });
+    
 });
 
 
@@ -82,11 +84,11 @@ function getWindowTabs(getALL) {
 }
 
 async function listTabs(ac = false) {
-    let id_active;
+    //let id_active;
     await getWindowTabs(highlight_any).then(async (tabs) => {
 	let winInfo = await browser.windows.getCurrent(); 
 	//console.log(winInfo);
-	// let id_active;
+	let id_active;
 	const List = document.getElementById('tabs-list');
 	const currentTabs = document.createDocumentFragment();
 	List.textContent = '';
@@ -104,6 +106,7 @@ async function listTabs(ac = false) {
 
 	    Parent.className = 'Tab-Item';
 	    Icon.src = tab.favIconUrl;
+	    Icon.classList.add('icon');
 	    Del.src = 'icons/delete-16.png';
 	    Del.classList.add('d-b');
 	    //Icon.setAttribute('rel', 'icon');
@@ -157,18 +160,13 @@ async function listTabs(ac = false) {
 	    currentTabs.appendChild(Parent);
 	}
 	List.appendChild(currentTabs);
-	      
+
+	if (auto_scroll == true && ac == true) {
+	    document.getElementById(id_active).scrollIntoView({behavior: "instant", block: "center", inline: "start"});
+	}
     
     });
-    //console.log("NOT WORKING; WHY>");
-	
-    if (auto_scroll == true && ac == true) {
-	document.getElementById(id_active).scrollIntoView({block: "center"});
-	//document.querySelector(".box-1").scrollTop = 80;
-	//element.parentElement.parentElement.parentElement.scroll(0, 200);
-	//element.parentElement.parentElement.parentElement.addEventListener("scroll", e => {
-	//console.log("ScrollTop:", e.target.scrollTop)});
-    }
+
 }
 
 
@@ -177,12 +175,65 @@ async function listTabs(ac = false) {
 
 // Drag n'Drop
 function dragStart() {
+    
     document.querySelector("#tabs-list").addEventListener('dragstart', function(e) {
-	console.log("Drag Start");
-	console.log(e.target);
+	//e.target.style.width = "300px";
 	e.dataTransfer.setData('text/uri-list', e.target.childNodes[1].href);
 	e.dataTransfer.setData('text/plain', e.target.childNodes[1].id);
-	    });
+	/*
+	const canvas = document.createElement('canvas');
+	const ctx = canvas.getContext('2d');
+	canvas.className = 'drag-canvas';
+	canvas.height = 24;
+	canvas.width = 300;
+	canvas.style.position = "absolute";
+	canvas.style.top = "-1000px";
+	//ctx.clearRect(0,0, canvas.width, canvas.height);
+	ctx.fillStyle = '#001a55';
+	//x.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.beginPath();
+	ctx.roundRect(0, 0, canvas.width, canvas.height, [6]);
+	ctx.stroke();
+	
+	ctx.fill();
+	//console.log(e.target.childNodes[0].src);
+
+	const img = new Image();
+
+	img.src = e.target.childNodes[0].src;
+	
+	ctx.drawImage(img, 4, 3, 18, 18)
+
+	ctx.fillStyle = 'white';
+	ctx.fillText(e.target.childNodes[1].innerText.slice(0,50), 28, 15);
+	*/
+	const Element = document.createElement('div');
+	const Icon = document.createElement('img');
+	const Link = document.createElement('p');
+
+	Element.className = 'Tab-Item-drag';
+	Icon.className = "icon-drag";
+	Link.className = "link-drag";
+	Icon.src = e.target.childNodes[0].src;
+	Link.innerText = e.target.childNodes[1].innerText;
+	
+
+	Element.appendChild(Icon);
+	Element.appendChild(Link);
+
+	Element.style.position = "absolute";
+	Element.style.top = "-1000px";
+	document.body.appendChild(Element);
+	
+	e.dataTransfer.setDragImage(Element, -15, -10)
+	
+    });
+
+    document.querySelector("#tabs-list").addEventListener("dragend", (event, width) => {
+	document.querySelector(".Tab-Item-drag").remove();
+    });
+
+    
 }
 
 function dragEnter() {
@@ -322,7 +373,7 @@ function dragDrop() {
 		index: -1,	    
 	    });
 	    const len = parseInt(e.target.childNodes[1].dataset.tabs) + 1;
-	    e.target.childNodes[1].innerText = '(' + len  + ' Tabs)';
+	    e.target.childNodes[1].innerText = ' (' + len  + ' Tabs)';
 	    e.target.childNodes[1].setAttribute("data-tabs", len);
 	    listTabs();
 	    
@@ -360,7 +411,7 @@ function dragDrop() {
 	    listTabs();
 	}
 	
-	
+
     });
 
     // Move tab to saved session
@@ -374,9 +425,9 @@ function dragDrop() {
 	if (e.target.classList.contains('Box-Item')) {
 	    e.target.style.border = "";
 	    e.target.style.border = "";
-	    addSession(u, e.target.dataset.pos, e.target.childNodes[0]);
-	    //listTabs();   DELETE TAB OR NOT ????????????????????????????????????????
-	    
+	    if (await addSession(u, e.target.dataset.pos, e.target.childNodes[0]))
+	    	   await browser.tabs.remove(parseInt(data));
+	    listTabs();	    
 	}
 	 
 	else if (e.target.classList.contains('open')) {
@@ -384,11 +435,15 @@ function dragDrop() {
 	    //console.log(e.target);
 	    e.target.parentElement.style.border = "";
 	    e.target.parentElement.style.border = "";
-	    addSession(u, e.target.parentElement.dataset.pos, e.target);
-	    // listTabs(); DELETE TAP OR NOT ??????????????????????????????????????
+	    if (await addSession(u, e.target.parentElement.dataset.pos, e.target))
+	    	await browser.tabs.remove(parseInt(data));
+	    listTabs();
 	}
 	
     });
+
+    
+    
 }
 
 // Utility function
@@ -397,21 +452,22 @@ async function addSession(tab_url, pos, node) {
 	try {
 	    const R = await Store.getSessions();
 	    const S = R[pos];
-	    console.log("S");
-	    console.log(S);
 	    const len = S.url.length + 1;
 	    
 	    await Store.overwriteSession(new Session(S.title, len, S.date, S.url.concat(tab_url)), pos);
 	    
-	    node.innerText = S.title + '(' + len + ')';
+	    node.innerText = S.title + ' (' + len + ')';
 	    Success("Tab added to Session ", 3000);
+	    return true;
 	}
 	catch(err) {
 	    console.log(err);
 	    Failure(err.message, 3000);
+	    return false;
 	}
     } else {
 	Failure("Tab cannot be saved!", 3000);
+	return false;
     }
 }
 
@@ -423,7 +479,7 @@ function linkTabs() {
     document.querySelector("#tabs-list").addEventListener('click', function(e){
 	if (e.target.classList.contains('list-tabs')) {
 	    e.preventDefault();
-	    //console.log(typeof  e.target.id);
+	    
 	    const ID = parseInt(e.target.id);
 	    browser.tabs.update(ID, {active: true});
 	    listTabs(false);
@@ -511,7 +567,6 @@ upTabNo();
 
 document.addEventListener('visibilitychange', async function() {
     if(document.visibilityState == "visible") {
-	//alert('triggered');
 	//window.location.reload();
 	await upTabNo();
 	listTabs();
@@ -627,24 +682,4 @@ document.querySelector('#listorder').addEventListener('change', (e) => {
 	listTabs();
     }
 });
-
-
-
-// Toast Print
-
-function Success(Message, Duration) {
-    const x = document.getElementById("toast");
-    x.innerHTML = Message;
-    x.className = "show";
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, Duration);
-}
-
-function Failure(Message, Duration) {
-    const x = document.getElementById("toast");
-    x.innerHTML = '<strong>Error: </strong>';
-    x.innerHTML += Message;
-    x.className = "show-fail";
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, Duration);
-}
-
 

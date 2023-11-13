@@ -1,6 +1,7 @@
 // storage.js
 
 import {text_color, rc_color, rc_font_color} from "./add.js";
+import {Success, Failure} from "./util.js";
 
 export class Session {
     constructor(title, tabs, date, url) {
@@ -114,7 +115,7 @@ export class Store {
     }
     static removeSession() {
     }
-
+/*
     static async getNames() {
 	let names;
 	await browser.storage.local.get('names').then(items => {
@@ -130,15 +131,35 @@ export class Store {
 	});
 	return names;
     }
+*/
 
-    static async saveNames(N) {
-	if(N.size > 0) {
-	    await browser.storage.local.set({
-		'names': JSON.stringify([...N])
-	    });
+    static async getNames(id) {
+	let names = new Map();
+
+	for (const i in id) {
+	    let value = await browser.sessions.getWindowValue(id[i], 'name');
+	    if (value)
+		names.set(id[i], value)
 	}
+	
+	return names;
     }
 
+    static async saveName(w_id, value) {
+	browser.sessions.setWindowValue(w_id, 'name', value)
+	    .then(Success("Window name changed", 3000))
+	    .catch((err) => Failure(err.message, 3000))
+    }
+    
+   /* 
+      static async saveNames(N) {
+      if(N.size > 0) {
+      await browser.storage.local.set({
+      'names': JSON.stringify([...N])
+      });
+      }
+      }	
+*/
     static async addNames(key, value) {
 	let m = await Store.getNames();
 	m.set(key, value);

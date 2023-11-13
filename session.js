@@ -60,25 +60,28 @@ function loadSession() {
 		browser.runtime.sendMessage({
 		    type: "loadSession",
 		    pos: pos
-		}).then( (msg) => {
-		    Store.addNames(msg[0], msg[1]);
+		}).then((msg) => {
+		    Store.saveName(msg[0], msg[1]);
+		    console.log(msg[0], msg[1]);
 		    Success("Opening new Window ...", 8000);
 		})
-		    .catch( (err) => {console.log(err); Failure(err.message, 3000);});
+		    .catch( (err) => {console.log(err); Failure(err.message, 4000);});
 	    }
 	    else {
 		try {
 		    const Sessions = await Store.getSessions();
 		    browser.windows.create({
-			url: Sessions[pos].url
+			url: Sessions[pos].url,
+			focused: false,
 		    }).then( (windowInfo) => {
-			Store.addNames(windowInfo.id, Sessions[pos].title);
-			Success("Opening new Window ...", 2000);
+			Store.saveName(windowInfo.id, Sessions[pos].title);
+			console.log(windowInfo.id, Session[pos].title);
+			Success("Opening new Window ...", 8000);
 		    });
 		}
 		catch(err) {
 		    console.log(err);
-		    Failure(err.message, 3000);
+		    Failure(err.message, 4000);
 		}
 	    }
 	}

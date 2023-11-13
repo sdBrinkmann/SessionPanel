@@ -2,20 +2,7 @@
 
 import {Store} from "./storage.js";
 
-/*
-let Current_Win = browser.windows.getCurrent().then( x => {
-    console.log(x);
-    document.querySelector("#name").innerText = x.id;
 
-})
-*/
-//console.log("Hello World!")
-
-/*
-let m = new Map([
-    [1, "Example"]
-]);
-*/
 
 
 function setName(w_id, m) {
@@ -38,13 +25,19 @@ function getName(w_id, m) {
     
     input.addEventListener("blur", (event) => {
 	m.set(w_id, input.value)
-	Store.saveNames(m);
+	Store.saveName(w_id, input.value);
+	if (input.value.length == 0)
+	    input.placeholder = "<Click to (Re)name Window>";
+
     });
 
     input.addEventListener("keydown", async event => {
 	if (event.key === "Enter") {
 	    m.set(w_id, input.value)
-	    Store.saveNames(m);
+	    Store.saveName(w_id, input.value);
+	    if (input.value.length == 0)
+		input.placeholder = "<Click to (Re)name Window>";
+	    input.blur();
 	}
     });
 }
@@ -57,7 +50,8 @@ browser.windows.getAll(
     }
 
 ).then(async Win => {
-    let m = await Store.getNames();
+    let id = Win.map(w => w.id);
+    let m = await Store.getNames(id);
     if (Win.length > 1) {
 	const Container = document.querySelector('.windows');
 	const h_windows = document.createElement('h3');
@@ -106,3 +100,5 @@ browser.windows.getAll(
 
     }
 });
+
+

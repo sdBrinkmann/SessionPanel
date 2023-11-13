@@ -1,13 +1,14 @@
 
-@media(min-width:640px) {
-    .container-1 {
-	display:flex;
-	//overflow: auto;
-	justify-content:space-around;
-	max-height: 96vh;
-	//flex-basis: 33.3%;
-	position: relative;
-    }
+
+.container-1 {
+    display:flex;
+    //overflow: auto;
+    justify-content:space-around;
+    max-height: 96vh;
+    //flex-basis: 33.3%;
+    position: relative;
+    margin: 0px;
+
 }
 
 @media(max-width:639px) {
@@ -16,9 +17,6 @@
     }
 }
 
-.container-1 {
-    margin: 0px;
-}
 
 
 .box-1, .box-2 {
@@ -42,26 +40,26 @@
     min-width: 340px;
     margin-right: 0px;
     scrollbar-width: none;
+    //overflow: auto;
 }
 
 
 
 .Session-Box, Window-Box {
     min-height: 30px;
+    margin-bottom: 30px;
 }
 
-.Window-Box {
-    margin-bottom: 20px;
-}
+
 
 .wName-input {
     background-color: #00001a;
     color: white;
     border: none;
     outline: none;
-    font-size: 1.1em;
-    margin-top: 1.33em;
-    margin-bottom: 1.33em;
+    font-size: 1.2em;
+    margin-top: 5px;
+    margin-bottom: 5px;
     margin-left: 0;
     margin-right: 0;
     font-weight: bold;
@@ -71,6 +69,7 @@
 	   .Session-Box, .Window-Box {
 	       display: grid;
 	       grid-template-columns: 50% 50%;
+	       margin-bottom: 40px;
 	   }
 
 	   .Box-Item:nth-of-type(even), .Window-Item:nth-of-type(odd) {
@@ -80,23 +79,61 @@
 }
 
 
-.Tab-Item {
+.Tab-Item  {
     padding-bottom: 5px;
     display: flex;
     align-items: center;
 }
 
-.Tab-Item img {
+.Tab-Item-drag {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right:10px;
+    display: flex;
+    align-items: center;
+    max-width: 300px;
+    max-height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0.999;
+    transform: translate(0, 0);
+    //border-color: none;
+}
+
+.Tab-Item-drag{
+    transform: translate(0, 0);
+}
+
+.icon, .icon-drag {
     padding-right: 7px;
 }
 
-.Tab-Item:hover {
+.icon-drag {
+    padding-left: 7px;
+    border-color: none;
+    //transform: translate(0, 0);
+}
+
+.link-drag {
+    //padding-right: 10px;
+    overflow: hidden;
+    display: inline-block;
+    border-color: none;
+    background-color: #001a55;
+    max-height: 20px;
+    //max-width: 280px;
+    //transform: translate(0, 0);
+		      
+}
+
+.Tab-Item:hover, .Tab-Item-drag {
     background-color: #001a55;
     opacity: 1;
 }
 
 a {
     padding: 0px;
+    overflow: hidden;
 }
 
 a:link, a:visited {
@@ -104,6 +141,16 @@ a:link, a:visited {
     text-decoration: none;
 }
 
+a{
+    //max-width: 374px;
+    overflow: hidden;
+
+}
+
+.drag-canvas {
+    border-radius: 40px;
+    transform: translate(0,0)
+}
 
 
 :where(a, .open):hover {
@@ -121,6 +168,7 @@ body {
     font-size: 14px;
     min-height: 580px;
     //overflow-y: visible;
+    min-width:790px;
 }
 
 img{
@@ -253,6 +301,11 @@ input[type="text"]{
 
 .base {
     display: inline;
+    margin: 0px;
+}
+
+.name {
+    margin: 0px;
 }
 
 .NO {
@@ -304,6 +357,11 @@ p.open {
     #open {
 	visibility: visible;
     }
+
+    a{
+	max-width: 374px;
+    }
+
 }
 	
 @media (min-width: 801px), (min-height: 601px) {
@@ -311,3 +369,4 @@ p.open {
 	visibility: hidden;
     }
 }
+

@@ -79,6 +79,7 @@ async function openSession(message, sender, response) {
 	const Sessions = await getSessions();
 	await browser.windows.create({
 	    url: Sessions[pos].url[0],
+	    focused: false,
 	}).then( (windowInfo) => {
 	    console.log(`Created window: ${windowInfo.id}`);
 	    info = [windowInfo.id, Sessions[pos].title];
@@ -86,7 +87,7 @@ async function openSession(message, sender, response) {
 		browser.tabs.create({
 		    discarded: true,
 		    url: Sessions[pos].url[i],
-		    windowId: windowInfo.id
+		    windowId: windowInfo.id,
 		});
 		
 	    }
