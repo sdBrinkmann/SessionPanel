@@ -1,4 +1,5 @@
 import {Session, Box, Store} from "./storage.js"
+import {Success, Failure} from "./util.js"
 
 function getWindowTabs() {
     return browser.tabs.query({currentWindow: true});
@@ -62,7 +63,7 @@ function loadSession() {
 		    pos: pos
 		}).then((msg) => {
 		    Store.saveName(msg[0], msg[1]);
-		    console.log(msg[0], msg[1]);
+		    //console.log(msg[0], msg[1]);
 		    Success("Opening new Window ...", 8000);
 		})
 		    .catch( (err) => {console.log(err); Failure(err.message, 4000);});
@@ -75,7 +76,7 @@ function loadSession() {
 			focused: false,
 		    }).then( (windowInfo) => {
 			Store.saveName(windowInfo.id, Sessions[pos].title);
-			console.log(windowInfo.id, Session[pos].title);
+			//console.log(windowInfo.id, Session[pos].title);
 			Success("Opening new Window ...", 8000);
 		    });
 		}
@@ -105,8 +106,8 @@ function deleteSession() {
 			browser.storage.local.set({
 			    'sessions': JSON.stringify(sessions)
 			});
-			console.log("DELETE");
-			console.log(e.target);
+			//console.log("DELETE");
+			//console.log(e.target);
 			let next = e.target.parentElement.nextElementSibling;
 			while (next) {
 			    let Pos = parseInt(next.dataset.pos) - 1;
@@ -225,20 +226,3 @@ function createSession() {
     }
 }
 
-// Duplicate Function
-// Toast Print
-
-function Success(Message, Duration) {
-    const x = document.getElementById("toast");
-    x.innerHTML = Message;
-    x.className = "show";
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, Duration);
-}
-
-function Failure(Message, Duration) {
-    const x = document.getElementById("toast");
-    x.innerHTML = '<strong>Error: </strong>';
-    x.innerHTML += Message;
-    x.className = "show-fail";
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, Duration);
-}

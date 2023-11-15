@@ -20,11 +20,11 @@
       
       <!-- <span class="close-set">&times;</span> -->
     </div>
-    <h3>Version: Session Panel 0.9.1 Firefox</h3> 
+    <h3>Version: Session Panel 0.9.5 Firefox</h3> 
     
     <div class="text-body">
     <p>This is the settings page for the Firefox add-on Session Panel. <br />
-    For more information and to see the current changelog visit <br /> the offical <a href="https://addons.mozilla.org/en-US/firefox/addon/session-panel/">Firefox Add-on page here</a>.</p>
+    <b>For more information and to see the current changelog visit</b> <br /> the offical <a href="https://addons.mozilla.org/en-US/firefox/addon/session-panel/">Firefox Add-on page <b>here</b></a>.</p>
       <h2>General</h2>
       <div class="settings">
 	<!-- General Settings -->
@@ -37,7 +37,7 @@
 	  </div>
 	</div>
 
-	<div>Enable Drag & Drop<br>(For now works only for reordering tabs)</div>
+	<div>Enable Drag & Drop<br></div>
 	<div>
 	  <div class="toggle">
 	    <input type="checkbox" class="check" id="drag-drop">
@@ -124,11 +124,18 @@
 		 <button type="submit" id="submit-bc">Change</button>
 	       </form>
 	       <!-- --->
-	       <h3>Rectangles Color</h3>
+	       <h3>Rectangles Color (Sessions)</h3>
 	       <form>
 		 <label>HEX value: </label>
 		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="rect-color"/>
 		 <button type="submit" id="submit-rc">Change</button>
+	       </form>
+	       
+	       <h3>Rectangles Color (Other windows)</h3>
+	       <form>
+		 <label>HEX value: </label>
+		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="win-color"/>
+		 <button type="submit" id="submit-wc">Change</button>
 	       </form>
 	       
 	       <h3>Font Color (Global)</h3>
@@ -137,13 +144,22 @@
 	       <input type="radio" id="black" name="font color" value="black">
 	       <label for="black">Black</label>
 
-	       <h3>Font Color Rectangles</h3>
+	       <h3>Font Color Rectangles (Sessions)</h3>
 	       <input type="radio" id="rc-global" name="font rc color" value="global">
 	       <label for="global">Same as Global</label>
 	       <input type="radio" id="rc-white" name="font rc color" value="white">
 	       <label for="white">White</label>
 	       <input type="radio" id="rc-black" name="font rc color" value="black">
 	       <label for="black">Black</label>
+
+	       <h3>Font Color Rectangles (other Windows)</h3>
+	       <input type="radio" id="wc-global" name="font wc color" value="global">
+	       <label for="global">Same as Global</label>
+	       <input type="radio" id="wc-white" name="font wc color" value="white">
+	       <label for="white">White</label>
+	       <input type="radio" id="wc-black" name="font wc color" value="black">
+	       <label for="black">Black</label>
+	       
       </div>
     </div>
     <script type="module" src="options.js"></script>

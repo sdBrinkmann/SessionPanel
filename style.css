@@ -17,7 +17,18 @@
     }
 }
 
+@media(min-width:1001px) {
+    .box-1, .box-2 {
+	scrollbar-width: thin;
+	padding-right: 10px;
+    }
+}
 
+@media(max-width:1000px) {
+    .box-1, .box-2 {
+	scrollbar-width: none;
+    }
+}
 
 .box-1, .box-2 {
     //background-color: #001a33;
@@ -31,7 +42,7 @@
     max-width: 1040px;
     margin-left: 10px;
     margin-right: 10px;
-    scrollbar-width: none;;
+    //scrollbar-width: none;;
     //overflow-y: auto;
 }
 
@@ -39,7 +50,7 @@
     //flex-basis: 67%;
     min-width: 340px;
     margin-right: 0px;
-    scrollbar-width: none;
+    //scrollbar-width: none;
     //overflow: auto;
 }
 
@@ -53,7 +64,7 @@
 
 
 .wName-input {
-    background-color: #00001a;
+    //background-color: #00001a;
     color: white;
     border: none;
     outline: none;
@@ -63,6 +74,7 @@
     margin-left: 0;
     margin-right: 0;
     font-weight: bold;
+    min-width: 300px;
 }
 
 @media(min-width: 1280px) {
@@ -93,16 +105,14 @@
     align-items: center;
     max-width: 300px;
     max-height: 20px;
-    border-radius: 10px;
+    //border-radius: 10px;
     overflow: hidden;
-    opacity: 0.999;
+    //opacity: 0.999;
     transform: translate(0, 0);
+    //position: relative;
     //border-color: none;
 }
 
-.Tab-Item-drag{
-    transform: translate(0, 0);
-}
 
 .icon, .icon-drag {
     padding-right: 7px;
@@ -233,7 +243,7 @@ img{
 }
 
 .Window-Item {
-    background: #483D8B;
+    //background: #483D8B;
     display: flex;
     //position: relative;
     //z-index: 100;
@@ -324,7 +334,8 @@ p.open {
 }
 
 .tab-order {
-    margin: 15px;
+    margin-top: 15px;
+    margin-bottom: 20px;
 }
 
 .save-button {

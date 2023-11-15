@@ -2,6 +2,7 @@
 
 import {Session, Box, Store} from "./storage.js";
 import {Success, Failure} from "./util.js";
+import {Windows} from "./windows.js";
 
 // Options
 
@@ -15,12 +16,18 @@ export let rc_color = 'darkred';
 export let rc_font_color;
 export let text_color = 'white';
 
-
+const w_config = {
+    w_color: '#483D8B',
+    w_font_color: "white",
+    background: '#00001a',
+    t_color: 'white',
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
     let order = await browser.storage.local.get(items => {
 	if (items.background_color != undefined) {
 	    document.body.style.backgroundColor = items.background_color;
+	    w_config.background = items.background_color;
 	}
 	if (items.rightmost == true) {
 	    document.querySelector('#listorder').checked = true;
@@ -29,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	if (items.font_color == "black") {
 	    text_color = 'black';
 	    document.body.style.color = 'black';
+	    w_config.t_color = 'black';
 	}
 	if (items.font_rc_color == 'black') {
 	    rc_font_color = 'black';
@@ -36,6 +44,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 	else if (items.font_rc_color == 'white') {
 	    rc_font_color = 'white';
 	}
+	w_config.w_font_color = items.font_color;
+	if (items.font_win_color == 'black')
+	    w_config.w_font_color = 'black';
+	else if (items.font_win_color == 'white')
+	    w_config.w_font_color = 'white';
+	
 	if (items.highlight_active == false) {
 	    highlight_active = false;
 	}
@@ -51,7 +65,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	if (items.rectangle_color != undefined) 
 	    rc_color = items.rectangle_color;
-
+	if (items.win_color != undefined)
+	    w_config.w_color = items.win_color;
 	if (items.dragndrop == false)
 	    dragNdrop = false;
 	else {
@@ -65,6 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	linkTabs();
 	closeTab();
 	switchWin();
+	Windows.display(w_config);
 	Store.displaySessions();
 
     });

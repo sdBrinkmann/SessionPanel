@@ -26,3 +26,8 @@ body {
     margin-top: auto;
     margin-bottom: auto;
 }
+
+a:hover {
+    text-decoration: underline;
+
+}

@@ -34,6 +34,16 @@ document.addEventListener("DOMContentLoaded", () => {
 	else {
 	    document.querySelector('#rc-global').checked = true;
 	}
+
+	if (items.font_win_color == "black") {
+	    document.querySelector('#wc-black').checked = true;
+	}
+	else if (items.font_win_color == "white") {
+	    document.querySelector('#wc-white').checked = true;
+	}
+	else {
+	    document.querySelector('#wc-global').checked = true;
+	}
 	    
 	if (items.highlight_active == true || items.highlight_active == undefined)
 	    document.querySelector('#highlight-active').checked = true;
@@ -164,6 +174,7 @@ document.querySelector('#reset').addEventListener('click', (e) => {
     browser.storage.local.remove([
 	"background_color",
 	"rectangle_color",
+	"win_color",
 	"font_color",
 	"font_rc_color",	
     ]);
@@ -204,6 +215,20 @@ document.querySelector('#submit-rc').addEventListener('click', (e) => {
     }
 });
 
+document.querySelector('#submit-wc').addEventListener('click', (e) => {
+    e.preventDefault();
+    let wc_field = document.getElementById("win-color");
+    wc_field.setCustomValidity("Input did not match valid hex color value e.g. #123abc or #ABC123AA");
+    if (wc_field.validity.patternMismatch == false && wc_field.value != '') {
+	browser.storage.local.set({
+	    'win_color': wc_field.value.toLowerCase()
+	});
+    }
+    else {
+	wc_field.reportValidity();
+    }
+});
+
 // GLOBAL FONT
 
 document.querySelector('#white').addEventListener('change', (e) => {
@@ -240,5 +265,27 @@ document.querySelector('#rc-white').addEventListener('change', (e) => {
 document.querySelector('#rc-black').addEventListener('change', (e) => {
     if (e.target.checked && e.target.value == "black") {
 	browser.storage.local.set({'font_rc_color': e.target.value});
+    }
+});
+
+// WIN FONT
+
+document.querySelector('#wc-global').addEventListener('change', (e) => {
+    if (e.target.checked && e.target.value == "global") {
+	browser.storage.local.remove('font_win_color');
+    }
+});
+
+
+document.querySelector('#wc-white').addEventListener('change', (e) => {
+    if (e.target.checked && e.target.value == "white") {
+	browser.storage.local.set({'font_win_color': "white"});
+
+    }
+});
+
+document.querySelector('#wc-black').addEventListener('change', (e) => {
+    if (e.target.checked && e.target.value == "black") {
+	browser.storage.local.set({'font_win_color': "black"});
     }
 });
