@@ -1,5 +1,5 @@
-import {Session, Box, Store} from "./storage.js"
-import {Success, Failure} from "./util.js"
+import {Session, Box, Store} from "./modules/storage.js"
+import {Success, Failure} from "./modules/util.js"
 
 function getWindowTabs() {
     return browser.tabs.query({currentWindow: true});

@@ -1,8 +1,8 @@
 // add.js
 
-import {Session, Box, Store} from "./storage.js";
-import {Success, Failure} from "./util.js";
-import {Windows} from "./windows.js";
+import {Session, Box, Store} from "./modules/storage.js";
+import {Success, Failure} from "./modules/util.js";
+import {Windows} from "./modules/windows.js";
 
 // Options
 
@@ -404,7 +404,7 @@ function dragDrop() {
 		windowId: parseInt(e.target.parentElement.dataset.wid),
 		index: -1,
 	    });
-	    console.log(e.target);
+	    //console.log(e.target);
 	    const len = parseInt(e.target.nextSibling.dataset.tabs) + 1;
 	    e.target.nextSibling.innerText = '(' + len  + ' Tabs)';
 	    e.target.nextSibling.setAttribute("data-tabs", len);
@@ -420,7 +420,7 @@ function dragDrop() {
 		windowId: parseInt(e.target.parentElement.dataset.wid),
 		index: -1,
 	    });
-	    console.log(e.target);
+	    //console.log(e.target);
 	    const len = parseInt(e.target.dataset.tabs) + 1;
 	    e.target.innerText = '(' + len  + ' Tabs)';
 	    e.target.setAttribute("data-tabs", len);

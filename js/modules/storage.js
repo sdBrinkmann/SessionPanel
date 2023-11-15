@@ -1,6 +1,6 @@
 // storage.js
 
-import {text_color, rc_color, rc_font_color} from "./add.js";
+import {text_color, rc_color, rc_font_color} from "../add.js";
 import {Success, Failure} from "./util.js";
 
 export class Session {
