@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteSession();
     saveSession();
     createSession();
+    selectTabs();
 });
 
 
@@ -27,6 +28,9 @@ const span = document.getElementsByClassName("close")[0];
 
 span.onclick = function() {
     modal.style.display = "none";
+    document.getElementById('tab-selection').innerHTML = "";
+    document.getElementById("select-tabs").innerHTML = "&#129170 Select Tabs individually"
+    document.getElementById("select-tabs").dataset.expanded = "false"
 }
 
 
@@ -36,13 +40,13 @@ function addSession() {
 	document.getElementById('session-name').focus();
     });
 }
-
+/*
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
 }
-
+*/
 
 
 
@@ -177,7 +181,7 @@ function saveSession() {
 
 // Create new Session upon Enter
 function createSession() {
-    document.getElementById("session-name").onkeypress = function(e){
+    document.getElementById("session-name").onkeypress = async function(e) {
 	if (!e) e = window.event;
 	var keyCode = e.keyCode || e.which;
 	if(keyCode  == '27') {
@@ -199,6 +203,96 @@ function createSession() {
 	    
 	    modal.style.display = 'none';
 	    try {
+		let selection = document.getElementById("select-tabs")
+		console.log(selection.dataset.expanded)
+		if (selection.dataset.expanded == "true") {
+		    console.log(document.getElementById("select-tabs"))
+		    const node_list = document.getElementById("select-tabs").nextElementSibling.childNodes
+		    let urls = []
+		    for (let node of node_list) {
+			if (node.childNodes[0].checked == true) {
+			    console.log(node.childNodes[2].href);
+			    urls.push(node.childNodes[2].href);
+			}
+		    }
+		    const No_tabs = urls.length;
+		    const session = new Session(Name, No_tabs, new Date(), urls);
+		    const box = new Box();
+		    let  pos = await Store.addSession(session);
+		    box.addBox(session, pos);
+		    Success("New Session Added", 3000);  
+		    selection.innerHTML = "&#129170 Select Tabs individually"
+		    selection.dataset.expanded = "false"
+		    
+		} else {
+		    getWindowTabs().then(async (tabs) => {
+			let url = []
+			const tabs_leng = tabs.length;
+			for (let tab of tabs) {
+			    if(tab.url.startsWith("http"))
+				url.push(tab.url);
+			}
+			const No_tabs = url.length;
+			const session = new Session(Name, No_tabs, new Date(), url);
+			const box = new Box();
+			let  pos = await Store.addSession(session);
+			box.addBox(session, pos);
+			if ( (tabs_leng )!== No_tabs)
+			    Success(`New Session Added <br> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
+			else
+			    Success("New Session Added", 3000);  
+		    });
+		}
+		
+	    }
+	    catch(err) {
+		console.log(err);
+		Failure(err.message, 3000);
+	    }
+	    document.getElementById("session-name").value = '';
+	    document.getElementById('tab-selection').innerHTML = "";
+	    e.srcElement.dataset.expanded = "false"
+	}
+    }
+
+    document.querySelector('#save-button').addEventListener('click', async (e) => {
+	e.preventDefault();
+	console.log("Clicked on save button");
+	console.log(e.srcElement.previousSibling.previousSibling.value);
+	let Name = e.srcElement.previousSibling.previousSibling.value;
+	if (Name.length > 28) {
+		Failure("Name is too long", 4000);
+		return;
+	    }
+	    if (Name.length == 0) {
+		Failure("No Title Given", 4000);
+		return;
+	    }
+	    
+	    modal.style.display = 'none';
+	try {
+	    let selection = document.getElementById("select-tabs")
+	    console.log("Expanded: " + e.srcElement.dataset.expanded)
+	    if (selection.dataset.expanded == "true") {
+		console.log(document.getElementById("select-tabs"))
+		const node_list = document.getElementById("select-tabs").nextElementSibling.childNodes
+		let urls = []
+		for (let node of node_list) {
+		    if (node.childNodes[0].checked == true) {
+			console.log(node.childNodes[2].href);
+			urls.push(node.childNodes[2].href);
+		    }
+		}
+		const No_tabs = urls.length;
+		const session = new Session(Name, No_tabs, new Date(), urls);
+		const box = new Box();
+		let  pos = await Store.addSession(session);
+		box.addBox(session, pos);
+		Success("New Session Added", 3000);  
+		selection.innerHTML = "&#129170 Select Tabs individually"
+		selection.dataset.expanded = "false"
+		
+	    } else {
 		getWindowTabs().then(async (tabs) => {
 		    let url = []
 		    const tabs_leng = tabs.length;
@@ -217,12 +311,83 @@ function createSession() {
 			Success("New Session Added", 3000);  
 		});
 	    }
-	    catch(err) {
-		console.log(err);
-		Failure(err.message, 3000);
-	    }
-	    document.getElementById("session-name").value = '';
 	}
-    }
+	catch(err) {
+	    console.log(err);
+	    Failure(err.message, 3000);
+	}
+	document.getElementById("session-name").value = '';
+	document.getElementById('tab-selection').innerHTML = "";
+	e.srcElement.dataset.expanded == "false"
+    });
+    
 }
 
+function selectTabs() {
+        document.querySelector('#select-tabs').addEventListener('click', async (e) => {
+	    e.preventDefault();
+	    console.log("Clicked on expand");
+	    console.log(e.srcElement.dataset.expanded);
+	    if (e.srcElement.dataset.expanded == "false") {
+		await getWindowTabs().then(async (tabs) => {
+		    let winInfo = await browser.windows.getCurrent(); 
+		    //console.log(winInfo);
+		    let id_active;
+		    const List = document.getElementById('tab-selection');
+		    const currentTabs = document.createDocumentFragment();
+		    List.textContent = '';
+		    let index = 0;
+		    let double_current = [];
+		    //if(Reverse)
+		    //    tabs = tabs.reverse();
+		    for (let tab of tabs) {
+			if(tab.url.startsWith("http")) {
+			    //console.log(tab);
+			    const Parent = document.createElement('div');
+			    const Check = document.createElement('input');
+			    const Icon = document.createElement('img');
+			    const Link = document.createElement('a');
+			    //const Del = document.createElement('img');
+
+
+			    Check.setAttribute("type", "checkbox");
+			    Check.classList.add('checkbox');
+			    //Parent.className = 'Tab-Item';
+			    Icon.src = tab.favIconUrl;
+			    Icon.classList.add('icon');
+			    //Del.src = 'icons/delete-16.png';
+			    //Del.classList.add('d-b');
+			    //Icon.setAttribute('rel', 'icon');
+			    //Icon.setAttribute('href', tab.favIconUrl)
+			    Link.textContent = tab.title || tab.id;
+			    Link.setAttribute('href', tab.url);
+			    
+			    /*if (dragNdrop == true) {
+			      Link.setAttribute('draggable', false);
+			      Parent.setAttribute('draggable', true);
+			      }
+			    */
+			    //Link.id = tab.id;
+			    Parent.classList.add('link-item');
+			    //Link.style.color = text_color;
+			    Parent.appendChild(Check);
+			    Parent.appendChild(Icon);
+			    Parent.appendChild(Link);
+			    //Parent.appendChild(Del);
+			    
+			    currentTabs.appendChild(Parent);
+			}
+		    }
+		    List.appendChild(currentTabs);
+		    e.srcElement.innerHTML = "&#129171 Select All"
+		    e.srcElement.dataset.expanded = "true"
+		});
+	    }
+	    else {
+		document.getElementById('tab-selection').innerHTML = "";
+		e.srcElement.innerHTML = "&#129170 Select Tabs individually";
+		e.srcElement.dataset.expanded = "false"
+	    }
+	});
+
+}

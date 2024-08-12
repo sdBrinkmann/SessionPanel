@@ -31,8 +31,8 @@ browser.storage.onChanged.addListener((changes, area) => {
 
 function openPanel() {
     if (pop == undefined || pop == true) {
-	browser.browserAction.setPopup({popup: "/main.html"});
-	browser.browserAction.openPopup();
+	browser.action.setPopup({popup: "/main.html"});
+	browser.action.openPopup();
     }
     else {
 	getWindowTabs().then((tabs) => {
@@ -51,7 +51,7 @@ function openPanel() {
     }
 }
 
-browser.browserAction.onClicked.addListener(openPanel);
+browser.action.onClicked.addListener(openPanel);
 
 
 // load Session
@@ -102,8 +102,8 @@ browser.runtime.onMessage.addListener(openSession);
 
 
 /*
-browser.browserAction.onClicked.addListener(() => {
-    browser.browserAction.openPopup();
+browser.action.onClicked.addListener(() => {
+    browser.action.openPopup();
 });
 */
 

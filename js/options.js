@@ -72,7 +72,7 @@ document.querySelector('#popup').addEventListener('change', (e) => {
 	browser.storage.local.set({
 	    'popup': false
 	});
-	browser.browserAction.setPopup({popup: ""});
+	browser.action.setPopup({popup: ""});
     }
 });
 
