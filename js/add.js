@@ -37,6 +37,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    text_color = 'black';
 	    document.body.style.color = 'black';
 	    w_config.t_color = 'black';
+
+	    document.getElementById("search-tog").src = "icons/search_48_b.png"
+	}
+	if (items.search_box_color != undefined) {
+	    document.getElementById("search").style.backgroundColor = items.search_box_color
 	}
 	if (items.font_rc_color == 'black') {
 	    rc_font_color = 'black';
@@ -87,8 +92,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     
 });
 
+// SEARCH FUNCTION
+
+document.getElementById("search").addEventListener("input", e => {
+    console.log("Entered: " + e.target.value)
+    //console.log(e)
+    listTabs()
+});
 
 
+
+
+document.querySelector("#search-tog").addEventListener('click', function(e) {
+    const search_input = document.getElementById("sIn")
+    console.log(search_input)
+    if (search_input.style.display == "inline") {
+	search_input.style.display = "none"
+	listTabs();
+	search_input.children[0].value = ""
+    }
+    else
+	search_input.style.display = "inline"
+});
+
+
+
+// END SEARCH FUNCTION 
 
 // Get and List TABS
 
@@ -112,8 +141,16 @@ async function listTabs(ac = false) {
 	let double_current = [];
 	if(Reverse)
 	    tabs = tabs.reverse();
+
+	let filter = document.getElementById("search").value.toLowerCase()
+	
 	for (let tab of tabs) {
 	    //console.log(tab);
+
+	    if (filter != "" && !tab.title.toLowerCase().includes(filter) &&
+		!tab.url.toLowerCase().includes(filter))
+		continue;
+	    
 	    if (highlight_any == true &&  tab.windowId != winInfo.id) continue;
 	    const Parent = document.createElement('div');
 	    const Icon = document.createElement('img');

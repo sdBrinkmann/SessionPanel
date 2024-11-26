@@ -175,8 +175,9 @@ document.querySelector('#reset').addEventListener('click', (e) => {
 	"background_color",
 	"rectangle_color",
 	"win_color",
+	"search_box_color",
 	"font_color",
-	"font_rc_color",	
+	"font_rc_color",
     ]);
     location.reload();
 });
@@ -222,6 +223,20 @@ document.querySelector('#submit-wc').addEventListener('click', (e) => {
     if (wc_field.validity.patternMismatch == false && wc_field.value != '') {
 	browser.storage.local.set({
 	    'win_color': wc_field.value.toLowerCase()
+	});
+    }
+    else {
+	wc_field.reportValidity();
+    }
+});
+
+document.querySelector('#submit-sb').addEventListener('click', (e) => {
+    e.preventDefault();
+    let sb_field = document.getElementById("search-box-color");
+    sb_field.setCustomValidity("Input did not match valid hex color value e.g. #123abc or #ABC123AA");
+    if (sb_field.validity.patternMismatch == false && sb_field.value != '') {
+	browser.storage.local.set({
+	    'search_box_color': sb_field.value.toLowerCase()
 	});
     }
     else {

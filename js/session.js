@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let option = browser.storage.local.get(items => {
 	if (items.no_load == true)
 	    no_load = true;
+	else
+	    no_load = false;
     });
     addSession();
     loadSession();
@@ -60,18 +62,18 @@ function loadSession() {
 	if (e.target.classList.contains('open')) {
 
 	    const pos = parseInt(e.target.parentElement.dataset.pos);	   
-	    if (no_load == true) {
 		//console.log('condition true');
 		browser.runtime.sendMessage({
 		    type: "loadSession",
-		    pos: pos
+		    pos: pos,
+		    noload: no_load
 		}).then((msg) => {
-		    Store.saveName(msg[0], msg[1]);
+		    //Store.saveName(msg[0], msg[1]);
 		    //console.log(msg[0], msg[1]);
 		    Success("Opening new Window ...", 8000);
 		})
 		    .catch( (err) => {console.log(err); Failure(err.message, 4000);});
-	    }
+	    /*
 	    else {
 		try {
 		    const Sessions = await Store.getSessions();
@@ -80,7 +82,7 @@ function loadSession() {
 			focused: false,
 		    }).then( (windowInfo) => {
 			Store.saveName(windowInfo.id, Sessions[pos].title);
-			//console.log(windowInfo.id, Session[pos].title);
+			console.log(windowInfo.id, Session[pos].title);
 			Success("Opening new Window ...", 8000);
 		    });
 		}
@@ -88,7 +90,8 @@ function loadSession() {
 		    console.log(err);
 		    Failure(err.message, 4000);
 		}
-	    }
+		}
+		*/
 	}
     });
 }

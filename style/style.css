@@ -222,11 +222,12 @@ img{
 }
 
 
-.header-1 {
+.header-1, .setting-line {
     display:flex;
     justify-content: space-between;
     align-items: center;
 }
+
 
 
 .header {
@@ -336,6 +337,7 @@ p.open {
 .tab-order {
     margin-top: 15px;
     margin-bottom: 20px;
+    flex: 1;
 }
 
 .save-button {
@@ -381,3 +383,21 @@ p.open {
     }
 }
 
+
+
+#search {
+    color: white;
+    font-size: 18px;
+    background: #00004a;
+    border: 2px solid #00004a;
+    border-radius: 10px;
+}
+
+.search-wrapper {
+    margin-bottom: 10px;
+    display: none;
+}
+
+.search-toggle {
+    margin-bottom: 10px;
+}
