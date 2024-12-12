@@ -38,6 +38,7 @@
 }
 
 .box-1 {
+    min-height: 320px;
     min-width: 420px;
     max-width: 1040px;
     margin-left: 10px;
@@ -68,13 +69,17 @@
     color: white;
     border: none;
     outline: none;
-    font-size: 1.2em;
+    font-size: 1.3em;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 0;
     margin-right: 0;
     font-weight: bold;
     min-width: 300px;
+}
+
+#session-header {
+    font-size: 18px;
 }
 
 @media(min-width: 1280px) {
@@ -87,6 +92,10 @@
 	   .Box-Item:nth-of-type(even), .Window-Item:nth-of-type(odd) {
 	       top: 20px;
 	       position: relative;
+	   }
+
+	   #session-header {
+	       font-size: 21px;
 	   }
 }
 
@@ -181,7 +190,9 @@ body {
     min-width:790px;
 }
 
-img{
+
+
+img {
     width: 16px;
     height: 16px;
 }
@@ -400,4 +411,36 @@ p.open {
 
 .search-toggle {
     margin-bottom: 10px;
+}
+
+.drop-container {
+    float: right;
+    position: relative;
+    display: inline-block;
+}
+
+.sort-list {
+    position: absolute;
+    background-color: #001a55;
+    display: none;
+    right: 0;
+    z-index: 1;
+    min-width: 100px;
+    color: white;
+
+}
+
+.sort-list a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.sort-selc:hover {
+    background-color: #003055;
+}
+
+.sort-default {
+    background-color: #003055;
 }

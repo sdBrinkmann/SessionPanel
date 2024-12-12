@@ -28,11 +28,22 @@
 	<!-- <input type="text" id="win-name"/> -->
 	<div class="setting-line">
 	  <div class="tab-order">
-	    <p class="order">List rightmost tab first </p>
+	    <p class="order">Reverse order</p>
 	    <div class="toggle">
 	      <input type="checkbox" class="check" id="listorder">
 	      <b class="b switch"></b>
 	      <b class="b track"></b>
+	    </div>
+	  </div>
+	  <div class="drop-container">
+	    <img class="set-icon" id="sort-tog" src="icons/sort_48.png" title="Sort">
+	    <div class="sort-list" id="sort-lst">
+	      <a><b>Sort by:</b></a>
+	      <a  class="sort-selc" id="sort-default">Tab Order</a>
+	      <a  class="sort-selc" id="sort-title">Title</a>
+	      <a  class="sort-selc" id="sort-url">URL</a>
+	      <a  class="sort-selc" id="sort-accessed">Last accessed</a>
+	      <a  class="sort-selc" id="sort-audio">Audible</a>
 	    </div>
 	  </div>
 	  <div class="set">
@@ -51,11 +62,11 @@
       </div>
       <div class="box-2">
 	<div class="windows"></div>
-	  <!-- <h3>Other Windows</h3> -->
+	<!-- <h3>Other Windows</h3> -->
 	<div class="Window-Box"></div>
 	
 	<div class="header"> 
-	  <h3>Sessions</h3>
+	  <h3 id="session-header">Sessions</h3>
 	  <img class="add-icon" src="icons/add-32.png" title="Add  Session">
 	</div>
 	<div class="Session-Box"> </div>

@@ -42,13 +42,23 @@ function addSession() {
 	document.getElementById('session-name').focus();
     });
 }
-/*
+
+
 window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
+    
+    const sort_menu = document.getElementById("sort-lst")
+    const sort_icon = document.getElementById("sort-tog")
+
+    if (sort_menu.style.display == "block" && event.target != sort_icon &&
+	event.target != sort_menu) {
+	sort_menu.style.display = "none";
+    }
+    
+    if (event.target == modal) {
+	modal.style.display = "none";
+    }
 }
-*/
+
 
 
 

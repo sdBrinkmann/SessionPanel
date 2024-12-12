@@ -7,11 +7,14 @@ import {Windows} from "./modules/windows.js";
 // Options
 
 let Reverse = false;
+let rev_default = false;
 let highlight_active = true;
 let highlight_double = false;
 let highlight_any = false;
 let auto_scroll = false;
 let dragNdrop = true;
+let sort_fn = null;
+let sort_setting = "sort-default"
 export let rc_color = 'darkred';
 export let rc_font_color;
 export let text_color = 'white';
@@ -32,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	if (items.rightmost == true) {
 	    document.querySelector('#listorder').checked = true;
 	    Reverse = true;
+	    rev_default = true;
 	}
 	if (items.font_color == "black") {
 	    text_color = 'black';
@@ -39,9 +43,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    w_config.t_color = 'black';
 
 	    document.getElementById("search-tog").src = "icons/search_48_b.png"
+	    document.getElementById("sort-tog").src = "icons/sort_48_b.png"
 	}
 	if (items.search_box_color != undefined) {
 	    document.getElementById("search").style.backgroundColor = items.search_box_color
+	}
+	if (items.search_on == true) {
+	    document.getElementById("sIn").style.display = "inline"
+	    
 	}
 	if (items.font_rc_color == 'black') {
 	    rc_font_color = 'black';
@@ -81,6 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    dragLeave();
 	    dragDrop();
 	}
+	setSortDefault(sort_setting);
 	listTabs(true);
 	linkTabs();
 	closeTab();
@@ -97,6 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.getElementById("search").addEventListener("input", e => {
     console.log("Entered: " + e.target.value)
     //console.log(e)
+
     listTabs()
 });
 
@@ -105,7 +116,7 @@ document.getElementById("search").addEventListener("input", e => {
 
 document.querySelector("#search-tog").addEventListener('click', function(e) {
     const search_input = document.getElementById("sIn")
-    console.log(search_input)
+    //console.log(search_input)
     if (search_input.style.display == "inline") {
 	search_input.style.display = "none"
 	listTabs();
@@ -117,7 +128,93 @@ document.querySelector("#search-tog").addEventListener('click', function(e) {
 
 
 
-// END SEARCH FUNCTION 
+// SORT
+
+document.getElementById("sort-tog").addEventListener('click', function(e) {
+    
+    const slc = document.getElementById("sort-lst")
+    if (slc.style.display == "block")
+	slc.style.display = "none"
+    else
+	slc.style.display = "block"
+});
+
+document.getElementById("sort-lst").addEventListener('click', function(e) {
+    
+    const parent = e.target.parentElement
+    
+    if (e.target.localName == "a") {
+	parent.style.display = "none"
+    }
+
+
+    if (e.target.id == "sort-default") {
+	sort_fn = null
+	removeSort(sort_setting)
+	sort_setting = "sort-default"
+	setSortDefault(sort_setting)
+	if (rev_default == true) {
+	    document.querySelector('#listorder').checked = true;
+	    Reverse = true;
+	}
+    }
+    else {
+	Reverse = false
+	document.querySelector('#listorder').checked = false
+	if (e.target.id == "sort-title") {
+	    sort_fn = sortTitle
+	    removeSort(sort_setting)
+	    sort_setting = "sort-title"
+	    setSortDefault(sort_setting)
+	}
+	else if (e.target.id == "sort-url") {
+	    sort_fn = sortURL
+	    removeSort(sort_setting)
+	    sort_setting = "sort-url"
+	    setSortDefault(sort_setting)
+	}
+	else if (e.target.id == "sort-accessed") {
+	    sort_fn = sortLastAccessed
+	    removeSort(sort_setting)
+	    sort_setting = "sort-accessed"
+	    setSortDefault(sort_setting)
+	}
+	else if (e.target.id == "sort-audio") {
+	    sort_fn = sortAudio
+	    removeSort(sort_setting)
+	    sort_setting = "sort-audio"
+	    setSortDefault(sort_setting)
+	}
+    }
+    listTabs();
+});
+
+
+function setSortDefault(sort_id) {
+    const el = document.getElementById(sort_id)
+    el.classList.add("sort-default")
+    
+}
+
+function removeSort(sort_id) {
+    const el = document.getElementById(sort_id)
+    el.classList.remove("sort-default")
+}
+
+/*
+window.onclick = function(event) {
+    const sort_menu = document.getElementById("sort-lst")
+    console.log("Click!")
+    if (sort_menu.style.display == "block" && event.target != sort_menu) {
+	sort_menu.style.display = "none";
+    }
+}
+*/
+
+function sortLastAccessed(a, b) {return b.lastAccessed > a.lastAccessed}
+function sortTitle(a, b) {return b.title < a.title}
+function sortURL(a, b) {return b.url < a.url}
+function sortAudio(a, b) {return b.audible}
 
 // Get and List TABS
 
@@ -139,9 +236,12 @@ async function listTabs(ac = false) {
 	List.textContent = '';
 	let index = 0;
 	let double_current = [];
+
+	if (sort_fn != null) {
+	    tabs.sort(sort_fn)
+	}
 	if(Reverse)
 	    tabs = tabs.reverse();
-
 	let filter = document.getElementById("search").value.toLowerCase()
 	
 	for (let tab of tabs) {

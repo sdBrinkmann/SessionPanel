@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (items.no_load == true) {
 	    document.querySelector('#no-load').checked = true;
 	}
+	if (items.search_on == true) {
+	    document.querySelector('#search-on').checked = true;
+	}
 	if (items.rightmost == true)
 	    document.querySelector('#order').checked = true;
 
@@ -98,6 +101,19 @@ document.querySelector('#no-load').addEventListener('change', (e) => {
     else {
 	browser.storage.local.set({
 	    'no_load': false
+	});
+    }
+});
+
+document.querySelector('#search-on').addEventListener('change', (e) => {
+    if (e.target.checked) {
+	browser.storage.local.set({
+	    'search_on': true
+	});
+    }
+    else {
+	browser.storage.local.set({
+	    'search_on': false
 	});
     }
 });

@@ -146,7 +146,7 @@ browser.history.onVisited.addListener(onVisited);
 
 function handleInstalled(details) {
     // details.reason == "update"
-    if (details.reason == "install" || details.reason == "update") {
+    if (details.reason == "install") { // || details.reason == "update") {
 	browser.runtime.openOptionsPage();
     }
 }
