@@ -404,6 +404,27 @@ p.open {
     border-radius: 10px;
 }
 
+.search-bar {
+    position: relative;
+    display: inline-block;
+    color: white;
+    font-size: 18px;
+}
+
+#clear-search {
+    display: none;
+    position: absolute;
+    z-index:1;
+    right: 5px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    padding: 2px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
 .search-wrapper {
     margin-bottom: 10px;
     display: none;
@@ -429,6 +450,7 @@ p.open {
     color: white;
 
 }
+
 
 .sort-list a {
     display: block;

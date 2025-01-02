@@ -32,11 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    document.body.style.backgroundColor = items.background_color;
 	    w_config.background = items.background_color;
 	}
-	if (items.rightmost == true) {
-	    document.querySelector('#listorder').checked = true;
-	    Reverse = true;
-	    rev_default = true;
-	}
+
 	if (items.font_color == "black") {
 	    text_color = 'black';
 	    document.body.style.color = 'black';
@@ -90,6 +86,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    dragLeave();
 	    dragDrop();
 	}
+
+	if (items.default_ordering != undefined) {
+	    switch(items.default_ordering) {
+	    case "tab-order":
+		sort_fn = null;
+		sort_setting = "sort-default";
+		break;
+	    case "title":
+		sort_fn = sortTitle;
+		sort_setting = "sort-title";
+		break;
+	    case "url":
+		sort_fn = sortURL;
+		sort_setting = "sort-url";
+		break;
+	    case "last-accessed":
+		sort_fn = sortLastAccessed;
+		sort_setting = "sort-accessed";
+		break;
+	    case "audible":
+		sort_fn = sortAudio;
+		sort_setting = "sort-audio";
+		break;
+	    }
+	}
+
+	if (items.rightmost == true) {
+	    if (sort_fn == null) {
+		Reverse = true;
+		document.querySelector('#listorder').checked = true;
+	    }
+	    rev_default = true;
+	}
+	
 	setSortDefault(sort_setting);
 	listTabs(true);
 	linkTabs();
@@ -105,13 +135,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 // SEARCH FUNCTION
 
 document.getElementById("search").addEventListener("input", e => {
-    console.log("Entered: " + e.target.value)
-    //console.log(e)
-
-    listTabs()
+    //console.log("Entered: " + e.target.value)
+    console.log(e.target.nextElementSibling.style.display)
+    if (e.target.nextElementSibling.style.display == "none" ||
+       e.target.nextElementSibling.style.display == "") {
+	e.target.nextElementSibling.style.display = "block"
+    }
+    listTabs();
 });
 
-
+document.getElementById("clear-search").addEventListener('click', function(e) {
+    console.log(e);
+    e.target.previousElementSibling.value = ""
+    e.target.style.display = "none"
+    listTabs();
+});
 
 
 document.querySelector("#search-tog").addEventListener('click', function(e) {

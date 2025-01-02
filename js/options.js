@@ -60,6 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (items.highlight_any == true)
 	    document.querySelector('#highlight-any').checked = true;
 
+	if (items.default_ordering != undefined) {
+	    document.getElementById('sort-ordering').value = items.default_ordering 
+	}
 	
     });
  
@@ -185,6 +188,16 @@ document.querySelector('#highlight-any').addEventListener('change', (e) => {
 	});
     }
 });
+
+document.querySelector('#sort-ordering').addEventListener('change', (e) => {
+    console.log(e.target.value)
+    browser.storage.local.set({
+	'default_ordering': e.target.value
+    });
+
+    
+});
+
 
 document.querySelector('#reset').addEventListener('click', (e) => {
     browser.storage.local.remove([

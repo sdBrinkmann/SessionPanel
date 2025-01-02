@@ -33,6 +33,7 @@ span.onclick = function() {
     document.getElementById('tab-selection').innerHTML = "";
     document.getElementById("select-tabs").innerHTML = "&#129170 Select Tabs individually"
     document.getElementById("select-tabs").dataset.expanded = "false"
+    document.getElementById("select-tabs").dataset.all = "false"
 }
 
 
@@ -56,6 +57,10 @@ window.onclick = function(event) {
     
     if (event.target == modal) {
 	modal.style.display = "none";
+	document.getElementById('tab-selection').innerHTML = "";
+	document.getElementById("select-tabs").innerHTML = "&#129170 Select Tabs individually"
+	document.getElementById("select-tabs").dataset.expanded = "false"
+	document.getElementById("select-tabs").dataset.all = "false"
     }
 }
 
@@ -337,70 +342,86 @@ function createSession() {
 }
 
 function selectTabs() {
-        document.querySelector('#select-tabs').addEventListener('click', async (e) => {
-	    e.preventDefault();
-	    console.log("Clicked on expand");
-	    console.log(e.srcElement.dataset.expanded);
-	    if (e.srcElement.dataset.expanded == "false") {
-		await getWindowTabs().then(async (tabs) => {
-		    let winInfo = await browser.windows.getCurrent(); 
-		    //console.log(winInfo);
-		    let id_active;
-		    const List = document.getElementById('tab-selection');
-		    const currentTabs = document.createDocumentFragment();
-		    List.textContent = '';
-		    let index = 0;
-		    let double_current = [];
-		    //if(Reverse)
-		    //    tabs = tabs.reverse();
-		    for (let tab of tabs) {
-			if(tab.url.startsWith("http")) {
-			    //console.log(tab);
-			    const Parent = document.createElement('div');
-			    const Check = document.createElement('input');
-			    const Icon = document.createElement('img');
-			    const Link = document.createElement('a');
-			    //const Del = document.createElement('img');
+    document.querySelector('#select-tabs').addEventListener('click', async (e) => {
+	e.preventDefault();
+	console.log("Clicked on expand");
+	console.log(e.srcElement.dataset.expanded);
+	if (e.srcElement.dataset.expanded == "false") {
+	    select(false);
+	    e.srcElement.innerHTML = "&#129171 Select all"
+	    e.srcElement.dataset.expanded = "true"
+	}
+	else if (e.srcElement.dataset.all == "false") {
+	    //document.getElementById('tab-selection').innerHTML = "";
+	    select(true)
+	    e.srcElement.innerHTML = "&#129171 Select Tabs individually";
+	    //e.srcElement.dataset.expanded = "false"
+	    e.srcElement.dataset.all = "true"
+	} else if (e.srcElement.dataset.expanded == "true") {
+	    select(false)
+	    e.srcElement.innerHTML = "&#129171 Select all"
+	    e.srcElement.dataset.all = "false"
+	}
+    });
+
+}
 
 
-			    Check.setAttribute("type", "checkbox");
-			    Check.classList.add('checkbox');
-			    //Parent.className = 'Tab-Item';
-			    Icon.src = tab.favIconUrl;
-			    Icon.classList.add('icon');
-			    //Del.src = 'icons/delete-16.png';
-			    //Del.classList.add('d-b');
-			    //Icon.setAttribute('rel', 'icon');
-			    //Icon.setAttribute('href', tab.favIconUrl)
-			    Link.textContent = tab.title || tab.id;
-			    Link.setAttribute('href', tab.url);
-			    
-			    /*if (dragNdrop == true) {
-			      Link.setAttribute('draggable', false);
-			      Parent.setAttribute('draggable', true);
-			      }
-			    */
-			    //Link.id = tab.id;
-			    Parent.classList.add('link-item');
-			    //Link.style.color = text_color;
-			    Parent.appendChild(Check);
-			    Parent.appendChild(Icon);
-			    Parent.appendChild(Link);
-			    //Parent.appendChild(Del);
-			    
-			    currentTabs.appendChild(Parent);
-			}
-		    }
-		    List.appendChild(currentTabs);
-		    e.srcElement.innerHTML = "&#129171 Select All"
-		    e.srcElement.dataset.expanded = "true"
-		});
+async function select(all) {
+    await getWindowTabs().then(async (tabs) => {
+	let winInfo = await browser.windows.getCurrent(); 
+	//console.log(winInfo);
+	let id_active;
+	const List = document.getElementById('tab-selection');
+	const currentTabs = document.createDocumentFragment();
+	List.textContent = '';
+	let index = 0;
+	let double_current = [];
+	//if(Reverse)
+	//    tabs = tabs.reverse();
+	for (let tab of tabs) {
+	    if(tab.url.startsWith("http")) {
+		//console.log(tab);
+		const Parent = document.createElement('div');
+		const Check = document.createElement('input');
+		const Icon = document.createElement('img');
+		const Link = document.createElement('a');
+		//const Del = document.createElement('img');
+
+
+		Check.setAttribute("type", "checkbox");		
+		if (all == true) { 
+		    Check.setAttribute("checked", "");
+		}
+		Check.classList.add('checkbox');
+		//Parent.className = 'Tab-Item';
+		Icon.src = tab.favIconUrl;
+		Icon.classList.add('icon');
+		//Del.src = 'icons/delete-16.png';
+		//Del.classList.add('d-b');
+		//Icon.setAttribute('rel', 'icon');
+		//Icon.setAttribute('href', tab.favIconUrl)
+		Link.textContent = tab.title || tab.id;
+		Link.setAttribute('href', tab.url);
+		
+		/*if (dragNdrop == true) {
+		  Link.setAttribute('draggable', false);
+		  Parent.setAttribute('draggable', true);
+		  }
+		*/
+		//Link.id = tab.id;
+		Parent.classList.add('link-item');
+		//Link.style.color = text_color;
+		Parent.appendChild(Check);
+		Parent.appendChild(Icon);
+		Parent.appendChild(Link);
+		//Parent.appendChild(Del);
+		
+		currentTabs.appendChild(Parent);
 	    }
-	    else {
-		document.getElementById('tab-selection').innerHTML = "";
-		e.srcElement.innerHTML = "&#129170 Select Tabs individually";
-		e.srcElement.dataset.expanded = "false"
-	    }
-	});
+	}
+	List.appendChild(currentTabs);
+
+    });
 
 }

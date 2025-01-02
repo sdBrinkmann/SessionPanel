@@ -53,7 +53,10 @@
 	<div class="search-toggle" >
 	  
 	  <form class="search-wrapper" id="sIn">
-	    <input type="search" id="search" placeholder="Search Bar">
+	    <span class="search-bar">
+	      <input type="search" id="search" placeholder="Search Bar">
+	      <div id="clear-search">&times</div>
+	    </span>
 	    <!--<button type="reset"></button>-->
 	  </form>
 	  
@@ -83,7 +86,7 @@
 	<span class="close">&times;</span>
 	<h3>Add a new Session</h3>
 	<input type="text" id="session-name" placeholder="Session NAME"/> <button id="save-button">Enter</button>
-	<p id="select-tabs" data-expanded="false">&#129170 Select Tabs individually</p>
+	<p id="select-tabs" data-expanded="false" data-all="false">&#129170 Select Tabs individually</p>
 	<div id="tab-selection"> </div>
       </div>
     </div>
