@@ -83,38 +83,60 @@ async function openSession(message, sender, response) {
     if (message.type == 'loadSession') {
 	let info;
 	const pos = message.pos;
-	console.log(message.noload);
+	console.log("noload: " + message.noload);
 	const Sessions = await getSessions();
-	if (message.noload) {
-	    await browser.windows.create({
-		url: Sessions[pos].url[0],
-		focused: false,
-	    }).then( async (windowInfo) => {
-		console.log(`Created window: ${windowInfo.id}`);
-		info = [windowInfo.id, Sessions[pos].title];
-		saveName(windowInfo.id, Sessions[pos].title)
-		for (var i = 1; i < Sessions[pos].url.length; i++) {
-		    await browser.tabs.create({
-			discarded: true,
-			url: Sessions[pos].url[i],
-			windowId: windowInfo.id,
-		    });
-		    
-		}
-	    });
-	    return info;
+	
+	if (message.switch_t) {
+	    const Tabs = await browser.tabs.query({currentWindow: true});
+	    const winId = Tabs[0].windowId
+	    //const Sessions = await Store.getSessions();
+	    const remove_list = Tabs.map(t => t.id)
+	    browser.tabs.remove(remove_list.splice(1))
+	    for (var i = 0; i < Sessions[pos].url.length; i++) {
+		browser.tabs.create({
+		    discarded: message.noload,
+		    url: Sessions[pos].url[i],
+		})
+	    }
+	    
+	    browser.tabs.remove(remove_list[0])
+	    saveName(winId, Sessions[pos].title)
+	    //response({res: [winId, Sessions[pos].title]});
+	    return [winId, Sessions[pos].title]
 	} else {
- 	    browser.windows.create({
-		url: Sessions[pos].url,
-		focused: false,
-	    }).then( (windowInfo) => {
-		saveName(windowInfo.id, Sessions[pos].title);
-		info = [windowInfo.id, Sessions[pos].title];
-		console.log(windowInfo.id, Session[pos].title);
-		//Success("Opening new Window ...", 8000);
-	    });
-	    return info
+	    if (message.noload) {
+		await browser.windows.create({
+		    url: Sessions[pos].url[0],
+		    focused: false,
+		}).then( async (windowInfo) => {
+		    console.log(`Created window: ${windowInfo.id}`);
+		    info = [windowInfo.id, Sessions[pos].title];
+		    saveName(windowInfo.id, Sessions[pos].title)
+		    for (var i = 1; i < Sessions[pos].url.length; i++) {
+			await browser.tabs.create({
+			    discarded: true,
+			    url: Sessions[pos].url[i],
+			    windowId: windowInfo.id,
+			});
+			
+		    }
+		});
+		return info
+	    } else {
+ 		browser.windows.create({
+		    url: Sessions[pos].url,
+		    focused: false,
+		}).then( (windowInfo) => {
+		    saveName(windowInfo.id, Sessions[pos].title);
+		    info = [windowInfo.id, Sessions[pos].title];
+		    //console.log(windowInfo.id, Session[pos].title);
+		    //Success("Opening new Window ...", 8000);
+		    
+		});
+		return info
+	    }
 	}
+
 
     }
 }

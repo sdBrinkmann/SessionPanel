@@ -19,7 +19,7 @@ export let rc_color = 'darkred';
 export let rc_font_color;
 export let text_color = 'white';
 
-const w_config = {
+export const w_config = {
     w_color: '#483D8B',
     w_font_color: "white",
     background: '#00001a',
@@ -263,7 +263,7 @@ function getWindowTabs(getALL) {
 	return browser.tabs.query({});
 }
 
-async function listTabs(ac = false) {
+export async function listTabs(ac = false) {
     //let id_active;
     await getWindowTabs(highlight_any).then(async (tabs) => {
 	let winInfo = await browser.windows.getCurrent(); 

@@ -22,8 +22,8 @@ function setName(w_id, m, config) {
     else
 	I.setAttribute("placeholder", "<Click to (Re)name Window>");
     n.appendChild(I);
-
 }
+
 //setName();
 
 function getName(w_id, m) {

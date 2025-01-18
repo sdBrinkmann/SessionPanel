@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (items.search_on == true) {
 	    document.querySelector('#search-on').checked = true;
 	}
+	if (items.switch_tabs == true) {
+	    document.querySelector('#switch-tabs').checked = true;
+	}
 	if (items.rightmost == true)
 	    document.querySelector('#order').checked = true;
 
@@ -117,6 +120,19 @@ document.querySelector('#search-on').addEventListener('change', (e) => {
     else {
 	browser.storage.local.set({
 	    'search_on': false
+	});
+    }
+});
+
+document.querySelector('#switch-tabs').addEventListener('change', (e) => {
+    if (e.target.checked) {
+	browser.storage.local.set({
+	    'switch_tabs': true
+	});
+    }
+    else {
+	browser.storage.local.set({
+	    'switch_tabs': false
 	});
     }
 });

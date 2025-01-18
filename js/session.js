@@ -1,17 +1,21 @@
 import {Session, Box, Store} from "./modules/storage.js"
 import {Success, Failure} from "./modules/util.js"
+import {w_config, listTabs} from "./add.js"
+
 
 function getWindowTabs() {
     return browser.tabs.query({currentWindow: true});
 }
 
 let no_load = false;
+let switch_tabs = false;
+
 document.addEventListener('DOMContentLoaded', () => {
     let option = browser.storage.local.get(items => {
 	if (items.no_load == true)
 	    no_load = true;
-	else
-	    no_load = false;
+	if (items.switch_tabs == true)
+	    switch_tabs = true;
     });
     addSession();
     loadSession();
@@ -72,41 +76,75 @@ window.onclick = function(event) {
 
 var thisArg = {custom: 'object'};
 
+function setName(w_id, title, config) {
+    const n = document.querySelector('.wName-input')
+    
+    n.value = title;
+
+
+}
+
+
 function loadSession() {
     document.querySelector(".Session-Box").addEventListener('click', async (e) => {
 	if (e.target.classList.contains('open')) {
 
 	    const pos = parseInt(e.target.parentElement.dataset.pos);	   
-		//console.log('condition true');
-		browser.runtime.sendMessage({
-		    type: "loadSession",
-		    pos: pos,
-		    noload: no_load
-		}).then((msg) => {
-		    //Store.saveName(msg[0], msg[1]);
-		    //console.log(msg[0], msg[1]);
+	    //console.log('condition true');
+	    
+	    browser.runtime.sendMessage({
+		type: "loadSession",
+		pos: pos,
+		noload: no_load,
+		switch_t: switch_tabs,
+	    }).then((msg) => {
+		//Store.saveName(msg[0], msg[1]);
+		//console.log(msg[0], msg[1]);
+		if (switch_tabs) {
+		    Success(`Switching tabs to Session ${msg[1]}`, 3000);
+		    setTimeout(function(){			
+			setName(msg[0], msg[1], w_config)
+			listTabs()
+		    }, 3000);
+		    //console.log(msg.res);
+		    //window.location.reload();
+		} else {
 		    Success("Opening new Window ...", 8000);
-		})
-		    .catch( (err) => {console.log(err); Failure(err.message, 4000);});
+		}
+	    })
+		.catch( (err) => {console.log(err); Failure(err.message, 4000);});
 	    /*
-	    else {
-		try {
-		    const Sessions = await Store.getSessions();
-		    browser.windows.create({
-			url: Sessions[pos].url,
-			focused: false,
-		    }).then( (windowInfo) => {
-			Store.saveName(windowInfo.id, Sessions[pos].title);
-			console.log(windowInfo.id, Session[pos].title);
-			Success("Opening new Window ...", 8000);
-		    });
-		}
-		catch(err) {
-		    console.log(err);
-		    Failure(err.message, 4000);
-		}
-		}
-		*/
+	      else {
+	      try {
+	      const Sessions = await Store.getSessions();
+	      browser.windows.create({
+	      url: Sessions[pos].url,
+	      focused: false,
+	      }).then( (windowInfo) => {
+	      Store.saveName(windowInfo.id, Sessions[pos].title);
+	      console.log(windowInfo.id, Session[pos].title);
+	      Success("Opening new Window ...", 8000);
+	      });
+	      }
+	      catch(err) {
+	      console.log(err);
+	      Failure(err.message, 4000);
+	      }
+	      }
+	    */
+	    /*
+	    const Tabs = await browser.tabs.query({currentWindow: true});
+	    const winId = Tabs[0].windowId
+	    const Sessions = await Store.getSessions();
+	    for (var i = 0; i < Sessions[pos].url.length; i++) {
+		browser.tabs.create({
+		    discarded: no_load,
+		    url: Sessions[pos].url[i],
+		})
+	    }
+	    browser.tabs.remove(Tabs.map(t => t.id))
+	    Store.saveName(winId, Sessions[pos].title)
+	    */
 	}
     });
 }
