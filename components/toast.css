@@ -25,7 +25,25 @@
     //-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     //animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
-    
+
+#toast.show-undo {
+    background-color: #F8D9;
+    padding: 8px;
+    visibility: visible;
+}
+
+#toast.show-undo:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+@media(max-width:1000px) {
+    #toast.show-undo {
+	min-width: 120px;
+	right: 10%;
+    }
+}
 
 @-webkit-keyframes fadein {
   from {top: 0; opacity: 0;}

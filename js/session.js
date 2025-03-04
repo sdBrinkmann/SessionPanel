@@ -84,6 +84,52 @@ function setName(w_id, title, config) {
 
 }
 
+let undo_url_list;
+let undo_window_title;
+
+function Undo(Message, Duration) {
+    const x = document.getElementById("toast");
+    x.innerHTML = "Undo: "
+    x.innerHTML += Message;
+    x.className = "show-undo";
+    setTimeout(function(){ x.className = x.className.replace("show-undo", ""); }, Duration);
+}
+
+
+document.getElementById("toast").addEventListener('click', async (e) => {
+    if (e.target.classList.contains('show-undo')) {
+	//console.log(undo_url_list);
+	
+	const Tabs = await browser.tabs.query({currentWindow: true});
+	
+	const winId = Tabs[0].windowId
+	//console.log(await browser.sessions.getWindowValue(winId, 'name'))
+	//const Sessions = await Store.getSessions();
+	const remove_list =
+	      Tabs.filter(t => (!(t.active &&
+				  t.url == "moz-extension://48436b49-4063-47d5-9735-4910ef327247/main.html")))
+	      .map(t => t.id)
+	//console.log(remove_list)
+	e.target.className = e.target.className.replace("show-undo", "");
+	
+	browser.tabs.remove(remove_list.splice(1))
+	for (var i = 0; i < undo_url_list.length; i++) {
+	    browser.tabs.create({
+		active: false,
+		discarded: no_load,
+		url: undo_url_list[i],
+	    })
+	}
+	browser.tabs.remove(remove_list[0])
+	Store.saveName(winId, undo_window_title)
+	Success(`Switched tabs back`, 3000);
+	setTimeout(function(){			
+	    setName(winId, undo_window_title, w_config)
+	    listTabs()
+
+	}, 3000);
+    }
+});
 
 function loadSession() {
     document.querySelector(".Session-Box").addEventListener('click', async (e) => {
@@ -91,7 +137,7 @@ function loadSession() {
 
 	    const pos = parseInt(e.target.parentElement.dataset.pos);	   
 	    //console.log('condition true');
-	    
+	    undo_window_title = await browser.sessions.getWindowValue(browser.windows.WINDOW_ID_CURRENT, 'name')
 	    browser.runtime.sendMessage({
 		type: "loadSession",
 		pos: pos,
@@ -102,9 +148,12 @@ function loadSession() {
 		//console.log(msg[0], msg[1]);
 		if (switch_tabs) {
 		    Success(`Switching tabs to Session ${msg[1]}`, 3000);
+		    undo_url_list = msg[2]
+			.filter(u => u != "moz-extension://48436b49-4063-47d5-9735-4910ef327247/main.html");
 		    setTimeout(function(){			
 			setName(msg[0], msg[1], w_config)
 			listTabs()
+			Undo("Switch tabs", 30000);
 		    }, 3000);
 		    //console.log(msg.res);
 		    //window.location.reload();

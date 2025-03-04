@@ -88,12 +88,18 @@ async function openSession(message, sender, response) {
 	
 	if (message.switch_t) {
 	    const Tabs = await browser.tabs.query({currentWindow: true});
+	    //console.log(Tabs)
 	    const winId = Tabs[0].windowId
 	    //const Sessions = await Store.getSessions();
-	    const remove_list = Tabs.map(t => t.id)
+	    const remove_list =
+		  Tabs.filter(t => (!(t.active &&
+				      t.url == "moz-extension://48436b49-4063-47d5-9735-4910ef327247/main.html")))
+		  .map(t => t.id)
+	    //console.log(remove_list)
 	    browser.tabs.remove(remove_list.splice(1))
 	    for (var i = 0; i < Sessions[pos].url.length; i++) {
 		browser.tabs.create({
+		    active: false,
 		    discarded: message.noload,
 		    url: Sessions[pos].url[i],
 		})
@@ -102,7 +108,7 @@ async function openSession(message, sender, response) {
 	    browser.tabs.remove(remove_list[0])
 	    saveName(winId, Sessions[pos].title)
 	    //response({res: [winId, Sessions[pos].title]});
-	    return [winId, Sessions[pos].title]
+	    return [winId, Sessions[pos].title, Tabs.map(t => t.url)]
 	} else {
 	    if (message.noload) {
 		await browser.windows.create({
