@@ -332,6 +332,7 @@ function createSession() {
 		} else {
 		    getWindowTabs().then(async (tabs) => {
 			let url = []
+			console.log(tabs)
 			const tabs_leng = tabs.length;
 			for (let tab of tabs) {
 			    if(tab.url.startsWith("http"))
@@ -400,13 +401,19 @@ function createSession() {
 	    } else {
 		getWindowTabs().then(async (tabs) => {
 		    let url = []
+		    let header = []
+		    let favIcon = []
 		    const tabs_leng = tabs.length;
+		    console.log(tabs)
 		    for (let tab of tabs) {
-			if(tab.url.startsWith("http"))
+			if(tab.url.startsWith("http")) {
 			    url.push(tab.url);
+			    header.push(tab.title)
+			    favIcon.push(tab.favIconUrl)
+			}
 		    }
 		    const No_tabs = url.length;
-		    const session = new Session(Name, No_tabs, new Date(), url);
+		    const session = new Session(Name, No_tabs, new Date(), url, header, favIcon);
 		    const box = new Box();
 		    let  pos = await Store.addSession(session);
 		    box.addBox(session, pos);

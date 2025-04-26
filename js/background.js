@@ -119,12 +119,20 @@ async function openSession(message, sender, response) {
 		    info = [windowInfo.id, Sessions[pos].title];
 		    saveName(windowInfo.id, Sessions[pos].title)
 		    for (var i = 1; i < Sessions[pos].url.length; i++) {
-			await browser.tabs.create({
-			    discarded: true,
-			    url: Sessions[pos].url[i],
-			    windowId: windowInfo.id,
-			});
-			
+			if (Sessions[pos].headr != undefined) {
+			    await browser.tabs.create({
+				discarded: true,
+				title: Sessions[pos].headr[i],
+				url: Sessions[pos].url[i],
+				windowId: windowInfo.id,
+			    });
+			} else {
+			    await browser.tabs.create({
+				discarded: true,
+				url: Sessions[pos].url[i],
+				windowId: windowInfo.id,
+			    });
+			}
 		    }
 		});
 		return info

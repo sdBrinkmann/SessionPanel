@@ -1,62 +1,123 @@
 // storage.js
 
-import {text_color, rc_color, rc_font_color} from "../add.js";
+import {text_color, rc_color, rc_font_color} from "./init.js";
 import {Success, Failure} from "./util.js";
 
 export class Session {
-    constructor(title, tabs, date, url) {
+    constructor(title, tabs, date, url, headr, favIcons) {
 	this.title = title;
 	this.tabs = tabs;
 	this.date = date;
 	this.url = url;
+	this.headr = headr;
+	this.favIcons = favIcons
     }
 }
 
+
+
+console.log(window.location.pathname);
 export class Box {
-    addBox(Session, pos){
+    addBox(Session, pos, showdate=false){
 	const Container = document.querySelector('.Session-Box');
 	const box = document.createElement('div');
 	const Title = document.createElement('p');
 	const Delete = document.createElement('p');
-	const Info = document.createElement('p');
-	const Save = document.createElement('img');
-	Title.innerText +=  Session.title  + " (" + Session.tabs + ")";
-	Title.className = 'open';
-	Title.setAttribute('title', 'Open in New Window');
-
-	//Title.style.color = "white";
 	
-	Delete.innerHTML += '&times;';
-	Delete.id = "delete";
-	Delete.setAttribute('title', 'Delete');
-	Info.innerText = Session.date.toLocaleString();
-	Info.className = 'time-stamp';
-	if (rc_font_color == 'black' ||
-	    (text_color == 'black' && rc_font_color != 'white')) {
-	    Save.setAttribute('src', 'icons/save-b-24.png');
-	}
-	else {
-	    Save.setAttribute('src', 'icons/save-24.png');
-	}
-	Save.className = 'save-button';
-	Save.id = "overwrite";
-	Save.setAttribute('title', 'Overwrite');
-	box.className = 'Box-Item';
-	box.setAttribute('data-pos', pos);
-	box.setAttribute('title', Session.date.toLocaleString());
-	box.appendChild(Title);
-	box.appendChild(Save);
-	box.appendChild(Delete);
+	if (window.location.pathname == "/main.html") {
+	    const Info = document.createElement('p');
+	    const Save = document.createElement('img');
+	    Title.innerText +=  Session.title  + " (" + Session.tabs + ")";
+	    Title.className = 'open';
+	    Title.setAttribute('title', 'Open in New Window');
 
+	    //Title.style.color = "white";
+	    
+	    Delete.innerHTML += '&times;';
+	    Delete.id = "delete";
+	    Delete.setAttribute('title', 'Delete');
+	    Info.innerText = Session.date.toLocaleString();
+	    Info.className = 'time-stamp';
+	    if (rc_font_color == 'black' ||
+		(text_color == 'black' && rc_font_color != 'white')) {
+		Save.setAttribute('src', 'icons/save-b-24.png');
+	    }
+	    else {
+		Save.setAttribute('src', 'icons/save-24.png');
+	    }
+	    Save.className = 'save-button';
+	    Save.id = "overwrite";
+	    Save.setAttribute('title', 'Overwrite');
+
+	    box.className = 'Box-Item';
+	    
+	    box.setAttribute('data-pos', pos);
+	    box.setAttribute('title', Session.date.toLocaleString());
+	    box.appendChild(Title);
+	    box.appendChild(Save);
+	    box.appendChild(Delete);
+
+
+	} else {
+	    const Title_div = document.createElement('div');
+	    const Drag_div = document.createElement('div');
+	    const Delete_div = document.createElement('div');
+	    
+	    
+	    const Info = document.createElement('p');
+	    const Drag = document.createElement('img');
+	    const Waste = document.createElement('img');
+	    Title.innerText +=  Session.title  + " (" + Session.tabs + ")";
+	    Title.className = 'open';
+	    Title.setAttribute('title', 'Open in New Window');
+
+	    //Title.style.color = "white";
+	    
+	    Delete.innerHTML += '&times;';
+	    Delete.id = "delete";
+	    Delete.setAttribute('title', 'Delete');
+	    Info.innerText = Session.date.toLocaleString();
+	    Info.className = 'time-stamp';
+	    if (rc_font_color == 'black' ||
+		(text_color == 'black' && rc_font_color != 'white')) {
+		Drag.setAttribute('src', 'icons/drag-indicator-24.png');
+	    }
+	    else {
+		Drag.setAttribute('src', 'icons/drag-indicator-w-24.png');
+	    }
+	    Drag.className = 'drag-icon';
+	    Drag.id = "move-session";
+	    Drag.setAttribute('title', 'move Session');
+
+	    Waste.className = 'waste-icon';
+	    Waste.setAttribute('src', 'icons/wastbin-w-24.png');
+	    
+	    box.className = 'Box-Item-2';
+	    
+	    box.setAttribute('data-pos', pos);
+	    box.setAttribute('title', Session.date.toLocaleString());
+	    Title_div.setAttribute('data-pos', pos);
+	    Title_div.appendChild(Title)
+	    Title_div.appendChild(Info)
+
+	    Delete_div.appendChild(Waste);	
+	    Drag_div.appendChild(Drag);
+
+	
+	    box.appendChild(Title_div);
+	    box.appendChild(Delete_div);
+	    box.appendChild(Drag_div);
+
+	    //box.appendChild(Info);
+	}
+	
 	box.style.backgroundColor = rc_color;
-
 	if (rc_font_color == 'black')
 	    box.style.color = 'black';
 	else if (rc_font_color == 'white')
 	    box.style.color = 'white';
-	
-	//box.appendChild(Info);
 	Container.appendChild(box);
+	
     }
 
 }

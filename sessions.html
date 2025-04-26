@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <link rel="stylesheet" type="text/css" href="style/sessions.css">
     <link rel="stylesheet" type="text/css" href="components/modal.css">
     <link rel="stylesheet" type="text/css" href="components/toggle.css">
     <link rel="stylesheet" type="text/css" href="components/toast.css">
@@ -10,15 +10,27 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <div class="container-1" >
-      <div class = "box-1">
+    <div class="container-1">
+      
+      <div class="box-2">
+	<div class="back">
+	  <img class="arrow-back" src="icons/arrow-back-w-48.png" title="Back to main">
+	  <a class="back" href="/main.html">Back to main</a>
+	</div>
+	
+	<div class="header"> 
+	  <h3 id="session-header">Sessions</h3>
+	  <img class="add-icon" src="icons/add-32.png" title="Add  Session">
+	</div>
+	<div class="Session-Box"> </div>
+      </div>
+
+
+      <div class="box-1">
 	<div class="header-1" >
 	  <div>
-	    <h4 class="base">Current Window</h4>
-	    <h4 class="base" id="NO"></h4>
-	    <div class="name">
-	      <div class="base" id="name"></div>
-	    </div>
+	    <h3>Workbench</h3>
+	   
 	  </div>
 	  <div>
 	    <img class="don-icon" id="don-icon" src="icons/heart-32.png" title="Donate" >
@@ -50,8 +62,7 @@
 	    <img class="set-icon" id="search-tog" src="icons/search-48.png" title="Search">
 	  </div>
 	</div>
-	<div class="search-toggle">
-	  
+	<div class="search-toggle" >	  
 	  <form class="search-wrapper" id="sIn">
 	    <span class="search-bar">
 	      <input type="search" id="search" placeholder="Search Bar">
@@ -61,24 +72,9 @@
 	  </form>
 	  
 	</div>
-	<div id ="tabs-list" > </div>
+	<div id="tabs-list" class="instruct" >Click on any Session titel to inspect respective Session </div>
       </div>
-      <div class="box-2">
-	<div class="windows"></div>
-	<!-- <h3>Other Windows</h3> -->
-	<div class="Window-Box"></div>
-	
-	<div class="header">
-	  <div>
-	    <a href="/sessions.html" id="session-header" title="Edit Sessions">Sessions</a>
-	    <img class="outward" src="icons/arrow-outward-w-48.png" title="Inspect Sessions">
-	  </div>
-	  <div>
-	    <img class="add-icon" src="icons/add-32.png" title="Add  Session">
-	  </div>
-	</div>
-	<div class="Session-Box"> </div>
-      </div>
+
     </div>
 
     <!-- Arrow down -->
@@ -137,7 +133,9 @@
 
     <!-- Toast -->
     <div id="toast">Display Message</div>
-    <script type="module" src="js/add.js"></script>
-    <script type="module"  src="js/session.js"></script>
+    <!-- <script type="module" src="js/add.js"></script> -->
+    <!-- <script type="module"  src="js/session.js"></script> -->
+
+    <script type="module" src="js/work.js"></script>
   </body>
 </html>

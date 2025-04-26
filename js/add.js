@@ -1,7 +1,7 @@
 // add.js
 
 import {Session, Box, Store} from "./modules/storage.js";
-import {Success, Failure} from "./modules/util.js";
+import {Success, Failure, getWindowTabs} from "./modules/util.js";
 import {Windows} from "./modules/windows.js";
 
 // Options
@@ -256,12 +256,7 @@ function sortAudio(a, b) {return b.audible}
 
 // Get and List TABS
 
-function getWindowTabs(getALL) {
-    if (getALL == false || getALL == undefined)
-	return browser.tabs.query({currentWindow: true});
-    else
-	return browser.tabs.query({});
-}
+
 
 export async function listTabs(ac = false) {
     //let id_active;
@@ -720,28 +715,6 @@ function switchWin() {
 
 //test();
 
-// From Popup to TAB
-
-document.querySelector("#open").onclick = () => {
-    var SP_Id;
-    getWindowTabs().then((tabs) => {
-	var SP = tabs.filter( tab =>
-	    tab.url == browser.runtime.getURL('/main.html'));
-	if (SP.length == 0) {
-	    browser.tabs.create({ 
-		url: browser.runtime.getURL('/main.html')
-	    });
-	    window.close();
-	}
-	else {
-	    browser.tabs.update(SP[0].id, {active: true}).then( () => {
-		window.close();
-	    });
-	}
-    });
-    
-    
-}
 
 
 // Display Number of TABS 
@@ -767,42 +740,6 @@ document.addEventListener('visibilitychange', async function() {
 
 
 
-// Settings
-const set = document.getElementById("set");
-const set_close = document.getElementsByClassName("close-set")[0];
-
-function Settings() {
-    document.querySelector(".set-icon").addEventListener('click', function(e) {
-
-	//set.style.display = "block";
-	browser.runtime.openOptionsPage();
-    });
-}
-
-set_close.onclick = function() {
-    set.style.display = "none";
-}
-
-Settings();
-
-// Donate
-
-const don = document.getElementById("don");
-const don_close = document.getElementsByClassName("close-don")[0];
-
-function Donate() {
-    document.querySelector(".don-icon").addEventListener('click', function(e) {
-
-	don.style.display = "block";
-
-    });
-}
-
-don_close.onclick = function() { 
-    don.style.display = "none";
-}
-
-Donate();
 
 
 

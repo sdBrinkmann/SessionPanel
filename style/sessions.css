@@ -1,9 +1,8 @@
 
-
 .container-1 {
     display:flex;
     //overflow: auto;
-    justify-content:space-around;
+    justify-content:space-evenly;
     max-height: 96vh;
     //flex-basis: 33.3%;
     position: relative;
@@ -79,23 +78,9 @@
 }
 
 #session-header {
-    //font-size: 18px;
-    font-size: 1.17em;
-
-    margin-left: 0;
-    margin-right: 0;
-    font-weight: bold;
+    font-size: 21px;
 }
-
-#session-header:hover {
-    text-decoration: underline;
-}
-
-.outward {
-    height: 20px;
-    width: 20px;
-}
-
+/*
 @media(min-width: 1280px) {
 	   .Session-Box, .Window-Box {
 	       display: grid;
@@ -112,7 +97,7 @@
 	       font-size: 21px;
 	   }
 }
-
+*/
 
 .Tab-Item  {
     padding-bottom: 5px;
@@ -260,8 +245,6 @@ img {
     justify-content: space-between;
     align-items: center;
     width: 320px;
-    margin-top: 1em;
-    margin-bottom: 1em;
 }
 
 .Box-Item {
@@ -288,6 +271,27 @@ img {
     //grid-template-rows: 35px 30px;
     align-items: center;
     
+}
+
+.Box-Item-2 {
+    background: darkred;
+    display: grid;
+    grid-template-columns: 88% 7% 5%;
+    width: 320px;
+    height: 50px;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    padding: 10px;
+    //grid-template-rows: 35px 30px;
+    align-items: center;
+
+}
+
+.time-stamp {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-style: italic;
+    opacity: 0.48;
 }
 
 .w-text-tabs {
@@ -481,4 +485,42 @@ p.open {
 
 .sort-default {
     background-color: #003055;
+}
+
+.list-tabs {
+    display: block;
+    opacity: 0.5;
+    font-style: italics;
+}
+
+.instruct {
+    padding: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: 20px;
+    border-style: dashed;
+    font-weight: 500;
+
+}
+
+.drag-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.waste-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.arrow-back {
+    width: 24px;
+    height: 24px;
+}
+
+.back {
+    font-size: 18px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
 }
