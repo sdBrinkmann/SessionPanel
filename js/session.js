@@ -1,5 +1,5 @@
 import {Session, Box, Store} from "./modules/storage.js"
-import {Success, Failure} from "./modules/util.js"
+import {Success, Failure, deleteSession} from "./modules/util.js"
 import {w_config, listTabs} from "./add.js"
 
 
@@ -61,7 +61,7 @@ window.onclick = function(event) {
     
     if (event.target == modal) {
 	modal.style.display = "none";
-	document.getElementById('tab-selection').innerHTML = "";
+document.getElementById('tab-selection').innerHTML = "";
 	document.getElementById("select-tabs").innerHTML = "&#129170 Select Tabs individually"
 	document.getElementById("select-tabs").dataset.expanded = "false"
 	document.getElementById("select-tabs").dataset.all = "false"
@@ -198,7 +198,7 @@ function loadSession() {
     });
 }
 
-
+/*
 
 function deleteSession() {
     document.querySelector(".Session-Box").addEventListener('click', function(e) {
@@ -235,7 +235,7 @@ function deleteSession() {
 	}
     });
 }
-
+*/
 //deleteSession();
 
 // aka overwrite Session
@@ -243,6 +243,7 @@ function deleteSession() {
 function saveSession() {
     document.querySelector(".Session-Box").addEventListener('click', function(e) {
 	if(e.target.id == "overwrite") {
+	    console.log("OVERWRITE")
 	    const pos = e.target.parentElement.dataset.pos;
 	    const tag = e.target.parentNode.childNodes[0].innerHTML;
 	    const name = tag.replace(/\([0-9]*\)$/g,'');
@@ -254,13 +255,19 @@ function saveSession() {
 		    getWindowTabs().then(async (tabs) => {
 			const tabs_leng = tabs.length;
 			let url = []
+			let header = []
+			let favIcon = []
+			
 			for (let tab of tabs) {
-			    if(tab.url.startsWith("http"))
+			    if(tab.url.startsWith("http")) {
 				url.push(tab.url);
+				header.push(tab.title)
+				favIcon.push(tab.favIconUrl)
+			    }
 			}
 			const No_tabs = url.length;
-			const date = new Date();
-			const session = new Session(name, No_tabs, date, url);
+			//const date = new Date();
+			const session = new Session(name, No_tabs, new Date(), url, header, favIcon);
 			const box = new Box();
 			await Store.overwriteSession(session, pos);
 			e.target.parentNode.childNodes[0].innerText = name + '(' + No_tabs + ')';
@@ -314,14 +321,18 @@ function createSession() {
 		    console.log(document.getElementById("select-tabs"))
 		    const node_list = document.getElementById("select-tabs").nextElementSibling.childNodes
 		    let urls = []
+		    let header = []
+		    let favIcon = []
 		    for (let node of node_list) {
 			if (node.childNodes[0].checked == true) {
 			    console.log(node.childNodes[2].href);
 			    urls.push(node.childNodes[2].href);
+			    favIcon.push(node.childNodes[1].src)
+			    header.push(node.childNodes[2].innerText)
 			}
 		    }
 		    const No_tabs = urls.length;
-		    const session = new Session(Name, No_tabs, new Date(), urls);
+		    const session = new Session(Name, No_tabs, new Date(), urls, header, favIcon);
 		    const box = new Box();
 		    let  pos = await Store.addSession(session);
 		    box.addBox(session, pos);
@@ -332,14 +343,19 @@ function createSession() {
 		} else {
 		    getWindowTabs().then(async (tabs) => {
 			let url = []
-			console.log(tabs)
+			let header = []
+			let favIcon = []
+
 			const tabs_leng = tabs.length;
 			for (let tab of tabs) {
-			    if(tab.url.startsWith("http"))
+			    if(tab.url.startsWith("http")) {
 				url.push(tab.url);
+				header.push(tab.title)
+				favIcon.push(tab.favIconUrl)
+			    }
 			}
 			const No_tabs = url.length;
-			const session = new Session(Name, No_tabs, new Date(), url);
+			const session = new Session(Name, No_tabs, new Date(), url, header, favIcon);
 			const box = new Box();
 			let  pos = await Store.addSession(session);
 			box.addBox(session, pos);
@@ -383,14 +399,18 @@ function createSession() {
 		console.log(document.getElementById("select-tabs"))
 		const node_list = document.getElementById("select-tabs").nextElementSibling.childNodes
 		let urls = []
+		let header = []
+		let favIcon = []
 		for (let node of node_list) {
 		    if (node.childNodes[0].checked == true) {
 			console.log(node.childNodes[2].href);
 			urls.push(node.childNodes[2].href);
+			favIcon.push(node.childNodes[1].src)
+			header.push(node.childNodes[2].innerText)			
 		    }
 		}
 		const No_tabs = urls.length;
-		const session = new Session(Name, No_tabs, new Date(), urls);
+		    const session = new Session(Name, No_tabs, new Date(), urls, header, favIcon);
 		const box = new Box();
 		let  pos = await Store.addSession(session);
 		box.addBox(session, pos);
@@ -404,7 +424,7 @@ function createSession() {
 		    let header = []
 		    let favIcon = []
 		    const tabs_leng = tabs.length;
-		    console.log(tabs)
+		    //console.log(tabs)
 		    for (let tab of tabs) {
 			if(tab.url.startsWith("http")) {
 			    url.push(tab.url);

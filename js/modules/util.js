@@ -1,5 +1,7 @@
 // utils.js 
 
+import  {Store} from "./storage.js"
+
 // Toast Print
 
 export function Success(Message, Duration) {
@@ -85,3 +87,104 @@ don_close.onclick = function() {
 }
 
 Donate();
+
+export function hover(e, src) {
+  e.target.setAttribute('src', src);
+}
+
+export function unhover(e, src) {
+  e.target.setAttribute('src', src);
+}
+
+
+document.getElementById("don-icon").addEventListener("mouseover", function() {
+    hover(event, 'icons/heart-full-32.png');
+}, false);
+document.getElementById("don-icon").addEventListener("mouseout", function() {
+    unhover(event, 'icons/heart-32.png');}, false);
+
+
+
+document.getElementById("paypal-button").addEventListener("mouseover", function() {
+    hover(event, 'icons/paypal-orange-64.png');
+}, false);
+document.getElementById("paypal-button").addEventListener("mouseout", function() {
+    unhover(event, 'icons/paypal-64.png');}, false);
+
+
+export function deleteSession() {
+
+    if (window.location.pathname == "/main.html") {
+    document.querySelector(".Session-Box").addEventListener('click', function(e) {
+	if(e.target.id == "delete") {
+	    const pos = e.target.parentElement.dataset.pos;
+	    const tag = e.target.parentNode.childNodes[0].innerHTML;
+	    let name = tag.replace(/\([0-9]*\)$/g,'');
+	    let NO = tag.match(/\d+(?!.*\d)/);
+	    console.log(e.target)
+	    if (window.confirm(`Delete Session ${name}with ${NO} Tabs ?`)) {
+		
+		try {
+		    Store.getSessions().then((sessions) => {
+			// CHECK TITLE AS SECURITY CHECK
+			const del = sessions.splice(pos, 1);
+			browser.storage.local.set({
+			    'sessions': JSON.stringify(sessions)
+			});
+			//console.log("DELETE");
+			//console.log(e.target);
+			let next = e.target.parentElement.nextElementSibling;
+			while (next) {
+			    let Pos = parseInt(next.dataset.pos) - 1;
+			    next.dataset.pos = Pos;
+			    next = next.nextElementSibling;
+			}
+			e.target.parentElement.remove();
+			Success("Session Deleted", 3000);
+		    });
+		}
+		catch(err) {
+		    console.log(err);
+		    Failure(err.message, 3000);
+		}
+	    }
+	}
+
+    });
+    } else {
+	document.querySelector(".inspect-head").addEventListener('click', function(e) {
+	    if(e.target.id == "delete-session") {
+		const pos = e.target.parentElement.dataset.pos;
+		const tag = e.target.parentNode.childNodes[0].innerHTML;
+		let name = tag.replace(/\([0-9]*\)$/g,'');
+		let NO = tag.match(/\d+(?!.*\d)/);
+		console.log(e.target)
+		if (window.confirm(`Delete Session ${name}with ${NO} Tabs ?`)) {
+		    
+		    try {
+			Store.getSessions().then((sessions) => {
+			    // CHECK TITLE AS SECURITY CHECK
+			    const del = sessions.splice(pos, 1);
+			    browser.storage.local.set({
+				'sessions': JSON.stringify(sessions)
+			    });
+			    //console.log("DELETE");
+			    //console.log(e.target);
+			    let next = e.target.parentElement.nextElementSibling;
+			    location.reload()
+			    Success("Session Deleted", 3000);
+			});
+		    }
+		    catch(err) {
+			console.log(err);
+			Failure(err.message, 3000);
+		    }
+		}
+	    }
+
+	});
+    }
+
+}
+
+//deleteSession();

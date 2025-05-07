@@ -1,7 +1,7 @@
 // add.js
 
 import {Session, Box, Store} from "./modules/storage.js";
-import {Success, Failure, getWindowTabs} from "./modules/util.js";
+import {Success, Failure, getWindowTabs, hover, unhover} from "./modules/util.js";
 import {Windows} from "./modules/windows.js";
 
 // Options
@@ -14,8 +14,9 @@ let highlight_any = false;
 let auto_scroll = false;
 let dragNdrop = true;
 let sort_fn = null;
+let show_url = false;
 let sort_setting = "sort-default"
-export let rc_color = 'darkred';
+//export let rc_color = 'darkred';
 export let rc_font_color;
 export let text_color = 'white';
 
@@ -73,8 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 	if (items.highlight_any == true)
 	    highlight_any = true;
 
-	if (items.rectangle_color != undefined) 
-	    rc_color = items.rectangle_color;
+	//if (items.rectangle_color != undefined) 
+	//    rc_color = items.rectangle_color;
 	if (items.win_color != undefined)
 	    w_config.w_color = items.win_color;
 	if (items.dragndrop == false)
@@ -254,6 +255,27 @@ function sortTitle(a, b) {return b.title < a.title}
 function sortURL(a, b) {return b.url < a.url}
 function sortAudio(a, b) {return b.audible}
 
+
+// Expand & Unfold tabs url
+
+document.getElementById("show-url").addEventListener('click', function(e) {
+    //console.log(e.target);
+    if (e.target.src.includes("expand")) {
+	e.target.src = "/icons/unfold-less-48.png";
+	e.target.title = "Hide Urls";
+	show_url = true;
+	listTabs(false)
+    }
+    else {
+	e.target.src = "/icons/expand-all-48.png";
+	e.target.title = "Display Urls";
+	show_url = false;
+	listTabs(false)
+    }
+    
+});
+
+
 // Get and List TABS
 
 
@@ -289,8 +311,11 @@ export async function listTabs(ac = false) {
 	    const Icon = document.createElement('img');
 	    const Link = document.createElement('a');
 	    const Del = document.createElement('img');
+	    const Website = document.createElement('div');
 
+	    
 	    Parent.className = 'Tab-Item';
+	    Parent.id = tab.id;
 	    Icon.src = tab.favIconUrl;
 	    Icon.classList.add('icon');
 	    Del.src = 'icons/delete-16.png';
@@ -306,16 +331,43 @@ export async function listTabs(ac = false) {
 	    }
 	    Link.id = tab.id;
 	    Link.classList.add('list-tabs');
+	    //Website.classList.add('list-tabs');
+	    
 	    Link.style.color = text_color;
+
+	    Website.appendChild(Link)
+	    	    
 	    Parent.appendChild(Icon);
-	    Parent.appendChild(Link);
+	    Parent.appendChild(Website);
 	    Parent.appendChild(Del);
+	    
+	    if (show_url && tab.title != undefined) {
+		const Ref = document.createElement('a');
+		Ref.textContent = tab.url.replace("https://", "").replace("www.", "")
+		Ref.setAttribute('href', tab.url);
+		Ref.classList.add('list-url');
+		Ref.id = tab.id;
+		Website.appendChild(Ref);
+	    }
+
 	    
 	    if (tab.active == true) id_active = tab.id;
 	    
 
 
-	    if (highlight_double == true && highlight_any != true) {
+
+
+	    if (highlight_any == true) {
+		for (var i = 0; i < tabs.length; i++) {
+		    if (tabs[i].url == tab.url && tabs[i].id != tab.id) {
+			Parent.style.backgroundColor = '#800040';
+			double_current.push(tabs[i].id);
+		    }
+		}
+		index++;
+	    }
+
+	    if (highlight_double == true ) { //&& highlight_any != true) {
 		for (var j = 0; j < double_current.length; j++) {
 		    if (double_current[j] == tab.id) 
 			Parent.style.backgroundColor = '#ff751aaa';
@@ -324,16 +376,6 @@ export async function listTabs(ac = false) {
 		for (var i = index + 1; i < tabs.length; i++) {
 		    if (tabs[i].url == tab.url) {
 			Parent.style.backgroundColor = '#ff751aaa';
-			double_current.push(tabs[i].id);
-		    }
-		}
-		index++;
-	    }
-
-	    if (highlight_any == true) {
-		for (var i = 0; i < tabs.length; i++) {
-		    if (tabs[i].url == tab.url && tabs[i].id != tab.id) {
-			Parent.style.backgroundColor = '#800040';
 			double_current.push(tabs[i].id);
 		    }
 		}
@@ -364,8 +406,15 @@ function dragStart() {
     
     document.querySelector("#tabs-list").addEventListener('dragstart', function(e) {
 	//e.target.style.width = "300px";
-	e.dataTransfer.setData('text/uri-list', e.target.childNodes[1].href);
-	e.dataTransfer.setData('text/plain', e.target.childNodes[1].id);
+	console.log(e.target)
+	
+	if (e.target.className == "list-url") {
+	    e.dataTransfer.setData('text/uri-list', e.target.previousSibling.href);
+	    e.dataTransfer.setData('text/plain', e.target.previousSibling.id);
+	} else {
+	e.dataTransfer.setData('text/uri-list', e.target.childNodes[1].childNodes[0].href);
+	    e.dataTransfer.setData('text/plain', e.target.childNodes[1].childNodes[0].id);
+	}
 	/*
 	const canvas = document.createElement('canvas');
 	const ctx = canvas.getContext('2d');
@@ -400,9 +449,13 @@ function dragStart() {
 	Element.className = 'Tab-Item-drag';
 	Icon.className = "icon-drag";
 	Link.className = "link-drag";
-	Icon.src = e.target.childNodes[0].src;
-	Link.innerText = e.target.childNodes[1].innerText;
-	
+	if (e.target.className == "list-url") {
+	    Icon.src = e.target.parentNode.parentNode.childNodes[0].src;
+	    Link.innerText = e.target.parentNode.childNodes[0].innerText;
+	} else {
+	    Icon.src = e.target.childNodes[0].src;
+	    Link.innerText = e.target.childNodes[1].innerText;
+	}
 
 	Element.appendChild(Icon);
 	Element.appendChild(Link);
@@ -470,8 +523,10 @@ function dragOver() {
 	    e.target.style.borderTop = "solid purple";
 	    e.target.style.borderLeft = "solid purple";
 	}
-	
-	else {
+	else if (e.target.classList.contains('list-tabs') || e.target.classList.contains('list-url')) {
+	    e.target.parentElement.parentElement.style.borderTop = "solid purple";
+	    e.target.parentElement.parentElement.style.borderLeft = "solid purple";
+	} else {
 	    e.target.parentElement.style.borderTop = "solid purple";
 	    e.target.parentElement.style.borderLeft = "solid purple";
 	}
@@ -495,12 +550,15 @@ function dragLeave() {
 	if (e.target.classList.contains('Tab-Item')) {
 	    e.target.style.borderTop = "";
 	    e.target.style.borderLeft = "";
+	} 	else if (e.target.classList.contains('list-tabs') || e.target.classList.contains('list-url')) {
+	    e.target.parentElement.parentElement.style.borderTop = "";
+	    e.target.parentElement.parentElement.style.borderLeft = "";
 	}
 	else {
 	    e.target.parentElement.style.borderTop = "";
 	    e.target.parentElement.style.borderLeft = "";
 	}
-	    
+	
     });
 
     document.querySelector(".Window-Box").addEventListener('dragleave', function(e) {
@@ -525,7 +583,7 @@ function dragDrop() {
     // Move tab within Tab List / Current Window
     document.querySelector("#tabs-list").addEventListener('drop', async function(e) {
 	e.preventDefault();
-	//console.log(e.target);
+	console.log( e.target);
 	e.target.style.borderTop = "";
 	e.target.style.borderLeft = "";
 	let data = e.dataTransfer.getData('text/plain');
@@ -535,6 +593,11 @@ function dragDrop() {
 	    let tabInfo = await browser.tabs.get(parseInt(e.target.id));
 	    browser.tabs.move(parseInt(data), {index: tabInfo.index});
 	    listTabs();
+	} else if (e.target.classList.contains('list-url')) {
+	    let tabInfo = await browser.tabs.get(parseInt(e.target.previousSibling.id));
+	    browser.tabs.move(parseInt(data), {index: tabInfo.index});
+	    listTabs();
+	    
 	}
 	else if (e.target.classList.contains('Tab-Item')) {
 	    let tabInfo = await browser.tabs.get(parseInt(e.target.childNodes[1].id));
@@ -607,11 +670,12 @@ function dragDrop() {
 
 	let data = e.dataTransfer.getData('text/plain');
 	const u = e.dataTransfer.getData('text/uri-list');
-	
+	console.log(data);
+	console.log(u);
 	if (e.target.classList.contains('Box-Item')) {
 	    e.target.style.border = "";
 	    e.target.style.border = "";
-	    if (await addSession(u, e.target.dataset.pos, e.target.childNodes[0]))
+	    if (await addSession(u, e.target.dataset.pos, e.target.childNodes[0], parseInt(data)))
 	    	   await browser.tabs.remove(parseInt(data));
 	    listTabs();	    
 	}
@@ -621,7 +685,7 @@ function dragDrop() {
 	    //console.log(e.target);
 	    e.target.parentElement.style.border = "";
 	    e.target.parentElement.style.border = "";
-	    if (await addSession(u, e.target.parentElement.dataset.pos, e.target))
+	    if (await addSession(u, e.target.parentElement.dataset.pos, e.target, parseInt(data)))
 	    	await browser.tabs.remove(parseInt(data));
 	    listTabs();
 	}
@@ -633,14 +697,30 @@ function dragDrop() {
 }
 
 // Utility function
-async function addSession(tab_url, pos, node) {
+async function addSession(tab_url, pos, node, tab_id) {
     if (tab_url.startsWith("http")) {
 	try {
 	    const R = await Store.getSessions();
 	    const S = R[pos];
 	    const len = S.url.length + 1;
+	    console.log(tab_id);
+	    const tab = await browser.tabs.get(tab_id);
+	    console.log("tab");
+	    console.log(tab);
+
 	    
-	    await Store.overwriteSession(new Session(S.title, len, S.date, S.url.concat(tab_url)), pos);
+	    if (S.headr == undefined) {
+
+		await Store.overwriteSession(new Session(S.title, len, S.date, S.url.concat(tab_url)), pos);
+	    } else {
+
+		await Store.overwriteSession(new Session(S.title, len, S.date,
+							 S.url.concat(tab_url),
+							 S.headr.concat(tab.title),
+							 S.favIcons.concat(tab.favIconUrl)
+							),
+					     pos);
+	    }
 	    
 	    node.innerText = S.title + ' (' + len + ')';
 	    Success("Tab added to Session ", 3000);
@@ -663,7 +743,7 @@ async function addSession(tab_url, pos, node) {
 
 function linkTabs() {
     document.querySelector("#tabs-list").addEventListener('click', function(e){
-	if (e.target.classList.contains('list-tabs')) {
+	if (e.target.classList.contains('list-tabs') || e.target.classList.contains('list-url')) {
 	    e.preventDefault();
 	    
 	    const ID = parseInt(e.target.id);
@@ -676,7 +756,8 @@ function linkTabs() {
 function closeTab() {
     document.querySelector("#tabs-list").addEventListener('click', async function(e) {
 	if (e.target.classList.contains('d-b')) {
-	    const ID = parseInt(e.target.previousSibling.id);
+	    console.log(e.target)
+	    const ID = parseInt(e.target.parentElement.id);
 	    await browser.tabs.remove(ID);
 	    e.target.parentElement.remove();
 	    upTabNo();
@@ -745,13 +826,7 @@ document.addEventListener('visibilitychange', async function() {
 
 
 
-function hover(e, src) {
-  e.target.setAttribute('src', src);
-}
 
-function unhover(e, src) {
-  e.target.setAttribute('src', src);
-}
 
 /*
 window.onload = function () {
@@ -783,19 +858,6 @@ document.addEventListener("mouseout", function(e) {
     }
 });
 
-document.getElementById("don-icon").addEventListener("mouseover", function() {
-    hover(event, 'icons/heart-full-32.png');
-}, false);
-document.getElementById("don-icon").addEventListener("mouseout", function() {
-    unhover(event, 'icons/heart-32.png');}, false);
-
-
-
-document.getElementById("paypal-button").addEventListener("mouseover", function() {
-    hover(event, 'icons/paypal-orange-64.png');
-}, false);
-document.getElementById("paypal-button").addEventListener("mouseout", function() {
-    unhover(event, 'icons/paypal-64.png');}, false);
 
 
 // Options Change
@@ -811,3 +873,10 @@ document.querySelector('#listorder').addEventListener('change', (e) => {
     }
 });
 
+// Go to session.html
+
+document.querySelector(".outward").addEventListener('click', () => {
+    console.log("click");
+    window.location.replace("/sessions.html");
+
+});

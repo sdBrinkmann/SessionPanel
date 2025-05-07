@@ -66,7 +66,7 @@
 .wName-input {
     //background-color: #00001a;
     color: white;
-    border: none;
+    border: none;<
     outline: none;
     font-size: 1.3em;
     margin-top: 5px;
@@ -106,19 +106,22 @@
 }
 
 .Tab-Item-drag {
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-right:10px;
-    display: flex;
-    align-items: center;
-    max-width: 300px;
-    max-height: 20px;
+    background-color: darkred;
+    //padding-top: 3px;
+    //padding-bottom: 3px;
+    //padding-right:10px;
+    margin: 40px;
+    display: grid;
+    grid-template-columns: 90% 10%;
+    width: 180px;
+    height: 50px;
     //border-radius: 10px;
     overflow: hidden;
     //opacity: 0.999;
     transform: translate(0, 0);
     //position: relative;
     //border-color: none;
+    align-items: center;
 }
 
 
@@ -127,24 +130,25 @@
 }
 
 .icon-drag {
-    padding-left: 7px;
+    padding-right: 10px;
     border-color: none;
     //transform: translate(0, 0);
 }
 
-.link-drag {
-    //padding-right: 10px;
+.title-drag {
+    padding-left: 10px;
     overflow: hidden;
-    display: inline-block;
+    font-weight: 500;
+    //display: inline-block;
     border-color: none;
-    background-color: #001a55;
-    max-height: 20px;
+    //background-color: darkred;
+    //max-height: 20px;
     //max-width: 280px;
     //transform: translate(0, 0);
 		      
 }
 
-.Tab-Item:hover, .Tab-Item-drag {
+.Tab-Item:hover {
     background-color: #001a55;
     opacity: 1;
 }
@@ -203,6 +207,7 @@ img {
     height: 20px;
     transition: 0.3s;
     cursor: pointer;
+    display: none;
 }
 
 .add-icon:hover {
@@ -238,7 +243,9 @@ img {
     align-items: center;
 }
 
-
+.setting-line {
+    display: none;
+}
 
 .header {
     display: flex;
@@ -363,6 +370,7 @@ p.w-text {
 p.open {
     margin: 0px;
     margin-right: 10px;
+    font-weight: 550;
 }
 
 .tab-order {
@@ -490,7 +498,9 @@ p.open {
 .list-tabs {
     display: block;
     opacity: 0.5;
-    font-style: italics;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .instruct {
@@ -508,6 +518,10 @@ p.open {
     height: 24px;
 }
 
+.drag-icon:hover {
+    cursor: grab;
+}
+
 .waste-icon {
     width: 20px;
     height: 20px;
@@ -523,4 +537,22 @@ p.open {
     display: flex;
     justify-content: start;
     align-items: center;
+}
+
+.back:hover {
+    cursor: pointer;
+    text-decoration: underline;
+
+}
+
+.inspect-head {
+    font-size: 1.3em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.waste-icon:hover {
+    cursor: pointer;
 }

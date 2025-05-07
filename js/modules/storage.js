@@ -16,10 +16,11 @@ export class Session {
 
 
 
-console.log(window.location.pathname);
+//console.log(window.location.pathname);
 export class Box {
     addBox(Session, pos, showdate=false){
 	const Container = document.querySelector('.Session-Box');
+	//Container.textContent = '';
 	const box = document.createElement('div');
 	const Title = document.createElement('p');
 	const Delete = document.createElement('p');
@@ -58,7 +59,7 @@ export class Box {
 	    box.appendChild(Delete);
 
 
-	} else {
+	} else { // session.html 
 	    const Title_div = document.createElement('div');
 	    const Drag_div = document.createElement('div');
 	    const Delete_div = document.createElement('div');
@@ -67,10 +68,13 @@ export class Box {
 	    const Info = document.createElement('p');
 	    const Drag = document.createElement('img');
 	    const Waste = document.createElement('img');
+
+	    box.setAttribute('draggable', true);
+	    
 	    Title.innerText +=  Session.title  + " (" + Session.tabs + ")";
 	    Title.className = 'open';
-	    Title.setAttribute('title', 'Open in New Window');
-
+	    Title.setAttribute('title', 'Inspect Session');
+	    
 	    //Title.style.color = "white";
 	    
 	    Delete.innerHTML += '&times;';
@@ -87,20 +91,21 @@ export class Box {
 	    }
 	    Drag.className = 'drag-icon';
 	    Drag.id = "move-session";
-	    Drag.setAttribute('title', 'move Session');
+	    Drag.setAttribute('title', 'Change order');
 
+	    Waste.id = 'delete-session'
 	    Waste.className = 'waste-icon';
 	    Waste.setAttribute('src', 'icons/wastbin-w-24.png');
 	    
 	    box.className = 'Box-Item-2';
 	    
 	    box.setAttribute('data-pos', pos);
-	    box.setAttribute('title', Session.date.toLocaleString());
+	    box.setAttribute('title', Session.title);
 	    Title_div.setAttribute('data-pos', pos);
 	    Title_div.appendChild(Title)
 	    Title_div.appendChild(Info)
 
-	    Delete_div.appendChild(Waste);	
+	    //Delete_div.appendChild(Waste);	
 	    Drag_div.appendChild(Drag);
 
 	
@@ -117,7 +122,8 @@ export class Box {
 	else if (rc_font_color == 'white')
 	    box.style.color = 'white';
 	Container.appendChild(box);
-	
+
+	console.log("rc_color: " + rc_color)
     }
 
 }

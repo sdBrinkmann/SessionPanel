@@ -78,6 +78,12 @@
     min-width: 300px;
 }
 
+#session-headr-div {
+    display: flex;
+    align-items: center;
+
+}
+
 #session-header {
     //font-size: 18px;
     font-size: 1.17em;
@@ -92,8 +98,8 @@
 }
 
 .outward {
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 32px;
 }
 
 @media(min-width: 1280px) {
@@ -359,6 +365,7 @@ p.w-text {
 p.open {
     margin: 0px;
     margin-right: 10px;
+    font-weight: 500;
 }
 
 .tab-order {
@@ -481,4 +488,16 @@ p.open {
 
 .sort-default {
     background-color: #003055;
+}
+
+.list-url {
+    display: block;
+    opacity: 0.5;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.outward:hover {
+    cursor: pointer;
 }
