@@ -1,13 +1,13 @@
 // work.js for session.html
 
-import "./modules/init.js"
+import {init} from "./modules/init.js"
 import {Session, Box, Store} from "./modules/storage.js";
 import {Success, Failure, deleteSession} from "./modules/util.js"
 
+let text_color = 'white';
+let rec = []
 
 document.addEventListener('DOMContentLoaded', async () => {
-    listSession();
-    Store.displaySessions();
     deleteSession();
     deleteTab();
     
@@ -16,15 +16,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     dragOver();
     dragLeave();
     dragDrop();
+
+    rec = await init()
+
+    if (rec.text_color == "black") {
+	text_color = 'black';
+	document.querySelector(".arrow-back").src = "icons/arrow-back-48.png"
+	document.getElementById("back").style.color = "black";
+	document.getElementById("open").src = "icons/arrow-down-b-48.png"
+    }
+    
+    listSession();
+    Store.displaySessions(rec);
 });
-
-
-let rc_color = 'darkred';
-let rc_font_color;
-let text_color = 'white';
-
-
-
 
 
 
@@ -33,7 +37,6 @@ function listSession() {
 	if (e.target.classList.contains('open')) {
 
 	    const pos = parseInt(e.target.parentElement.dataset.pos);	   
-	    console.log(pos);
 	    list(pos);
 	}
 
@@ -44,7 +47,6 @@ function listSession() {
 async function list(pos) {
     
     const Sessions = await Store.getSessions();
-    console.log(Sessions)
     const S = Sessions[pos]
     const List = document.getElementById('tabs-list');
     
@@ -59,7 +61,11 @@ async function list(pos) {
     Waste.title = "Delete Session";
     Waste.id = 'delete-session'
     Waste.className = 'waste-icon';
-    Waste.setAttribute('src', 'icons/wastbin-w-24.png');
+    if (text_color == "black")
+	Waste.setAttribute('src', 'icons/wastbin-b-24.png');
+    else
+	Waste.setAttribute('src', 'icons/wastbin-w-24.png');
+    
     Head.setAttribute('data-pos', pos)
     List.setAttribute('data-pos', pos)
 
@@ -91,13 +97,15 @@ async function list(pos) {
 	Link.textContent = S.headr ? S.headr[idx] : S.url[idx] // tab.title || tab.id;
 	Link.setAttribute('href', S.url[idx]);
 
+	Link.classList.add('list-tabs');
 
 	Website.appendChild(Link);
 
 	if (S.headr != undefined) {
 	    Ref.textContent = S.url[idx].replace("https://", "").replace("www.", "") // tab.title || tab.id;
 	    Ref.setAttribute('href', S.url[idx]);
-	    Ref.classList.add('list-tabs');
+	    Ref.classList.add('list-url');
+	    Ref.style.color = text_color;
 	    Website.appendChild(Ref)
 
 	}
@@ -109,7 +117,7 @@ async function list(pos) {
 	*/
 	//Link.id = tab.id;
 
-	//Link.style.color = text_color;
+	Link.style.color = text_color;
 	Parent.appendChild(Icon);
 	Parent.appendChild(Website);
 	Parent.appendChild(Del);
@@ -142,7 +150,8 @@ function deleteTab() {
 		    
 		    await Store.overwriteSession(new Session(S.title, S.tabs-1, S.date, S.url), pos)
 		    list(pos);
-		    Store.displaySessions();
+		    document.querySelector('.Session-Box').textContent = '';
+		    Store.displaySessions(rec);
 		} else {
 		    S.url.splice(no, 1)
 		    S.headr.splice(no,1)
@@ -154,7 +163,7 @@ function deleteTab() {
 						       S.favIcons), pos)
 		    list(pos);
 		    document.querySelector('.Session-Box').textContent = '';
-		    Store.displaySessions();
+		    Store.displaySessions(rec);
 		}
 
 	    });
@@ -166,13 +175,10 @@ function deleteTab() {
 function dragStart() {
     
     document.querySelector(".Session-Box").addEventListener('dragstart', function(e) {
-	//e.target.style.width = "300px";
-	//if (e.target.classList.contains('Box-Item-2')) 
-	//    e.preventDefault();
-	
-	console.log(e.target)
+
+
 	if (e.target.id == "move-session") {
-	    console.log("move")
+
 	    e.dataTransfer.setData('text/plain', e.target.parentElement.parentElement.dataset.pos);
 
 	    const Element = document.createElement('div');
@@ -183,26 +189,24 @@ function dragStart() {
 	    Icon.className = "icon-drag";
 	    Title.className = "title-drag";
 
-	    Icon.setAttribute('src', 'icons/drag-indicator-w-24.png');
-	    
-	    /* 
-	       if (e.target.className == "list-url") {
-	       Icon.src = e.target.parentNode.parentNode.childNodes[0].src;
-	       Link.innerText = e.target.parentNode.childNodes[0].innerText;
-	       } else {
-	       Icon.src = e.target.childNodes[0].src;
-	       Link.innerText = e.target.childNodes[1].innerText;
-	       }
-	    */
+	    console.log(rec.rc_font_color)
+	    if (rec.rc_font_color == "black") {
+		Icon.setAttribute('src', 'icons/drag-indicator-24.png');
+		Title.style.color = "black"
+	    }
+	    else
+		Icon.setAttribute('src', 'icons/drag-indicator-w-24.png');
+
 
 	    Title.innerText = e.target.parentElement.parentElement.title;
 	    
 	    Element.appendChild(Title);
 	    Element.appendChild(Icon);
-
+	    
 
 	    Element.style.position = "absolute";
 	    Element.style.top = "-1000px";
+	    Element.style.backgroundColor = rec.rc_color;
 	    document.body.appendChild(Element);
 
 	    e.dataTransfer.effectAllowed = "move";
@@ -225,8 +229,7 @@ function dragStart() {
 function dragEnter() {
     document.querySelector(".Session-Box").addEventListener('dragenter', function(e) {
 	e.preventDefault();
-	console.log("I'AM HERE!");
-	console.log(e.target);
+
 
 	//e.target.style.border = "thin solid red";	    	
 
@@ -268,7 +271,7 @@ function dragLeave() {
 function dragDrop() {
     document.querySelector(".Session-Box").addEventListener('drop', async function(e) {
 	e.preventDefault();
-	console.log( e.target);
+
 	e.target.style.border = "";
 	let pos;
 
@@ -285,15 +288,12 @@ function dragDrop() {
 	    pos = e.target.parentElement.parentElement.dataset.pos;
 	}
 	
-	
-	let data = parseInt(e.dataTransfer.getData('text/plain'));
-
-	
-
-	    console.log("data: " + data);
-	    //console.log(data);
-
-	    console.log("pos: " + pos);
+	if (e.dataTransfer.getData('text/plain') != undefined) {
+	    //console.log(e.dataTransfer.getData('text/plain'))
+	    let data = parseInt(e.dataTransfer.getData('text/plain'));	
+	    
+	    if (isNaN(data) || isNaN(pos))
+		throw new Error("Element cannot be dropped!");
 	    
 	    if (pos != data) {
 		await Store.getSessions().then((sessions) => {
@@ -304,7 +304,7 @@ function dragDrop() {
 		});
 		window.location.reload()
 	    }
-	
+	}
     });
 
 
@@ -312,7 +312,9 @@ function dragDrop() {
 
 function moveElement(A, prv, nxt) {
     let Arry = new Array();
-    
+
+    if (prv < 0 || nxt < 0 || prv >= A.length || nxt > A.length)
+	throw new Error("Out of bounds!");
     
     for (let i = 0; i < A.length; i++) {
 	if (i == prv) {
@@ -332,3 +334,10 @@ function moveElement(A, prv, nxt) {
     
     return Arry
 }
+
+document.addEventListener('visibilitychange', async function() {
+    if(document.visibilityState == "visible") {
+	//window.location.reload();
+	window.location.reload();
+    }
+});

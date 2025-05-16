@@ -3,6 +3,7 @@
 import {Session, Box, Store} from "./modules/storage.js";
 import {Success, Failure, getWindowTabs, hover, unhover} from "./modules/util.js";
 import {Windows} from "./modules/windows.js";
+import {init} from "./modules/init.js";
 
 // Options
 
@@ -16,9 +17,11 @@ let dragNdrop = true;
 let sort_fn = null;
 let show_url = false;
 let sort_setting = "sort-default"
+
 //export let rc_color = 'darkred';
 export let rc_font_color;
 export let text_color = 'white';
+export let rec = [];
 
 export const w_config = {
     w_color: '#483D8B',
@@ -28,7 +31,7 @@ export const w_config = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    let order = await browser.storage.local.get(items => {
+    let order = await browser.storage.local.get(async items => {
 	if (items.background_color != undefined) {
 	    document.body.style.backgroundColor = items.background_color;
 	    w_config.background = items.background_color;
@@ -41,6 +44,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	    document.getElementById("search-tog").src = "icons/search_48_b.png"
 	    document.getElementById("sort-tog").src = "icons/sort_48_b.png"
+	    document.getElementById("show-url").src = "icons/expand-all-b-48.png"
+	    document.querySelector(".outward").src = "icons/chevron-right-b-48.png"
+	    document.getElementById("session-header").style.color = "black"
+
+	    document.getElementById("open").src = "icons/arrow-down-b-48.png"
 	}
 	if (items.search_box_color != undefined) {
 	    document.getElementById("search").style.backgroundColor = items.search_box_color
@@ -120,14 +128,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    }
 	    rev_default = true;
 	}
-	
+	rec =  await init();
 	setSortDefault(sort_setting);
 	listTabs(true);
 	linkTabs();
 	closeTab();
 	switchWin();
 	Windows.display(w_config);
-	Store.displaySessions();
+	Store.displaySessions(rec);
 
     });
     
@@ -261,13 +269,19 @@ function sortAudio(a, b) {return b.audible}
 document.getElementById("show-url").addEventListener('click', function(e) {
     //console.log(e.target);
     if (e.target.src.includes("expand")) {
-	e.target.src = "/icons/unfold-less-48.png";
+	if (text_color == "black")
+	    e.target.src = "/icons/unfold-less-b-48.png";
+	else
+	    e.target.src = "/icons/unfold-less-48.png";
 	e.target.title = "Hide Urls";
 	show_url = true;
 	listTabs(false)
     }
     else {
-	e.target.src = "/icons/expand-all-48.png";
+	if (text_color == "black")
+	    e.target.src = "/icons/expand-all-b-48.png";
+	else
+	    e.target.src = "/icons/expand-all-48.png";
 	e.target.title = "Display Urls";
 	show_url = false;
 	listTabs(false)
@@ -346,6 +360,7 @@ export async function listTabs(ac = false) {
 		Ref.textContent = tab.url.replace("https://", "").replace("www.", "")
 		Ref.setAttribute('href', tab.url);
 		Ref.classList.add('list-url');
+		Ref.style.color = text_color;
 		Ref.id = tab.id;
 		Website.appendChild(Ref);
 	    }
@@ -406,7 +421,7 @@ function dragStart() {
     
     document.querySelector("#tabs-list").addEventListener('dragstart', function(e) {
 	//e.target.style.width = "300px";
-	console.log(e.target)
+	//console.log(e.target)
 	
 	if (e.target.className == "list-url") {
 	    e.dataTransfer.setData('text/uri-list', e.target.previousSibling.href);
@@ -583,7 +598,7 @@ function dragDrop() {
     // Move tab within Tab List / Current Window
     document.querySelector("#tabs-list").addEventListener('drop', async function(e) {
 	e.preventDefault();
-	console.log( e.target);
+	//console.log( e.target);
 	e.target.style.borderTop = "";
 	e.target.style.borderLeft = "";
 	let data = e.dataTransfer.getData('text/plain');
@@ -600,7 +615,7 @@ function dragDrop() {
 	    
 	}
 	else if (e.target.classList.contains('Tab-Item')) {
-	    let tabInfo = await browser.tabs.get(parseInt(e.target.childNodes[1].id));
+	    let tabInfo = await browser.tabs.get(parseInt(e.target.id));
 	    browser.tabs.move(parseInt(data), {index: tabInfo.index});
 	    listTabs();
 	}	

@@ -22,11 +22,20 @@
 	scrollbar-width: thin;
 	padding-right: 10px;
     }
+
+    .list-url, .list-tabs {
+	max-width: 980px;
+    }
+    
 }
 
 @media(max-width:1000px) {
     .box-1, .box-2 {
 	scrollbar-width: none;
+    }
+
+    .list-url, list-tabs {
+	max-width: 380px;
     }
 }
 
@@ -86,8 +95,8 @@
 
 #session-header {
     //font-size: 18px;
-    font-size: 1.17em;
-
+    //font-size: 1.17em;
+    font-size: 21px;
     margin-left: 0;
     margin-right: 0;
     font-weight: bold;
@@ -95,11 +104,20 @@
 
 #session-header:hover {
     text-decoration: underline;
+    //filter: brightness(150%);
+    font-size: 22px;
 }
 
+
+
 .outward {
-    height: 32px;
-    width: 32px;
+    height: 34px;
+    width: 34px;
+}
+
+.outward:hover {
+    height: 36px;
+    width: 36px;
 }
 
 @media(min-width: 1280px) {
@@ -496,8 +514,17 @@ p.open {
     font-style: italic;
     white-space: nowrap;
     overflow: hidden;
+    //max-width: 1000px;
+}
+
+.list-tabs {
+    display: block;
+    overflow: hidden;
+    //max-width: 
 }
 
 .outward:hover {
     cursor: pointer;
 }
+
+

@@ -27,6 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (items.font_color == "black") {
 	    document.querySelector('#black').checked = true;
 	    document.body.style.color = 'black';
+	    document.getElementById("addon-page").style.color = "black";
+	    document.getElementById("git-page").style.color = "black";
+	    document.getElementById("mail-link").style.color = "black";
 	}
 	else
 	    document.querySelector('#white').checked = true;

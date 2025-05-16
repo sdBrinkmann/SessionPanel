@@ -97,7 +97,7 @@ async function openSession(message, sender, response) {
 		  .map(t => t.id)
 	    //console.log(remove_list)
 	    browser.tabs.remove(remove_list.splice(1))
-	    for (var i = 0; i < Sessions[pos].url.length; i++) {
+	    for (let i = 0; i < Sessions[pos].url.length; i++) {
 		browser.tabs.create({
 		    active: false,
 		    discarded: message.noload,
@@ -111,25 +111,26 @@ async function openSession(message, sender, response) {
 	    return [winId, Sessions[pos].title, Tabs.map(t => t.url)]
 	} else {
 	    if (message.noload) {
-		await browser.windows.create({
+		browser.windows.create({
 		    url: Sessions[pos].url[0],
-		    focused: false,
-		}).then( async (windowInfo) => {
+		    focused: true,
+		}).then( (windowInfo) => {
 		    console.log(`Created window: ${windowInfo.id}`);
 		    info = [windowInfo.id, Sessions[pos].title];
 		    saveName(windowInfo.id, Sessions[pos].title)
-		    for (var i = 1; i < Sessions[pos].url.length; i++) {
+		    for (let idx = 1; idx < Sessions[pos].url.length; idx++) {
 			if (Sessions[pos].headr != undefined) {
-			    await browser.tabs.create({
+			    browser.tabs.create({
 				discarded: true,
-				title: Sessions[pos].headr[i],
-				url: Sessions[pos].url[i],
+				active: false,
+				title: Sessions[pos].headr[idx],
+				url: Sessions[pos].url[idx],
 				windowId: windowInfo.id,
 			    });
 			} else {
-			    await browser.tabs.create({
+			    browser.tabs.create({
 				discarded: true,
-				url: Sessions[pos].url[i],
+				url: Sessions[pos].url[idx],
 				windowId: windowInfo.id,
 			    });
 			}

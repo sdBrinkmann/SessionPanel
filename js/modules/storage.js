@@ -1,6 +1,6 @@
 // storage.js
 
-import {text_color, rc_color, rc_font_color} from "./init.js";
+//import {text_color, rc_color, rc_font_color, obj} from "./init.js";
 import {Success, Failure} from "./util.js";
 
 export class Session {
@@ -18,7 +18,7 @@ export class Session {
 
 //console.log(window.location.pathname);
 export class Box {
-    addBox(Session, pos, showdate=false){
+    addBox(Session, pos, set, showdate=false){
 	const Container = document.querySelector('.Session-Box');
 	//Container.textContent = '';
 	const box = document.createElement('div');
@@ -39,8 +39,8 @@ export class Box {
 	    Delete.setAttribute('title', 'Delete');
 	    Info.innerText = Session.date.toLocaleString();
 	    Info.className = 'time-stamp';
-	    if (rc_font_color == 'black' ||
-		(text_color == 'black' && rc_font_color != 'white')) {
+	    if (set.rc_font_color == 'black' ||
+		(set.text_color == 'black' && set.rc_font_color != 'white')) {
 		Save.setAttribute('src', 'icons/save-b-24.png');
 	    }
 	    else {
@@ -82,8 +82,8 @@ export class Box {
 	    Delete.setAttribute('title', 'Delete');
 	    Info.innerText = Session.date.toLocaleString();
 	    Info.className = 'time-stamp';
-	    if (rc_font_color == 'black' ||
-		(text_color == 'black' && rc_font_color != 'white')) {
+	    if (set.rc_font_color == 'black' ||
+		(set.text_color == 'black' && set.rc_font_color != 'white')) {
 		Drag.setAttribute('src', 'icons/drag-indicator-24.png');
 	    }
 	    else {
@@ -116,14 +116,13 @@ export class Box {
 	    //box.appendChild(Info);
 	}
 	
-	box.style.backgroundColor = rc_color;
-	if (rc_font_color == 'black')
+	box.style.backgroundColor = set.rc_color;
+	if (set.rc_font_color == 'black')
 	    box.style.color = 'black';
-	else if (rc_font_color == 'white')
+	else if (set.rc_font_color == 'white')
 	    box.style.color = 'white';
 	Container.appendChild(box);
 
-	console.log("rc_color: " + rc_color)
     }
 
 }
@@ -147,12 +146,14 @@ export class Store {
 	return sessions;
     }
 
-    static displaySessions() {
-	Store.getSessions().then((sessions) => {
+    static displaySessions(settings) {
+	Store.getSessions().then(async (sessions) => {
 	    sessions.forEach((session, index) => {
-		const corect = new Session(session.title, session.tabs, new Date(session.date));
-		const box = new Box();
-		box.addBox(corect, index);
+		if (session != null) {
+		    const corect = new Session(session.title, session.tabs, new Date(session.date));	
+		    const box = new Box();
+		    box.addBox(corect, index, settings);
+		}
 	    });
 	});
 

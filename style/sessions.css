@@ -14,6 +14,8 @@
     .box-2 {
 	margin-left: 20px;
     }
+
+
 }
 
 @media(min-width:1001px) {
@@ -21,12 +23,22 @@
 	scrollbar-width: thin;
 	padding-right: 10px;
     }
+
+    .list-url, .list-tabs {
+	max-width: 980px;
+    }
 }
 
 @media(max-width:1000px) {
     .box-1, .box-2 {
 	scrollbar-width: none;
     }
+
+    .list-url, .list-tabs {
+	max-width: 380px;
+    }
+    
+
 }
 
 .box-1, .box-2 {
@@ -495,12 +507,19 @@ p.open {
     background-color: #003055;
 }
 
-.list-tabs {
+.list-url {
     display: block;
     opacity: 0.5;
     font-style: italic;
     white-space: nowrap;
     overflow: hidden;
+    //max-width: 1000px;
+}
+
+.list-tabs {
+    display: block;
+    overflow: hidden;
+    //max-width: 
 }
 
 .instruct {
@@ -536,7 +555,12 @@ p.open {
     font-size: 18px;
     display: flex;
     justify-content: start;
-    align-items: center;
+    //align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #00001a;
+    padding-bottom: 10px;
 }
 
 .back:hover {
@@ -556,3 +580,4 @@ p.open {
 .waste-icon:hover {
     cursor: pointer;
 }
+

@@ -1,6 +1,6 @@
 import {Session, Box, Store} from "./modules/storage.js"
 import {Success, Failure, deleteSession} from "./modules/util.js"
-import {w_config, listTabs} from "./add.js"
+import {w_config, listTabs, rec} from "./add.js"
 
 
 function getWindowTabs() {
@@ -316,7 +316,6 @@ function createSession() {
 	    modal.style.display = 'none';
 	    try {
 		let selection = document.getElementById("select-tabs")
-		console.log(selection.dataset.expanded)
 		if (selection.dataset.expanded == "true") {
 		    console.log(document.getElementById("select-tabs"))
 		    const node_list = document.getElementById("select-tabs").nextElementSibling.childNodes
@@ -335,7 +334,9 @@ function createSession() {
 		    const session = new Session(Name, No_tabs, new Date(), urls, header, favIcon);
 		    const box = new Box();
 		    let  pos = await Store.addSession(session);
-		    box.addBox(session, pos);
+		    console.log("rec")
+		    console.log(rec)
+		    box.addBox(session, pos, rec);
 		    Success("New Session Added", 3000);  
 		    selection.innerHTML = "&#129170 Select Tabs individually"
 		    selection.dataset.expanded = "false"
@@ -358,7 +359,8 @@ function createSession() {
 			const session = new Session(Name, No_tabs, new Date(), url, header, favIcon);
 			const box = new Box();
 			let  pos = await Store.addSession(session);
-			box.addBox(session, pos);
+
+			box.addBox(session, pos, rec);
 			if ( (tabs_leng )!== No_tabs)
 			    Success(`New Session Added <br> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
 			else
@@ -413,7 +415,7 @@ function createSession() {
 		    const session = new Session(Name, No_tabs, new Date(), urls, header, favIcon);
 		const box = new Box();
 		let  pos = await Store.addSession(session);
-		box.addBox(session, pos);
+		box.addBox(session, pos, rec);
 		Success("New Session Added", 3000);  
 		selection.innerHTML = "&#129170 Select Tabs individually"
 		selection.dataset.expanded = "false"
@@ -436,7 +438,7 @@ function createSession() {
 		    const session = new Session(Name, No_tabs, new Date(), url, header, favIcon);
 		    const box = new Box();
 		    let  pos = await Store.addSession(session);
-		    box.addBox(session, pos);
+		    box.addBox(session, pos, rec);
 		    if ( (tabs_leng )!== No_tabs)
 			Success(`New Session Added <br> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
 		    else
