@@ -8,7 +8,7 @@ export const obj = {rc_color: 'darkred', rc_font_color: 'white', text_color: 'wh
 export let rc_color = 'darkred';
 export let rc_font_color;
 export let text_color = 'white';
-
+let last_first = false;
 
 /*
 document.addEventListener('DOMContentLoaded', async () => {
@@ -59,6 +59,10 @@ export async function init() {
     if (items.background_color != undefined) {
 	document.body.style.backgroundColor = items.background_color;
 	//w_config.background = items.background_color;
+	if (window.location.pathname == "/sessions.html") {
+	    document.querySelector(".back").style.backgroundColor = items.background_color;
+	    document.querySelector("#back").style.backgroundColor = items.background_color;
+	}
     }
     
     if (items.font_color == "black") {
@@ -83,9 +87,14 @@ export async function init() {
 	rc_color = items.rectangle_color;
 	obj.rc_color = items.rectangle_color;
     }
+    
+    if (items.session_last_first == true) {
+	last_first = true
+    }
+    
     //console.log("loaded");
 
-    return {rc_color: rc_color, rc_font_color: rc_font_color, text_color: text_color}
+    return {rc_color: rc_color, rc_font_color: rc_font_color, text_color: text_color, last_first: last_first}
  
 }
 

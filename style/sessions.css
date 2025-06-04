@@ -161,7 +161,7 @@
 }
 
 .Tab-Item:hover {
-    background-color: #001a55;
+    //background-color: #001a55;
     opacity: 1;
 }
 
@@ -541,7 +541,7 @@ p.open {
     cursor: grab;
 }
 
-.waste-icon {
+.edit-icon {
     width: 20px;
     height: 20px;
 }
@@ -558,7 +558,7 @@ p.open {
     //align-items: center;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 1;
     background: #00001a;
     padding-bottom: 10px;
 }
@@ -577,7 +577,8 @@ p.open {
     justify-content: space-between;
 }
 
-.waste-icon:hover {
+.edit-icon:hover {
     cursor: pointer;
+    opacity: 0.8;
 }
 

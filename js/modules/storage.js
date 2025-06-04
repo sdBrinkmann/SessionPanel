@@ -121,7 +121,14 @@ export class Box {
 	    box.style.color = 'black';
 	else if (set.rc_font_color == 'white')
 	    box.style.color = 'white';
-	Container.appendChild(box);
+
+	if (set.last_first == true) {
+	    console.log("push front")
+	    Container.prepend(box)
+	} else {
+	    console.log("add end");
+	    Container.appendChild(box);
+	}
 
     }
 
@@ -181,7 +188,16 @@ export class Store {
 	    });
 	});
     }
-    static removeSession() {
+    static async removeandAddSession(pos, session) {
+	await Store.getSessions().then((sessions) => {
+	    // CHECK TITLE AS SECURITY CHECK
+	    const del = sessions.splice(pos, 1);
+	    sessions.push(session)
+	    browser.storage.local.set({
+		'sessions': JSON.stringify(sessions)
+	    });
+	});
+	
     }
 /*
     static async getNames() {
@@ -200,6 +216,19 @@ export class Store {
 	return names;
     }
 */
+
+    static async renameSession(pos, title) {
+	let len
+	await Store.getSessions().then((sessions) => {
+	    //console.log(pos);
+	    sessions[pos].title = title;
+	    len = sessions[pos].tabs
+	    browser.storage.local.set({
+		'sessions': JSON.stringify(sessions)
+	    });
+	});
+	return len;
+    }
 
     static async getNames(id) {
 	let names = new Map();

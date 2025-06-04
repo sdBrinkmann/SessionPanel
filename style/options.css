@@ -1,17 +1,31 @@
 
+.settings-2 {
+    display: grid;
+    grid-template-columns: 420px 140px;
+    row-gap: 30px;
+    //justify-self: start;
+    align-items: center;
+}
+
 .settings {
     display: grid;
-    grid-template-columns: 480px 40px;
+    grid-template-columns: 520px 40px;
     row-gap: 30px;
     justify-self: start;
 }
 
 .text-body {
-    margin-left: 10px;
+    margin-left: 80px;
+    min-height: 2400px;
 }
 
-body {
-    margin-left: 20px;
+
+
+@media(min-width:800px) {
+    body {
+	margin-left: 15%;
+    }
+
 }
 
 #reset {
@@ -34,4 +48,106 @@ a:hover {
 
 #sort-ordering {
     margin-left: 10px;
+
 }
+
+ul {
+    font-size: 22px;
+    font-weight: bold;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 40px;
+    padding-top: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #00001a;
+    border-bottom: 1px solid #bbb;
+    max-width: 600px;
+}
+
+li {
+    //display: block;
+    float: left;
+    border-right: 1px solid #bbb;
+    opacity: 70%;
+}
+
+li:hover {
+    opacity: 90%;
+}
+
+.active {
+    opacity: 100%
+}
+#ui-content {
+    max-width: 600px;
+    padding-bottom: 30px;
+    border-bottom: 3px double #bbb;
+}
+
+
+li a {
+    display: block;
+    padding-left: 20px;
+    padding-right: 20px;
+    
+}
+
+li:first-child a {
+    padding-left: 0px;
+
+}
+
+
+#general {
+    clear: both;
+}
+
+#info {
+    margin-bottom: 48px;
+}
+
+.section {
+    margin-top: 42px;
+    margin-bottom: 20px;
+    scroll-margin-top: 65px;
+}
+
+.dot-1 {
+    font-size: 10px;
+    padding-right: 5px;
+
+}
+
+}
+
+
+
+
+.dot-3 {
+    font-size: 10px;
+}
+
+.sel-radio {
+    margin-left: 80px;
+    margin-bottom: 40px;
+}
+
+.dot-center {
+    display: flex;
+    align-items: center;
+}
+
+
+
+#color-settings, #font-settings {
+    margin-left: 80px;
+}
+
+div#font-settings p, div#color-settings p {
+    font-weight: 500;
+}
+
+

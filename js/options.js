@@ -3,9 +3,28 @@
 document.addEventListener("DOMContentLoaded", () => {
     let popup = browser.storage.local.get( items => {
 	//console.log(items);
-	if (items.background_color != undefined) {
-	    document.body.style.backgroundColor = items.background_color;
-	}
+	if (items.background_color != undefined) 
+	    document.getElementById("background-color").value = items.background_color
+	else 
+	    document.getElementById("background-color").value = '#00001a'
+
+	if (items.search_box_color != undefined) 
+	    document.getElementById("search-box-color").value = items.search_box_color
+	else 
+	    document.getElementById("search-box-color").value = '#00004a'
+
+	if (items.rectangle_color != undefined) 
+	    document.getElementById("rect-color").value = items.rectangle_color
+	else 
+	    document.getElementById("rect-color").value = '#8B0000'
+
+	if (items.win_color != undefined) 
+	    document.getElementById("win-color").value = items.win_color
+	else 
+	    document.getElementById("win-color").value = '#483d8b'
+
+
+	
 	if (items.popup == undefined || items.popup == true) {
 	    document.querySelector('#popup').checked = true;
 	}
@@ -23,13 +42,15 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	if (items.rightmost == true)
 	    document.querySelector('#order').checked = true;
-
+	
 	if (items.font_color == "black") {
 	    document.querySelector('#black').checked = true;
+	    /*
 	    document.body.style.color = 'black';
 	    document.getElementById("addon-page").style.color = "black";
 	    document.getElementById("git-page").style.color = "black";
 	    document.getElementById("mail-link").style.color = "black";
+	    */
 	}
 	else
 	    document.querySelector('#white').checked = true;
@@ -69,9 +90,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (items.default_ordering != undefined) {
 	    document.getElementById('sort-ordering').value = items.default_ordering 
 	}
-	
+	if (items.session_last_first == true) {
+	    document.getElementById('session-last-first').checked = true;
+	}
+	if (items.overwrite_order == true) {
+	    document.getElementById('overwrite-order').checked = true;
+	}
     });
- 
+    
 });
 
 document.querySelector('#popup').addEventListener('change', (e) => {
@@ -184,8 +210,10 @@ document.querySelector('#highlight-active').addEventListener('change', (e) => {
 document.querySelector('#highlight-double').addEventListener('change', (e) => {
     if (e.target.checked) {
 	browser.storage.local.set({
-	    'highlight_double': true
+	    'highlight_double': true,
+	    'highlight_any': false
 	});
+	document.querySelector('#highlight-any').checked = false;
     }
     else {
 	browser.storage.local.set({
@@ -198,8 +226,10 @@ document.querySelector('#highlight-double').addEventListener('change', (e) => {
 document.querySelector('#highlight-any').addEventListener('change', (e) => {
     if (e.target.checked) {
 	browser.storage.local.set({
-	    'highlight_any': true
+	    'highlight_any': true,
+	    'highlight_double': false
 	});
+	document.querySelector('#highlight-double').checked = false;
     }
     else {
 	browser.storage.local.set({
@@ -217,6 +247,33 @@ document.querySelector('#sort-ordering').addEventListener('change', (e) => {
     
 });
 
+document.querySelector('#session-last-first').addEventListener('change', (e) => {
+    console.log(e.target.value)
+    if (e.target.checked) {
+	browser.storage.local.set({
+	    'session_last_first': true
+	});
+    }
+    else {
+	browser.storage.local.set({
+	    'session_last_first': false
+	});
+    }   
+});
+
+document.querySelector('#overwrite-order').addEventListener('change', (e) => {
+    console.log(e.target.value)
+    if (e.target.checked) {
+	browser.storage.local.set({
+	    'overwrite_order': true
+	});
+    }
+    else {
+	browser.storage.local.set({
+	    'overwrite_order': false
+	});
+    }   
+});
 
 document.querySelector('#reset').addEventListener('click', (e) => {
     browser.storage.local.remove([
@@ -232,64 +289,45 @@ document.querySelector('#reset').addEventListener('click', (e) => {
 
 
 
-document.querySelector('#submit-bc').addEventListener('click', (e) => {
+document.querySelector('#background-color').addEventListener('change', (e) => {
     e.preventDefault();
-    let bc_field = document.getElementById("background-color");
-    //console.log(bc_col_field.validity.patternMismatch);
-    bc_field.setCustomValidity("Input did not match valid hex color value e.g. #fff000 or #fff00088");
-    if (bc_field.validity.patternMismatch == false && bc_field.value != '') {
-	//console.log('Valid input');
-	browser.storage.local.set({
-	    'background_color': bc_field.value.toLowerCase()
-	});
-	document.body.style.backgroundColor = bc_field.value.toLowerCase();
-    }
-    else {
-	bc_field.reportValidity();
-    }
+    console.log(e.target.value)
+    
+    browser.storage.local.set({
+	'background_color': e.target.value
+    });
+
+
 });
 
 
-document.querySelector('#submit-rc').addEventListener('click', (e) => {
+document.querySelector('#rect-color').addEventListener('change', (e) => {
     e.preventDefault();
-    let rc_field = document.getElementById("rect-color");
-    rc_field.setCustomValidity("Input did not match valid hex color value e.g. #123abc or #ABC123AA");
-    if (rc_field.validity.patternMismatch == false && rc_field.value != '') {
-	browser.storage.local.set({
-	    'rectangle_color': rc_field.value.toLowerCase()
-	});
-    }
-    else {
-	rc_field.reportValidity();
-    }
+    
+    browser.storage.local.set({
+	'rectangle_color': e.target.value
+    });
+    
 });
 
-document.querySelector('#submit-wc').addEventListener('click', (e) => {
+
+document.querySelector('#win-color').addEventListener('change', (e) => {
     e.preventDefault();
-    let wc_field = document.getElementById("win-color");
-    wc_field.setCustomValidity("Input did not match valid hex color value e.g. #123abc or #ABC123AA");
-    if (wc_field.validity.patternMismatch == false && wc_field.value != '') {
-	browser.storage.local.set({
-	    'win_color': wc_field.value.toLowerCase()
-	});
-    }
-    else {
-	wc_field.reportValidity();
-    }
+
+
+    browser.storage.local.set({
+	'win_color': e.target.value
+    });
+    
 });
 
-document.querySelector('#submit-sb').addEventListener('click', (e) => {
+document.querySelector('#search-box-color').addEventListener('change', (e) => {
     e.preventDefault();
-    let sb_field = document.getElementById("search-box-color");
-    sb_field.setCustomValidity("Input did not match valid hex color value e.g. #123abc or #ABC123AA");
-    if (sb_field.validity.patternMismatch == false && sb_field.value != '') {
-	browser.storage.local.set({
-	    'search_box_color': sb_field.value.toLowerCase()
-	});
-    }
-    else {
-	wc_field.reportValidity();
-    }
+    
+    browser.storage.local.set({
+	'search_box_color': e.target.value
+    });
+    
 });
 
 // GLOBAL FONT
@@ -298,14 +336,14 @@ document.querySelector('#white').addEventListener('change', (e) => {
     if (e.target.checked && e.target.value == "white") {
 	browser.storage.local.set({'font_color': e.target.value});
 
-	document.body.style.color = 'white';
+	//document.body.style.color = 'white';
     }
 });
 
 document.querySelector('#black').addEventListener('change', (e) => {
     if (e.target.checked && e.target.value == "black") {
 	browser.storage.local.set({'font_color': e.target.value});
-	document.body.style.color = 'black';
+	//document.body.style.color = 'black';
     }
 });
 
@@ -352,3 +390,41 @@ document.querySelector('#wc-black').addEventListener('change', (e) => {
 	browser.storage.local.set({'font_win_color': "black"});
     }
 });
+
+
+// Highlight current section
+
+const ref = document.querySelectorAll('.ref');
+const sections = document.querySelectorAll('.section');
+
+let currentSection = 'general';
+let ticker = false;
+
+
+window.addEventListener('scroll', () => {
+    /*
+    if (!ticker) {
+	requestAnimationFrame(() => updateHeader());
+	ticker = true;
+	}
+    */
+    updateHeader();
+});
+
+
+function updateHeader() {
+    console.log("triggered")
+    sections.forEach( s => {
+	if (window.scrollY >= s.offsetTop - 100) {
+	    currentSection = s.id
+	}
+    });
+
+    ref.forEach(r => {
+	if (r.href.includes(currentSection)) {
+	    document.querySelector('.active').classList.remove('active');
+	    r.parentElement.classList.add('active');
+	}
+    });
+    ticker = false;
+}

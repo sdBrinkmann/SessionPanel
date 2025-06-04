@@ -36,12 +36,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    document.body.style.backgroundColor = items.background_color;
 	    w_config.background = items.background_color;
 	}
+	const style = document.createElement('style')
 
 	if (items.font_color == "black") {
 	    text_color = 'black';
 	    document.body.style.color = 'black';
 	    w_config.t_color = 'black';
 
+	    const css = '.Tab-Item:hover {box-shadow: inset 0 0 0 10em rgba(0, 0, 0, 0.08);}';
+
+	    if (style.styleSheet) {
+		style.styleSheet.cssText = css;
+	    } else {
+		style.appendChild(document.createTextNode(css));
+	    }
+	    
 	    document.getElementById("search-tog").src = "icons/search_48_b.png"
 	    document.getElementById("sort-tog").src = "icons/sort_48_b.png"
 	    document.getElementById("show-url").src = "icons/expand-all-b-48.png"
@@ -49,7 +58,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 	    document.getElementById("session-header").style.color = "black"
 
 	    document.getElementById("open").src = "icons/arrow-down-b-48.png"
+	} else {
+	    const css = '.Tab-Item:hover {box-shadow: inset 0 0 0 10em rgba(255, 255, 255, 0.08);}';
+	    if (style.styleSheet) {
+		style.styleSheet.cssText = css;
+	    } else {
+		style.appendChild(document.createTextNode(css));
+	    }
 	}
+	document.getElementsByTagName('head')[0].appendChild(style);
+
 	if (items.search_box_color != undefined) {
 	    document.getElementById("search").style.backgroundColor = items.search_box_color
 	}
@@ -304,7 +322,6 @@ export async function listTabs(ac = false) {
 	const currentTabs = document.createDocumentFragment();
 	List.textContent = '';
 	let index = 0;
-	let double_current = [];
 
 	if (sort_fn != null) {
 	    tabs.sort(sort_fn)
@@ -375,31 +392,31 @@ export async function listTabs(ac = false) {
 	    if (highlight_any == true) {
 		for (var i = 0; i < tabs.length; i++) {
 		    if (tabs[i].url == tab.url && tabs[i].id != tab.id) {
-			Parent.style.backgroundColor = '#800040';
-			double_current.push(tabs[i].id);
+			//Parent.style.backgroundColor = '#800040';
+			//Parent.style.backgroundColor = '#a40655';
+			Parent.style.backgroundColor = '#91064c';
 		    }
 		}
 		index++;
 	    }
 
-	    if (highlight_double == true ) { //&& highlight_any != true) {
-		for (var j = 0; j < double_current.length; j++) {
-		    if (double_current[j] == tab.id) 
+	    if (highlight_double == true && highlight_any != true) {
+		for (var i = 0; i < tabs.length; i++) {
+		    if (tabs[i].url == tab.url && tabs[i].id != tab.id) {
 			Parent.style.backgroundColor = '#ff751aaa';
-		}
-		
-		for (var i = index + 1; i < tabs.length; i++) {
-		    if (tabs[i].url == tab.url) {
-			Parent.style.backgroundColor = '#ff751aaa';
-			double_current.push(tabs[i].id);
 		    }
 		}
 		index++;
 	    }
 
-	    if (tab.active == true && highlight_active == true) 
-		Parent.style.backgroundColor = '#001ab2aa'
-	    
+	    if (tab.active == true && highlight_active == true) {
+		//Parent.style.backgroundColor = '#001ab2aa'
+		if (text_color == "white") {
+		    Parent.style.boxShadow = "inset 0 0 0 10em rgba(255, 255, 255, 0.1)";
+		} else {
+		    Parent.style.boxShadow = "inset 0 0 0 10em rgba(0, 0, 0, 0.1)";
+		}
+	    }
 	    currentTabs.appendChild(Parent);
 	}
 	List.appendChild(currentTabs);
@@ -477,6 +494,15 @@ function dragStart() {
 
 	Element.style.position = "absolute";
 	Element.style.top = "-1000px";
+	Element.style.backgroundColor = w_config.background;
+
+
+	if (text_color == "white") {
+	    Element.style.boxShadow = "inset 0 0 0 10em rgba(255, 255, 255, 0.1)";
+	} else {
+	    Element.style.boxShadow = "inset 0 0 0 10em rgba(0, 0, 0, 0.1)";
+	}
+	Link.style.color = text_color;
 	document.body.appendChild(Element);
 	
 	e.dataTransfer.setDragImage(Element, -15, -10)

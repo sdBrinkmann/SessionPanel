@@ -28,6 +28,23 @@
   color: #000;
 }
 
+/* session.html */
+.modal-content-2 { 
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #fefefe;
+  border-radius: 10px;
+  width: 52ch;
+  max-height: 70vh;
+  overflow: auto;
+  scrollbar-width: thin;
+  color: #000;
+  margin-top: 25vh;
+  padding-bottom: 40px;
+}
+
+
 #session-name {
     font-size: 16px;
     border: 2px solid #444444;

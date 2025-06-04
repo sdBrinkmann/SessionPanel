@@ -20,14 +20,23 @@
       
       <!-- <span class="close-set">&times;</span> -->
     </div>
-    <h3>Version: Session Panel 0.11.0.5 Firefox</h3> 
+
     
     <div class="text-body">
-    <p>This is the settings page for the Firefox add-on Session Panel. <br />
+      <h3>Version: Session Panel 0.12.4.2 Firefox</h3> 
+    <p id="info">This is the settings page for the Firefox add-on Session Panel. <br />
       <b>For more information and to see the current changelog visit</b> <br /> the offical <a id="addon-page" href="https://addons.mozilla.org/en-US/firefox/addon/session-panel/versions">Firefox Add-on page <b>here</b></a>.<br/><br/>
-      Report bugs <a id="git-page" href="https://github.com/sdBrinkmann/SessionPanel"><b>here</b></a> or provide feedback via <a id="mail-link" href="mailto:sdbrinkmann@outlook.com"> <b>mail</b></a>.
+      Report bugs <a id="git-page" href="https://github.com/sdBrinkmann/SessionPanel"><b>here</b></a> or provide feedback via <a id="mail-link" href="mailto:sdbrinkmann@outlook.com"> <b>mail</b></a>.<br/><br/>
+      <span class="dot-3">&#128308</span> New settings are marked with a red dot.
     </p>
-      <h2>General</h2>
+    <ul>
+      <li class="active"><a class="ref" href="#general">General</a></li>
+      <li><a class="ref" href="#tabs">Tabs</a></li>
+      <li><a class=" ref dot-center" href="#sessions"><span class="dot-1">&#128308</span> Sessions</a></li>
+      <li><a class="ref" href="#ui">UI</a></li>
+    </ul>
+    
+      <h3 class="section" id="general">General</h3>
       <div class="settings">
 	<!-- General Settings -->
 	<div>Open Session Panel as a popup, instead as a tab</div>
@@ -77,7 +86,7 @@
 	</div>
 	
 	<!-- List Settings -->
-	<h4>Tab List Settings:</h4> <div></div>
+	<h3 class="section" id="tabs">Tab List Settings</h3> <div></div>
 	<div>List rightmost tab of current window first as default </div>
 	<div>
 	  <div class="toggle">
@@ -97,8 +106,7 @@
 	  </div>
 	</div>
 	
-	<div>Highlight the active tab in the current window tab list
-	  <br> Default Color: Blue</div>
+	<div>Highlight the active tab in the current window tab list </div>
 	<div>
 	  <div class="toggle">
 	    <input type="checkbox" class="check" id="highlight-active">
@@ -136,68 +144,87 @@
 	    <option value="audible">audible</option>
 	  </select>
 
-	</div>
-      
+	</div> <div></div>
 	
-      </div>
-      <h2>User Interface (UI)</h2>
-      <div>
+	
+	
+
+	<h3 class="section" id="sessions">Sessions</h3><div></div>
+
+	  <div><span class="dot-3">&#128308</span> Display last added Session first &#128712</div>
+	  <div>
+	    <div class="toggle">
+	      <input type="checkbox" class="check" id="session-last-first">
+	      <b class="b switch"></b>
+	      <b class="b track"></b>
+	    </div>
+	  </div>
+
+	  <div><span class="dot-3">&#128308</span> When overwriting a Session reassign it to
+	  a new position, </br> so that Sessions are sorted after save date</div>
+	  <div>
+	    <div class="toggle">
+	      <input type="checkbox" class="check" id="overwrite-order">
+	      <b class="b switch"></b>
+	      <b class="b track"></b>
+	    </div>
+	  </div>
+
+
+      </div> <!-- END CLASS SETTING -->
+      
+      <h3 class="section" id="ui">User Interface (UI)</h3>
+      <div id="ui-content">
 	Change the UI at your own discretion. <br/> You can always revert back to the default settings
 	by pressing the reset button below. <br/>
 
 	<input type="button" value="Restore Default" id="reset">
-	<br>For colors use the hexadecimal format including the leading number sign #. <br> RGB colors can be specified without transparency (#RRGGBB) or with (#RRGGBBTT).
-	       <!-- -->
-	       <h3>Background Color</h3>
-	       <form>
-		 <label>HEX value: </label>
-		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="background-color"/>
-		 <button type="submit" id="submit-bc">Change</button>
-	       </form>
-	       <!-- --->
-	       <h3>Rectangles Color (Sessions)</h3>
-	       <form>
-		 <label>HEX value: </label>
-		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="rect-color"/>
-		 <button type="submit" id="submit-rc">Change</button>
-	       </form>
-	       
-	       <h3>Rectangles Color (Other windows)</h3>
-	       <form>
-		 <label>HEX value: </label>
-		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="win-color"/>
-		 <button type="submit" id="submit-wc">Change</button>
-	       </form>
+	<br>
+	<!-- -->
+	<h4>Colors</h4>
+	<div id="color-settings">
+	  <div class="settings-2">
+	    <p>Background Color</p>
+	    <input type="color"  id="background-color"/>
 
-	       <h3>Search Bar Color</h3>
-	       <form>
-		 <label>HEX value: </label>
-		 <input type="text" pattern="#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}" id="search-box-color"/>
-		 <button type="submit" id="submit-sb">Change</button>
-	       </form>
-	       
-	       <h3>Font Color (Global)</h3>
-	       <input type="radio" id="white" name="font color" value="white">
-	       <label for="white">White</label>
-	       <input type="radio" id="black" name="font color" value="black">
-	       <label for="black">Black</label>
+	    <p>Rectangles Color (Sessions)</p>
+	    <input type="color"  id="rect-color"/>
 
-	       <h3>Font Color Rectangles (Sessions)</h3>
-	       <input type="radio" id="rc-global" name="font rc color" value="global">
-	       <label for="global">Same as Global</label>
-	       <input type="radio" id="rc-white" name="font rc color" value="white">
-	       <label for="white">White</label>
-	       <input type="radio" id="rc-black" name="font rc color" value="black">
-	       <label for="black">Black</label>
+	    <p>Rectangles Color (Other windows)</p>	  
+	    <input type="color"  id="win-color"/>
 
-	       <h3>Font Color Rectangles (other Windows)</h3>
-	       <input type="radio" id="wc-global" name="font wc color" value="global">
-	       <label for="global">Same as Global</label>
-	       <input type="radio" id="wc-white" name="font wc color" value="white">
-	       <label for="white">White</label>
-	       <input type="radio" id="wc-black" name="font wc color" value="black">
-	       <label for="black">Black</label>
-	       
+	    <p>Search Bar Color</p>
+	    <input type="color"  id="search-box-color"/>
+	  </div>
+	</div>
+	<h4>Font Colors</h4>
+	<div id="font-settings">
+	  <p>Font Color (Global):</p>
+	  <form class="sel-radio">
+	    <input type="radio" id="white" name="font color" value="white">
+	    <label for="white">White</label>
+	    <input type="radio" id="black" name="font color" value="black">
+	    <label for="black">Black</label>
+	  </form>
+	  <p>Font Color Rectangles (Sessions):</p>
+	  <form class="sel-radio">
+	    <input type="radio" id="rc-global" name="font rc color" value="global">
+	    <label for="global">Same as Global</label>
+	    <input type="radio" id="rc-white" name="font rc color" value="white">
+	    <label for="white">White</label>
+	    <input type="radio" id="rc-black" name="font rc color" value="black">
+	    <label for="black">Black</label>
+	  </form>
+	  <p>Font Color Rectangles (other Windows):</p>
+	  <form class="sel-radio">
+	    <input type="radio" id="wc-global" name="font wc color" value="global">
+	    <label for="global">Same as Global</label>
+	    <input type="radio" id="wc-white" name="font wc color" value="white">
+	    <label for="white">White</label>
+	    <input type="radio" id="wc-black" name="font wc color" value="black">
+	    <label for="black">Black</label>
+	  </form>
+	</div>
       </div>
     </div>
     <script type="module" src="js/options.js"></script>

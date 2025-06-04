@@ -19,12 +19,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     rec = await init()
 
+    const style = document.createElement('style')
+    
+
     if (rec.text_color == "black") {
 	text_color = 'black';
 	document.querySelector(".arrow-back").src = "icons/arrow-back-48.png"
 	document.getElementById("back").style.color = "black";
 	document.getElementById("open").src = "icons/arrow-down-b-48.png"
+	const css = '.Tab-Item:hover {box-shadow: inset 0 0 0 10em rgba(0, 0, 0, 0.08);}';
+
+	if (style.styleSheet) {
+	    style.styleSheet.cssText = css;
+	} else {
+	    style.appendChild(document.createTextNode(css));
+	}
+    } else {
+	const css = '.Tab-Item:hover {box-shadow: inset 0 0 0 10em rgba(255, 255, 255, 0.08);}';
+	if (style.styleSheet) {
+	    style.styleSheet.cssText = css;
+	} else {
+	    style.appendChild(document.createTextNode(css));
+	}
     }
+
+    document.getElementsByTagName('head')[0].appendChild(style);
+
+    
+
     
     listSession();
     Store.displaySessions(rec);
@@ -57,22 +79,35 @@ async function list(pos) {
 
     const Head = document.querySelector(".inspect-head");
     Head.textContent = '';
+    const Span = document.createElement('span');
     const Waste = document.createElement('img');
+    const Edit = document.createElement('img');
     Waste.title = "Delete Session";
     Waste.id = 'delete-session'
-    Waste.className = 'waste-icon';
-    if (text_color == "black")
+    Waste.className = 'edit-icon';
+
+    Edit.id = 'rename-session';
+    Edit.className = 'edit-icon';
+    
+    if (text_color == "black") {
 	Waste.setAttribute('src', 'icons/wastbin-b-24.png');
-    else
+	Edit.src = 'icons/edit_b_48.png';
+    }
+    else {
 	Waste.setAttribute('src', 'icons/wastbin-w-24.png');
+	Edit.src = 'icons/edit_48.png';
+    }
     
     Head.setAttribute('data-pos', pos)
     List.setAttribute('data-pos', pos)
 
     const Title = document.createElement('p');
     Title.innerText = S.title + " (" + S.tabs  + ")";
+    Title.id = "session-title";
     Head.appendChild(Title);
-    Head.appendChild(Waste);
+    Span.appendChild(Edit);
+    Span.appendChild(Waste);
+    Head.appendChild(Span);
     
     for (var idx = 0; idx < S.url.length; idx++)  { // (let tab of S.url) {
 	//console.log(tab);
@@ -81,6 +116,7 @@ async function list(pos) {
 	const Icon = document.createElement('img');
 	const Link = document.createElement('a');
 	const Del = document.createElement('img');
+
 	const Website = document.createElement('div');
 	const Ref = document.createElement('a');
 	
@@ -91,6 +127,8 @@ async function list(pos) {
 	Icon.classList.add('icon');
 	Del.src = 'icons/delete-16.png';
 	Del.classList.add('d-b');
+
+
 	//Icon.setAttribute('rel', 'icon');
 	//Icon.setAttribute('href', tab.favIconUrl)
 	
@@ -143,11 +181,14 @@ function deleteTab() {
 	    const no = e.target.parentNode.dataset.no
 	    //const ID = parseInt(e.target.previousSibling.id);
 	    Store.getSessions().then( async (sessions) => {
-
+		let title;
+		let tab_no;
+		
 		const S = sessions[pos]
 		if (S.headr == undefined) {
 		    S.url.splice(no, 1)
-		    
+		    title = S.title;
+		    tab_no = S.tabs - 1;
 		    await Store.overwriteSession(new Session(S.title, S.tabs-1, S.date, S.url), pos)
 		    list(pos);
 		    document.querySelector('.Session-Box').textContent = '';
@@ -156,14 +197,25 @@ function deleteTab() {
 		    S.url.splice(no, 1)
 		    S.headr.splice(no,1)
 		    S.favIcons.splice(no,1)
+
+		    title = S.title;
+		    tab_no = S.tabs - 1;
 		    
 		    await Store.overwriteSession(new Session(S.title, S.tabs-1, S.date,
 						       S.url,
 						       S.headr,
 						       S.favIcons), pos)
 		    list(pos);
-		    document.querySelector('.Session-Box').textContent = '';
-		    Store.displaySessions(rec);
+		    //document.querySelector('.Session-Box').textContent = '';
+		    //Store.displaySessions(rec);
+		    const ses = document.querySelectorAll(".Box-Item-2")
+
+		    for (const el of ses) {
+			if (el.dataset.pos == pos) {
+			    el.childNodes[0].childNodes[0].textContent = title + " (" + tab_no + ")";
+			    break;
+			}
+		    }
 		}
 
 	    });
@@ -341,3 +393,104 @@ document.addEventListener('visibilitychange', async function() {
 	window.location.reload();
     }
 });
+
+
+// RENAME MODAL
+
+const modal = document.getElementById("add");
+const span = document.getElementsByClassName("close")[0];
+
+
+span.onclick = function() {
+    modal.style.display = "none";
+
+}
+renameSession()
+
+function renameSession() {
+    document.querySelector(".inspect-head").addEventListener('click', function(e) {
+	if(e.target.id == "rename-session") {
+	    modal.style.display = "block";
+	    document.getElementById('session-name').focus();
+	}
+    });
+}
+
+window.onclick = function(event) {
+    
+ 
+    if (event.target == modal) 
+	modal.style.display = "none";
+
+}
+
+document.querySelector('#save-button').addEventListener('click', async (e) => {
+    e.preventDefault();
+    //console.log("Clicked on save button");
+    //console.log(e.srcElement.previousSibling.previousSibling.value);
+    let Name = e.srcElement.previousSibling.previousSibling.value;
+    if (Name.length > 28) {
+	Failure("Name is too long", 4000);
+	return;
+    }
+    if (Name.length == 0) {
+	Failure("No Title Given", 4000);
+	return;
+    }
+
+    const pos = document.querySelector(".inspect-head").dataset.pos;
+    //console.log(pos)
+    await rename(pos, Name);
+});
+
+
+document.getElementById("session-name").onkeypress = async function(e) {
+    if (!e) e = window.event;
+    var keyCode = e.keyCode || e.which;
+    if(keyCode  == '27') {
+	alert('WHY');
+	modal.style.display = 'none';
+	return;
+    }
+    
+    if(keyCode == '13') {
+	let Name = this.value;
+	if (Name.length > 28) {
+	    Failure("Name is too long", 4000);
+	    return;
+	}
+	if (Name.length == 0) {
+	    Failure("No Title Given", 4000);
+	    return;
+	}
+	
+	const pos = document.querySelector(".inspect-head").dataset.pos;
+	//console.log(pos)
+	await rename(pos, Name);
+    }
+};
+
+
+async function rename(pos, Name) {
+    try {
+	const len = await Store.renameSession(pos, Name);
+	console.log(len);
+	Success(`Session has been renamed to ${Name}`, 4000);
+	modal.style.display = 'none';
+	document.getElementById("session-title").textContent = Name + " (" + len + ")";
+
+
+	const ses = document.querySelectorAll(".Box-Item-2")
+
+	for (const el of ses) {
+	    if (el.dataset.pos == pos) {
+		el.childNodes[0].childNodes[0].textContent = Name + " (" + len + ")";
+		break;
+	    }
+	}
+	
+    } catch (err) {
+	console.log(err);
+	Failure(err.message, 3000);
+    }
+}

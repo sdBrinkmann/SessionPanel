@@ -9,6 +9,7 @@ function getWindowTabs() {
 
 let no_load = false;
 let switch_tabs = false;
+let overwrite_order = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     let option = browser.storage.local.get(items => {
@@ -16,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	    no_load = true;
 	if (items.switch_tabs == true)
 	    switch_tabs = true;
+	if (items.overwrite_order == true)
+	    overwrite_order = true;
     });
     addSession();
     loadSession();
@@ -269,9 +272,17 @@ function saveSession() {
 			//const date = new Date();
 			const session = new Session(name, No_tabs, new Date(), url, header, favIcon);
 			const box = new Box();
-			await Store.overwriteSession(session, pos);
-			e.target.parentNode.childNodes[0].innerText = name + '(' + No_tabs + ')';
-			//e.target.parentNode.childNodes[2].innerHTML = date.toLocaleString();
+
+			if (overwrite_order) {
+			    await Store.removeandAddSession(pos, session);
+			    document.querySelector('.Session-Box').textContent = '';
+			    Store.displaySessions(rec);
+
+			} else {
+			    await Store.overwriteSession(session, pos);
+			    e.target.parentNode.childNodes[0].innerText = name + '(' + No_tabs + ')';
+			    //e.target.parentNode.childNodes[2].innerHTML = date.toLocaleString();
+			}
 			if ( (tabs_leng) !== No_tabs)
 			    Success(`Session overwriten <br/> ${tabs_leng - No_tabs} tab(s) could not be saved`, 3000);
 			else
